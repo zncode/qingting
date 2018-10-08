@@ -7,7 +7,7 @@ use think\Db;
 class ChannelController extends BaseController
 {
     public $pager = 20;
-    public $table = 'qt_channel';
+    public $table = 'nj_channel';
     public $url_path = 'channel';
     public $module_name = '频道';
 

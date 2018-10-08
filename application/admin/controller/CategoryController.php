@@ -7,7 +7,7 @@ use think\Db;
 class CategoryController extends BaseController
 {
     public $pager = 20;
-    public $table = 'qt_category';
+    public $table = 'nj_category';
     public $url_path = 'category';
     public $module_path = 'category';
     public $module_name = '栏目';

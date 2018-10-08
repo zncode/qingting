@@ -9,7 +9,7 @@ use app\model\UserModel;
 class UserController extends BaseController
 {
     public $pager = 20;
-    public $table = 'qt_user';
+    public $table = 'nj_user';
     public $url_path = 'user';
     public $module_name = '用户';
 
