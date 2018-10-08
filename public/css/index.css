@@ -1,0 +1,21 @@
+.top{
+    margin: 0 auto;
+    width: 100%;
+    height: 100px;
+    box-shadow: 0 3px 1px rgba(212,212,212,0.6);
+}
+.top_wrapper{
+    margin: 0 auto;
+    width: 1200px;
+    height: 100px;
+}
+.logo{
+    float: left;
+    width: 200px;
+    margin-top:20px;
+}
+.top_menu_wrapper{float:left;margin-top:40px;}
+.top_menu_wrapper ul{}
+.top_menu_wrapper ul li{float: left; font-size:18px; margin-left:50px; height:60px; line-height:60px;}
+.top_menu_wrapper ul li a:hover{color:#6fc615;font-weight: bold;}
+.active {border-bottom: 4px solid transparent; border-bottom-color: #6fc615;}

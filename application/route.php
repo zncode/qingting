@@ -16,3 +16,4 @@ Route::get('/', 				            'IndexController/index');
 
 include 'route_admin.php';
 include 'route_api.php';
+include 'route_index.php';
