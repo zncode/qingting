@@ -19,3 +19,34 @@
 .top_menu_wrapper ul li{float: left; font-size:18px; margin-left:50px; height:60px; line-height:60px;}
 .top_menu_wrapper ul li a:hover{color:#6fc615;font-weight: bold;}
 .active {border-bottom: 4px solid transparent; border-bottom-color: #6fc615;}
+
+.body{margin: 0 auto;width: 1200px;margin-top:30px;}
+.body-left{float:left; width:280px; height:800px; background-color: #f8f8f9;border-top: 6px solid #101d37;}
+.body-content{float:left; width:900px; height:auto;margin-left:20px;}
+
+.body-left .bd {
+    background-color: #f8f8f9;
+    padding: 0 22px;
+}
+.body-left .bd dl {
+    border-top-color: transparent;
+    height:100px;
+}
+.body-left .bd dl {
+    padding-bottom: 25px;
+    border-top: 1px dashed #eaeaea;
+}
+.body-left .bd dt {
+    padding: 22px 0 12px;
+    line-height: 1;
+    font-size: 18px;
+    font-weight: bold;
+}
+.body-left .bd dd {
+    line-height: 24px;
+}
+.body-left .bd dd a {
+    float: left;
+    width: 78px;
+    color: #7c7f80;
+}
