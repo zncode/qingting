@@ -1,3 +1,12 @@
+/* 布局 */
+.body{margin: 0 auto;width: 1200px;margin-top:30px;}
+.body-left{float:left; width:280px; height:800px; background-color: #f8f8f9;border-top: 6px solid #101d37;}
+.body-content{float:left; width:900px; height:auto;margin-left:20px;}
+.body-center{float:left; width:680px; height:auto;margin-left:20px;}
+.body-right{float:left; width:200px; height:auto;margin-left:20px;padding-top:28px;}
+
+#page{text-align: center;}
+
 .top{
     margin: 0 auto;
     width: 100%;
@@ -22,9 +31,7 @@
 .top_menu_wrapper ul li.active {border-bottom: 4px solid transparent; border-bottom-color: #6fc615; }
 .top_menu_wrapper ul li.active a{color:#6fc615;font-weight: bold;}
 
-.body{margin: 0 auto;width: 1200px;margin-top:30px;}
-.body-left{float:left; width:280px; height:800px; background-color: #f8f8f9;border-top: 6px solid #101d37;}
-.body-content{float:left; width:900px; height:auto;margin-left:20px;}
+
 
 .body-left .bd {
     background-color: #f8f8f9;
@@ -56,3 +63,16 @@
 .ad_1{margin-top: 20px;}
 .ad_1 ul {float: left; width: 100%;}
 .ad_1 ul li{float: left; margin-left:10px; margin-right:10px;}
+
+/* 列表页 */
+.breadcrumb{height: 30px; border-bottom: 1px solid #e5e5e5;overflow: hidden; margin-bottom: 20px;}
+.breadcrumb a {color: #999!important;  }
+.breadcrumb span {  margin: 0 2px;  color: #999;  }
+.line_wrapper{width: 100%; height: 200px; border-bottom: 1px solid #e5e5e5;overflow: hidden; margin-bottom: 20px;}
+.line_picture{float: left; width: 200px; padding-top:15px;}
+.line_content{float: left; width: 480px;}
+.line_content_title{font-size: 20px;  color: #333; height: 50px; line-height: 50px;}
+.line_content_body{color: #666;height: 100px;}
+.line_content_bottom{float: right;color: #666;margin-right:10px;height: 50px; line-height: 50px;}
+
+.body_right_block{margin-bottom:20px;}

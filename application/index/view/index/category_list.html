@@ -118,35 +118,61 @@
         </dl>
       </div>
     </div>
-    <div class="body-content">
-
-      <!-- 一行 -->
-      <div>
-        <div class="tab-inners">
-          <div class="tab-inner active">
-            <div class="card-item active"><a href="https://news.ke.com/bj/baike/0044/" target="_blank" class="btn-more">更多</a>
-              <div class="card-hd">
-                <div class="index index-01"></div>
-                <div class="tit">准备买房</div>
-                <div class="subtit">有购房资质了吗，资金准备好了吗？开始寻找房源吧</div>
-              </div>
-            </div>
+    <div class="body-center">
+      <div class="breadcrumb">
+        <a href="#">首页</a> <span>》</span> <a href="#">风景</a> <span>》</span> 湖水
+      </div>
+      <!--<span class="layui-breadcrumb">-->
+        <!--<a href="/">首页</a>-->
+        <!--<a href="/demo/">风景</a>-->
+        <!--<a><cite>湖水风光</cite></a>-->
+      <!--</span>-->
+      {for start="1" end="10"}
+        <!-- 行 -->
+        <div class="line_wrapper">
+          <div class="line_picture">
+            <img src="{$Think.BASE_PATH}image/tmp/list_1.jpg" width="180px" height="120px">
+          </div>
+          <div class="line_content">
+              <div class="line_content_title"><a href="#">普吉岛｜这些拥有私密沙滩的酒店让你再也不人挤人！</a></div>
+              <div class="line_content_body">蜂蜂们的困扰我们都听到了！为你看过了千百个普吉酒店，精挑细选了9家可享私密沙滩的五星酒店，分分钟甩开拥挤人潮、冲入碧海蓝天，让人恨不得现在就想把机票买下去啊。</div>
+              <div class="line_content_bottom">1216浏览</div>
           </div>
         </div>
-      </div>
-      <!-- 一行 -->
+        <!-- 行 -->
+      {/for}
 
+      <div id="page"></div>
     </div>
+
+    <div class="body-right">
+      <div class="body_right_block"><img src="{$Think.BASE_PATH}image/tmp/right_1.png" width="200px" height="auto"></div>
+      <div class="body_right_block"><img src="{$Think.BASE_PATH}image/tmp/right_2.png" width="200px" height="auto"></div>
+      <div class="body_right_block"><img src="{$Think.BASE_PATH}image/tmp/right_3.png" width="200px" height="auto"></div>
+    </div>
+
+  <div style="clear: both"></div>
 </div>
 
 
 <script>
-    layui.use('element', function(){
+    layui.use(['element', 'laypage'], function(){
         var $ = layui.$;
-        $('.top_menu').mouseover(function(){
-            $('.top_menu').removeClass('active');
-            $(this).addClass('active');
+        var laypage = layui.laypage;
+
+        $('.line_wrapper').mouseover(function(){
+            $(this).css('background-color','#e5e5e5');
         })
+        $('.line_wrapper').mouseout(function(){
+            $(this).css('background-color','#ffffff');
+        })
+
+        laypage.render({
+            elem: 'page'
+            ,count: 1000
+            ,theme: '#1E9FFF'
+            ,layout: ['count', 'prev', 'page', 'next', 'skip']
+        });
     });
 </script>
 {include file="page/footer" /}
