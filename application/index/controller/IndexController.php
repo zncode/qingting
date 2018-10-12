@@ -15,6 +15,11 @@ class IndexController extends BaseController
         return view('index/category_list');
     }
 
+    public function page_info()
+    {
+        return view('index/page_info');
+    }
+
     public function resource_list()
     {
 //        echo 'test';die;

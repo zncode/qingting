@@ -1,0 +1,33 @@
+{include file="page/header" /}
+{include file="page/body_top" /}
+<div style="clear: both;"></div>
+<div class="body">
+    <div class="body-left">
+      {include file="page/menu" /}
+    </div>
+    <div class="page_center">
+        <div class="breadcrumb">
+        <a href="#">首页</a> <span>》</span> <a href="#">风景</a> <span>》</span> 湖水
+        </div>
+
+        <div class="page_content">
+            <div class="page_content_title">
+                入住云台山附近的山庄，在神奇的溶洞里泡温泉、树洞里吃饭
+            </div>
+            <div class="page_content_body">
+                {include file="page/tmp_content" /}
+            </div>
+        </div>
+
+    </div>
+
+  <div style="clear: both"></div>
+</div>
+
+
+<script>
+    layui.use(['element', 'laypage'], function(){
+        var $ = layui.$;
+    });
+</script>
+{include file="page/footer" /}
