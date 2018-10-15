@@ -47,4 +47,5 @@ Route::get('admin/category/list', 			'admin/CategoryController/index');
 Route::get('admin/category/info', 			'admin/CategoryController/info');
 Route::get('admin/category/delete', 		'admin/CategoryController/delete');
 Route::get('admin/category/json_data', 		'admin/CategoryController/json_data');
+Route::get('admin/category/list_data', 		'admin/CategoryController/index_data');
 

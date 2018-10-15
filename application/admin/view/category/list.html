@@ -11,32 +11,30 @@
                     <div class="layui-card">
                         <div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
                             <a lay-href="">主页</a><span lay-separator="">/</span>
-                            <a><cite>频道管理</cite></a><span lay-separator="">/</span>
-                            <a><cite>频道详情</cite></a><span lay-separator=""></span>
+                            <a><cite>栏目管理</cite></a><span lay-separator="">/</span>
+                            <a><cite>栏目详情</cite></a><span lay-separator=""></span>
                         </div>
-                        <div class="go_back"><a href="{:url('admin/channel/add')}" class="layui-btn layui-btn-sm">添加</a></div>
+                        <div class="go_back"><a href="{:url('admin/category/add')}" class="layui-btn layui-btn-sm">添加</a></div>
                         <div class="layui-card-body">
-                            <div style="height: 100%">
-                                <div class="dHead">
-                                    <a class="layui-btn layui-btn-primary layui-btn-xs layui-btn-xstree"  onclick="window.location.href='index.html';">刷新</a>
-                                    <a class="layui-btn layui-btn-primary layui-btn-xs layui-btn-xstree"  onclick="reload()">reload</a>
-                                    <a class="layui-btn layui-btn-primary layui-btn-xs layui-btn-xstree"  onclick="query()">query</a>
-                                    <a class="layui-btn layui-btn-primary layui-btn-xs layui-btn-xstree"  onclick="add(null);">新增一行</a>
-                                    <a class="layui-btn layui-btn-primary layui-btn-xs layui-btn-xstree"  onclick="openorclose();">隐藏或打开香蕉节点</a>
-                                    <a class="layui-btn layui-btn-primary layui-btn-xs layui-btn-xstree"  onclick="getCheckData();">获取选中行数据</a>
-                                    <a class="layui-btn layui-btn-primary layui-btn-xs layui-btn-xstree"  onclick="getCheckLength();">获取选中数目</a>
-                                    <a class="layui-btn layui-btn-primary layui-btn-xs layui-btn-xstree"  onclick="print();">打印缓存对象</a>
-                                    <a class="layui-btn layui-btn-primary layui-btn-xs layui-btn-xstree"  onclick="openAll();">展开或折叠全部</a>
-                                    <a class="layui-btn layui-btn-primary layui-btn-xs layui-btn-xstree"  onclick="radioStatus();">获取单选数据</a>
-                                    <a class="layui-btn layui-btn-primary layui-btn-xs layui-btn-xstree"  onclick="test();">test</a>
-                                    <br>
-                                    <br>
-                                    <b>此服务器配置不是一般低</b>，请您耐心等待，如长时间无法加载，可以手动刷新一次（一机多用，所以宽带和内存有限的问题导致资源无法及时加载成功）。
-                                </div>
-                                <div class="dBody">
-                                    <table class="layui-hidden" id="treeTable" lay-filter="treeTable"></table>
-                                </div>
-                            </div>
+                            <table class="layui-table" lay-data="{height:500, url:'{$Think.BASE_PATH}admin/category/list_data', page:true, id:'idTest'}" lay-filter="demo">
+                                <thead>
+                                <tr>
+                                    <th lay-data="{type:'checkbox', fixed: 'left'}"></th>
+                                    <th lay-data="{field:'id', width:80, sort: true, fixed: true}">ID</th>
+                                    <th lay-data="{field:'name', width:100}">栏目名称</th>
+                                    <th lay-data="{field:'path', width:100, sort: true}">路径</th>
+                                    <th lay-data="{field:'keyword', width:300}">关键字</th>
+                                    <th lay-data="{field:'create_time', width:200}">创建时间</th>
+                                    <th lay-data="{fixed: 'right', toolbar: '#barDemo'}">操作</th>
+                                </tr>
+                                </thead>
+                            </table>
+
+                            <script type="text/html" id="barDemo">
+                                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+                                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
+                                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="del">删除</a>
+                            </script>
                         </div>
                     </div>
                 </div>
@@ -52,145 +50,75 @@
 {include file="page/footer" /}
 
 <script>
-    var editObj=null,ptable=null,treeGrid=null,tableId='treeTable',layer=null;
-    layui.config({
-        base: '{$Think.BASE_PATH}layui/extend/'
-    }).extend({
-        treeGrid:'treeGrid'
-    }).use(['jquery','treeGrid','layer'], function(){
-        var $=layui.jquery;
-        treeGrid = layui.treeGrid;//很重要
-        layer    = layui.layer;
-        ptable   = treeGrid.render({
-            id:tableId
-            ,elem: '#'+tableId
-            ,idField:'id'
-            ,url:'{$Think.BASE_PATH}admin/category/json_data'
-            ,cellMinWidth: 100
-            ,treeId:'id'//树形id字段名称
-            ,treeUpId:'pId'//树形父id字段名称
-            ,treeShowName:'name'//以树形式显示的字段
-            ,heightRemove:[".dHead",10]//不计算的高度,表格设定的是固定高度，此项不生效
-            ,height:'100%'
-            ,isFilter:false
-            ,iconOpen:true//是否显示图标【默认显示】
-            ,isOpenDefault:true//节点默认是展开还是折叠【默认展开】
-            ,cols: [[
-                {type:'numbers'}
-                ,{type:'radio'}
-                ,{type:'checkbox'}
-                ,{field:'name', width:300, title: '水果名称',edit:'text'}
-                ,{field:'id',width:100, title: 'id'}
-                ,{field:'pId', title: 'pid'}
-                ,{width:100,title: '操作', align:'center'/*toolbar: '#barDemo'*/
-                    ,templet: function(d){
-                        var html='';
-                        var addBtn='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="add">添加</a>';
-                        var delBtn='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
-                        return addBtn+delBtn;
-                    }
-                }
-            ]]
-            ,page:true
-            ,parseData:function (res) {//数据加载后回调
-                return res;
-            }
-            ,onClickRow:function (index, o) {
-                console.log(index,o,"单击！");
-            }
-            ,onDblClickRow:function (index, o) {
-                console.log(index,o,"双击");
+    layui.use(['table','jquery'], function(){
+        var table = layui.table;
+        var $ = layui.$;
+
+        table.on('checkbox(demo)', function(obj){
+            console.log(obj)
+        });
+
+        //监听工具条
+        table.on('tool(demo)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'detail'){
+//                layer.msg('ID：'+ data.id + ' 的查看操作');
+                window.location.href = '{$Think.BASE_PATH}admin/category/info?id=' + data.id;
+            } else if(obj.event === 'del'){
+                layer.confirm('真的删除行么', function(index){
+                    //提交
+                    $.ajax({
+                        url: "{$Think.BASE_PATH}admin/category/delete?id=" + data.id,
+                        type: "get",
+                        success:function(result){
+                            var result = JSON.parse(result);
+                            var code = result.code;
+                            var msg  = result.msg;
+                            var data = result.data;
+                            if(code==0){
+                                layer.msg(msg, {
+                                    time: 2000,
+                                    icon: 16,
+                                    shade: 0.2
+                                }, function(){
+                                    obj.del();
+//                                    parent.location.reload();
+                                });
+                            }else{
+                                layer.msg(msg);
+                            }
+                            layer.close(index);
+                        }
+                    })
+
+                });
+            } else if(obj.event === 'edit'){
+//                layer.alert('编辑行：<br>'+ JSON.stringify(data))
+                window.location.href = '{$Think.BASE_PATH}admin/category/edit?id=' + data.id;
             }
         });
 
-        treeGrid.on('tool('+tableId+')',function (obj) {
-            if(obj.event === 'del'){//删除行
-                del(obj);
-            }else if(obj.event==="add"){//添加行
-                add(obj);
+        var active = {
+            getCheckData: function(){ //获取选中数据
+                var checkStatus = table.checkStatus('idTest')
+                    ,data = checkStatus.data;
+                layer.alert(JSON.stringify(data));
             }
+            ,getCheckLength: function(){ //获取选中数目
+                var checkStatus = table.checkStatus('idTest')
+                    ,data = checkStatus.data;
+                layer.msg('选中了：'+ data.length + ' 个');
+            }
+            ,isAll: function(){ //验证是否全选
+                var checkStatus = table.checkStatus('idTest');
+                layer.msg(checkStatus.isAll ? '全选': '未全选')
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
         });
+
     });
-
-//    function del(obj) {
-//        layer.confirm("你确定删除数据吗？如果存在下级节点则一并删除，此操作不能撤销！",{icon: 3,title:'提示'},
-//            function(index){//确定回调
-//                obj.del();
-//                layer.close(index);
-//            },function(index) {//取消回调
-//                layer.close(index);
-//            }
-//        );
-//    }
-
-
-    var i=1000000;
-    //添加
-    function add(pObj) {
-        var pdata=pObj?pObj.data:null;
-        var param={};
-        param.name='水果'+Math.random();
-        param.id=++i;
-        param.pId=pdata?pdata.id:null;
-        treeGrid.addRow(tableId,pdata?pdata[treeGrid.config.indexName]+1:0,param);
-    }
-
-    function print() {
-        console.log(treeGrid.cache[tableId]);
-        var loadIndex=layer.msg("对象已打印，按F12，在控制台查看！", {
-            time:3000
-            ,offset: 'auto'//顶部
-            ,shade: 0
-        });
-    }
-
-    function openorclose() {
-        var map=treeGrid.getDataMap(tableId);
-        var o= map['102'];
-        treeGrid.treeNodeOpen(tableId,o,!o[treeGrid.config.cols.isOpen]);
-    }
-
-
-    function openAll() {
-        var treedata=treeGrid.getDataTreeList(tableId);
-        treeGrid.treeOpenAll(tableId,!treedata[0][treeGrid.config.cols.isOpen]);
-    }
-
-    function getCheckData() {
-        var checkStatus = treeGrid.checkStatus(tableId)
-            ,data = checkStatus.data;
-        layer.alert(JSON.stringify(data));
-    }
-    function radioStatus() {
-        var data = treeGrid.radioStatus(tableId)
-        layer.alert(JSON.stringify(data));
-    }
-    function getCheckLength() {
-        var checkStatus = treeGrid.checkStatus(tableId)
-            ,data = checkStatus.data;
-        layer.msg('选中了：'+ data.length + ' 个');
-    }
-
-    function reload() {
-        treeGrid.reload(tableId,{
-            page:{
-                curr:1
-            }
-        });
-    }
-    function query() {
-        treeGrid.query(tableId,{
-            where:{
-                name:'sdfsdfsdf'
-            }
-        });
-    }
-
-    function test() {
-//        console.log(treeGrid.cache[tableId],treeGrid.getClass(tableId));
-        var map=treeGrid.getDataMap(tableId);
-        var o= map['102'];
-        o.name="更新";
-        treeGrid.updateRow(tableId,o);
-    }
 </script>
