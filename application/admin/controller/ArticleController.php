@@ -75,6 +75,7 @@ class ArticleController extends BaseController
         $categorys              = Db::table('nj_category')->where(array('delete'=>0))->select();
         $data['goback']         = url('admin/'.$this->url_path.'/list');
         $data['action']         = url('admin/'.$this->url_path.'/add_submit');
+        $data['url_upload']     = url('/upload/image');
         $data['module_name']    = $this->module_name;
         $data['categorys']      =  $categorys;
         return view($this->url_path.'/add_form', $data);

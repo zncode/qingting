@@ -44,7 +44,7 @@ class UploadController extends BaseController
      */
     public function image()
     {
-        $category = input('post.category');
+        $category = input('post.category') ? input('post.category') : 'article';
         $file = request()->file('image');
 
         if($file){
@@ -57,13 +57,28 @@ class UploadController extends BaseController
                 $picture['save_path'] = $info->getSaveName();
                 $picture['filename']  = $info->getFilename();
                 $picture['size']      = $info->getSize();
-                $picture['view_url']  = 'http://'.$_SERVER['HTTP_HOST'].'/zw/public/upload/'.$category.'/'.$date_dir.'/'.$picture['filename'];
+                $picture['src']  = 'http://'.$_SERVER['HTTP_HOST'].'/public/upload/'.$category.'/'.$date_dir.'/'.$picture['filename'];
+
 
 //                //生成缩略图
 //                $image = \think\Image::open(request()->file('image'));
 //                $image->thumb(150, 150)->save($upload_save_path_thumb.$picture['filename']);
 //                $thumb_file_name = str_replace('.'.$picture['extension'], '_thumb.'.$picture['extension'], $picture['filename']);
 //                $picture['thumb_path'] = $date_dir . DS . 'thumb'. DS . $thumb_file_name;
+
+                $data = [
+                    'module'        => $category,
+                    'type'          => 1,
+                    'status'        => 1,
+                    'filename'      => $picture['filename'],
+                    'size'          => $picture['size'],
+                    'save_path'     => '/public/upload/'.$category.'/'.$date_dir.'/'.$picture['filename'],
+                    'extension'     => $picture['extension'],
+                    'create_time'   => date("Y-m-d H:i:s", time()),
+                ];
+                $upload_id = Db::table('nj_upload')->insert($data);
+                $picture['upload_id'] = $upload_id;
+
                 $data = ['code'=>0, 'message'=>'上传图片成功', 'data'=>$picture];
             }else{
                 // 上传失败获取错误信息

@@ -37,6 +37,15 @@
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
+                                    <label class="layui-form-label">缩略图</label>
+                                    <div class="layui-input-block">
+                                        <button type="button" class="layui-btn" id="image_upload">
+                                            <i class="layui-icon">&#xe67c;</i>上传图片
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="layui-form-item">
                                     <label class="layui-form-label" >关键字</label>
                                     <div class="layui-input-block">
                                         <input type="input" name="meta_keyword" name="" class="layui-input"  placeholder="keyword1, keyword2, keyword3">
@@ -73,8 +82,9 @@
 
 <script>
 
-    layui.use('form', function(){
+    layui.use(['upload','form'], function(){
         var form = layui.form;
+        var upload = layui.upload;
         $ = layui.jquery;
 
         form.on('submit(add)', function(data){
@@ -102,6 +112,18 @@
                 }
             })
             return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#image_upload' //绑定元素
+            ,url: '{$url_upload}' //上传接口
+            ,done: function(res){
+                //上传完毕回调
+            }
+            ,error: function(){
+                //请求异常回调
+            }
         });
     });
 </script>
