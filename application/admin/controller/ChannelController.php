@@ -16,7 +16,6 @@ class ChannelController extends BaseController
      */
     public function index()
     {
-
         $pages  = Db::table($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
         $render = $pages->render();
         $lists  = $pages->all();

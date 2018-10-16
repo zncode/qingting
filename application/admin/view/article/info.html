@@ -1,103 +1,80 @@
-<!-- 头部开始 -->
 {include file="page/header" /}
-<!-- 头部结束 -->
+<div class="layui-layout layui-layout-admin">
+  {include file="page/body_top" /}
+  {include file="page/menu" /}
 
-<!-- 菜单开始 -->
-{include file="page/menu" /}
-<!-- 菜单结束 -->
+  <div class="layui-body">
+    <div class="layui-fluid">
+      <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+          <div class="layui-card">
 
-<!-- 内容开始 -->
-<div class="content-wrapper">
+            <div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
+              <a lay-href="">主页</a><span lay-separator="">/</span>
+              <a><cite>{$module_name}管理</cite></a><span lay-separator="">/</span>
+              <a><cite>{$module_name}详情</cite></a><span lay-separator=""></span>
+            </div>
 
-  <!-- 内容标题开始 -->
-  <section class="content-header">
-    <h1>
-      {$module_name}详情
-    </h1>
-    <ol class="breadcrumb">
-      <li><i class="fa fa-dashboard"></i>首页</li>
-      <li><i class="fa fa-dashboard"></i>{$module_name}详情</li>
-    </ol>
-  </section>
-  <!-- 内容标题结束 -->
-
-  <!-- 主内容开始 -->
-  <section class="content">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="box box-primary">
-          <div class="box-header with-border">
-            <a  href="{$goback}" class="btn btn-primary">返回</a>
-          </div>
-
-          <div class="box-body">
-            <div class="row">
-              <div class="col-md-12">
-                <table  class="table table-bordered table-hover dataTable">
-                  <tr>
-                    <td width="10%" align="right">ID&nbsp;&nbsp;</td>
-                    <td>{$info.id}</td>
-                  </tr>
-                  <tr>
-                    <td width="10%" align="right">目录&nbsp;&nbsp;</td>
-                    <td>{$info.category_id}</td>
-                  </tr>
-                  <tr>
-                    <td width="10%" align="right">状态&nbsp;&nbsp;</td>
-                    <td>{$info.status}</td>
-                  </tr>
-                  <tr>
-                    <td width="10%" align="right">来源&nbsp;&nbsp;</td>
-                    <td>{$info.source}</td>
-                  </tr>
-                  <tr>
-                    <td width="10%" align="right">作者&nbsp;&nbsp;</td>
-                    <td>{$info.author}</td>
-                  </tr>
-                  <tr>
-                    <td width="10%" align="right">Meta 关键字&nbsp;&nbsp;</td>
-                    <td>{$info.meta_keyword}</td>
-                  </tr>
-                  <tr>
-                    <td width="10%" align="right">Meta 描述&nbsp;&nbsp;</td>
-                    <td>{$info.meta_description}</td>
-                  </tr>
-                  <tr>
-                    <td width="10%" align="right">摘要&nbsp;&nbsp;</td>
-                    <td>{$info.summary}</td>
-                  </tr>
-                  <tr>
-                    <td width="10%" align="right">标题&nbsp;&nbsp;</td>
-                    <td>{$info.title}</td>
-                  </tr>
-                  <tr>
-                    <td width="10%" align="right">内容&nbsp;&nbsp;</td>
-                    <td>{$info.content}</td>
-                  </tr>
-                  <tr>
-                    <td width="10%" align="right">添加时间&nbsp;&nbsp;</td>
-                    <td>{$info.create_time}</td>
-                  </tr>
-                  <tr>
-                    <td width="10%" align="right">更新时间&nbsp;&nbsp;</td>
-                    <td>{$info.update_time}</td>
-                  </tr>
-                </table>
-              </div>
+            <div class="go_back"><a href="{$goback}" class="layui-btn layui-btn-sm">返回</a></div>
+            <div class="layui-card-body">
+              <table class="layui-table" >
+                <colgroup>
+                  <col width="200" >
+                  <col width="">
+                </colgroup>
+                <thead>
+                <tr>
+                  <td align="center">名称</td>
+                  <td align="center">内容</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td align="right" >ID</td>
+                  <td>{$info.id}</td>
+                </tr>
+                <tr>
+                  <td align="right" >名称</td>
+                  <td>{$info.title}</td>
+                </tr>
+                <tr>
+                  <td align="right" >栏目</td>
+                  <td>{$info.category_name}</td>
+                </tr>
+                <tr>
+                  <td align="right" >关键字</td>
+                  <td>{$info.meta_keyword}</td>
+                </tr>
+                <tr>
+                  <td align="right" >摘要</td>
+                  <td>{$info.summary}</td>
+                </tr>
+                <tr>
+                  <td align="right" >内容</td>
+                  <td>{$info.content}</td>
+                </tr>
+                <tr>
+                  <td align="right" >创建时间</td>
+                  <td>{$info.create_time}</td>
+                </tr>
+                <tr>
+                  <td align="right" >更新时间</td>
+                  <td>{$info.update_time}</td>
+                </tr>
+                </tbody>
+              </table>
             </div>
           </div>
-
         </div>
       </div>
     </div>
-  </section>
-  <!-- 主内容结束 -->
+
+
+
+  </div>
+
+  {include file="page/body_bottom" /}
 
 </div>
-<!-- 内容结束 -->
 
-<!-- 脚部开始 -->
 {include file="page/footer" /}
-<!-- 脚部结束 -->
-
-

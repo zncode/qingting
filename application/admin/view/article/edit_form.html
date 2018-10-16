@@ -1,124 +1,115 @@
-<!-- 头部开始 -->
 {include file="page/header" /}
-<!-- 头部结束 -->
+<div class="layui-layout layui-layout-admin">
+    {include file="page/body_top" /}
+    {include file="page/menu" /}
 
-<!-- 菜单开始 -->
-{include file="page/menu" /}
-<!-- 菜单结束 -->
+    <div class="layui-body">
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
 
-<!-- 内容开始 -->
-<div class="content-wrapper">
+                        <div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
+                            <a lay-href="">主页</a><span lay-separator="">/</span>
+                            <a><cite>{$module_name}管理</cite></a><span lay-separator="">/</span>
+                            <a><cite>{$module_name}编辑</cite></a><span lay-separator=""></span>
+                        </div>
 
-    <!-- 内容标题开始 -->
-    <section class="content-header">
-        <h1>
-            编辑{$module_name}
-        </h1>
-        <ol class="breadcrumb">
-            <li><i class="fa fa-dashboard"></i>首页</li>
-            <li><i class="fa fa-dashboard"></i>编辑{$module_name}</li>
-        </ol>
-    </section>
-    <!-- 内容标题结束 -->
+                        <div class="go_back"><a href="{$goback}" class="layui-btn layui-btn-sm">返回</a></div>
 
-    <!-- 主内容开始 -->
-    <section class="content">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-
-                        <a  href="{$goback}" class="btn btn-primary">返回</a>
+                        <div class="layui-card-body">
+                            <form id="add_form" action="{$action}" method="post" class="layui-form">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">标题</label>
+                                    <div class="layui-input-block">
+                                        <input type="input" name="title" placeholder="" class="layui-input" value="{$info.title}">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">栏目</label>
+                                    <div class="layui-input-block">
+                                        <select name="category_id" class="layui-select">
+                                            <option value=""> - 选择 - </option>{
+                                            {volist name="categorys" id="vo"}
+                                                {if condition="$info.category_id eq $vo.id"}
+                                                    <option value="{$vo.id}" selected="selected">{$vo.name}</option>
+                                                {else /}
+                                                    <option value="{$vo.id}">{$vo.name}</option>
+                                                {/if}
+                                            {/volist}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" >关键字</label>
+                                    <div class="layui-input-block">
+                                        <input type="input" name="meta_keyword" name="" class="layui-input"  placeholder="keyword1, keyword2, keyword3" value="{$info.meta_keyword}">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" >摘要</label>
+                                    <div class="layui-input-block">
+                                        <textarea class="layui-textarea" name="summary" rows="10" placeholder="Enter ..." >{$info.summary}</textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" >内容</label>
+                                    <div class="layui-input-block">
+                                        <textarea class="layui-textarea" name="content" rows="20" placeholder="Enter ..." >{$info.content}</textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <input type="hidden" name="id" name="id" value="{$info.id}">
+                                        <button class="layui-btn" lay-submit lay-filter="update">提交</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <!-- /.box-header -->
-                    <!-- form start -->
-                    <form id="edit_form" action="{$action}" method="post" >
-                        <div class="box-body">
-                            <div class="form-group">
-                                <label >标题</label>
-                                <input type="input" name="title" class="form-control"  placeholder="" value="{$info.title}">
-                            </div>
-                            <div class="form-group">
-                                <label>目录</label>
-                                <select class="form-control" id="category_id" name="category_id" >
-                                    <option value="0"> - Select - </option>
-                                    <option value="6" {if condition="$info.category_id eq 6"} selected="selected" {/if}> 趣味植物 </option>
-                                    <option value="19" {if condition="$info.category_id eq 19"} selected="selected" {/if}> 植物新闻 </option>
-                                    <option value="20" {if condition="$info.category_id eq 20"} selected="selected" {/if}> 植物科学 </option>
-                                    <option value="21" {if condition="$info.category_id eq 21"} selected="selected" {/if}> 植物之最 </option>
-                                    <option value="22" {if condition="$info.category_id eq 22"} selected="selected" {/if}> 植物知识 </option>
-                                    <option value="23" {if condition="$info.category_id eq 23"} selected="selected" {/if}> 植物历史 </option>
-                                    <option value="24" {if condition="$info.category_id eq 24"} selected="selected" {/if}> 植物故事 </option>
-                                    <option value="25" {if condition="$info.category_id eq 25"} selected="selected" {/if}> 植物保护 </option>
-                                    <option value="26" {if condition="$info.category_id eq 26"} selected="selected" {/if}> 植物学家 </option>
-                                    <option value="27" {if condition="$info.category_id eq 27"} selected="selected" {/if}> 植物名词 </option>
-                                    <option value="28" {if condition="$info.category_id eq 28"} selected="selected" {/if}> 每日养眼 </option>
-                                    <option value="29" {if condition="$info.category_id eq 29"} selected="selected" {/if}> 植物栽培 </option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="status" id="optionsRadios1" value="1" {if condition="$info.status eq 1"} checked="checked" {/if} >
-                                        默认
-                                    </label>
-                                </div>
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="status" id="optionsRadios2" value="2" {if condition="$info.status eq 2"} checked="checked" {/if}>
-                                        网站首页
-                                    </label>
-                                </div>
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="status" id="optionsRadios3" value="3" {if condition="$info.status eq 3"} checked="checked" {/if}>
-                                        关闭
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label >来源</label>
-                                <input type="input" name="source" class="form-control"  placeholder="www.baidu.com" value="{$info.source}">
-                            </div>
-                            <div class="form-group">
-                                <label >作者</label>
-                                <input type="input" name="author" class="form-control"  placeholder="未知" value="{$info.author}">
-                            </div>
-                            <div class="form-group">
-                                <label >Meta关键字</label>
-                                <input type="input" name="meta_keyword" name="" class="form-control"  placeholder="keyword1, keyword2, keyword3" value="{$info.meta_keyword}">
-                            </div>
-                            <div class="form-group">
-                                <label >Meta描述</label>
-                                <input type="input" name="meta_description" class="form-control"  placeholder="description" value="{$info.meta_description}">
-                            </div>
-                            <div class="form-group">
-                                <label>摘要</label>
-                                <textarea class="form-control" name="summary" rows="3" placeholder="Enter ...">{$info.summary}</textarea>
-                            </div>
-                            <div class="form-group">
-                                <label>内容</label>
-                                <textarea class="form-control" name="content" rows="10" placeholder="Enter ..." >{$info.content}</textarea>
-                            </div>
-                        </div>
-                        <!-- /.box-body -->
-
-                        <div class="box-footer">
-                            <input type="hidden" name="id" name="id" value="{$info.id}">
-                            <button type="submit" class="btn btn-primary">提交</button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
-    </section>
-    <!-- 主内容结束 -->
+
+    </div>
+
+    {include file="page/body_bottom" /}
 
 </div>
-<!-- 内容结束 -->
 
-<!-- 脚部开始 -->
 {include file="page/footer" /}
-<!-- 脚部结束 -->
 
+<script>
 
+    layui.use('form', function(){
+        var form = layui.form;
+        $ = layui.jquery;
+
+        form.on('submit(update)', function(data){
+            //提交
+            $.ajax({
+                url: "{$action}",
+                type: "post",
+                data: data.field,
+                success:function(result){
+                    var result = JSON.parse(result);
+                    var code = result.code;
+                    var msg  = result.msg;
+                    var data = result.data;
+                    if(code==0){
+                        layer.msg(msg, {
+                            time: 2000,
+                            icon: 16,
+                            shade: 0.2
+                        }, function(){
+                            parent.location.reload();
+                        });
+                    }else{
+                        layer.msg(msg);
+                    }
+                }
+            })
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+    });
+</script>

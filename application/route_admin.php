@@ -10,23 +10,6 @@ Route::get('admin/user/register', 			    'admin/UserController/register_form');
 Route::post('admin/user/register_submit', 		'admin/UserController/register_form_submit');
 Route::get('admin/user/logout', 			    'admin/UserController/logout');
 
-//文章
-Route::get('admin/article/add', 			'ArticleController/add_form');
-Route::post('admin/article/add_submit', 	'ArticleController/add_form_submit');
-Route::get('admin/article/edit', 			'ArticleController/edit_form');
-Route::post('admin/article/edit_submit', 	'ArticleController/edit_form_submit');
-Route::get('admin/article/list', 			'ArticleController/index');
-Route::get('admin/article/info', 			'ArticleController/info');
-Route::get('admin/article/delete', 		    'ArticleController/delete');
-
-//文章类型
-Route::get('admin/article_type/add', 			'CategoryController/add_form');
-Route::post('admin/article_type/add_submit', 	'CategoryController/add_form_submit');
-Route::get('admin/article_type/edit', 			'CategoryController/edit_form');
-Route::post('admin/article_type/edit_submit', 	'CategoryController/edit_form_submit');
-Route::get('admin/article_type/list', 			'CategoryController/index');
-Route::get('admin/article_type/info', 			'CategoryController/info');
-Route::get('admin/article_type/delete', 		'CategoryController/delete');
 
 //频道
 Route::get('admin/channel/add', 			'admin/ChannelController/add_form');
@@ -48,4 +31,25 @@ Route::get('admin/category/info', 			'admin/CategoryController/info');
 Route::get('admin/category/delete', 		'admin/CategoryController/delete');
 Route::get('admin/category/json_data', 		'admin/CategoryController/json_data');
 Route::get('admin/category/list_data', 		'admin/CategoryController/index_data');
+
+//内容
+Route::get('admin/article/add', 			'admin/ArticleController/add_form');
+Route::post('admin/article/add_submit', 	'admin/ArticleController/add_form_submit');
+Route::get('admin/article/edit', 			'admin/ArticleController/edit_form');
+Route::post('admin/article/edit_submit', 	'admin/ArticleController/edit_form_submit');
+Route::get('admin/article/list', 			'admin/ArticleController/index');
+Route::get('admin/article/info', 			'admin/ArticleController/info');
+Route::get('admin/article/delete', 		    'admin/ArticleController/delete');
+Route::get('admin/article/list_data', 		'admin/ArticleController/index_data');
+
+//文章类型
+Route::get('admin/article_type/add', 			'CategoryController/add_form');
+Route::post('admin/article_type/add_submit', 	'CategoryController/add_form_submit');
+Route::get('admin/article_type/edit', 			'CategoryController/edit_form');
+Route::post('admin/article_type/edit_submit', 	'CategoryController/edit_form_submit');
+Route::get('admin/article_type/list', 			'CategoryController/index');
+Route::get('admin/article_type/info', 			'CategoryController/info');
+Route::get('admin/article_type/delete', 		'CategoryController/delete');
+
+
 

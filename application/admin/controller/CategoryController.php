@@ -63,7 +63,6 @@ class CategoryController extends BaseController
     {
         $id = input('get.id');
         $info = Db::table($this->table)->where(array('id'=>$id))->find();
-
         $data['info'] = $info;
         $data['goback'] = url('admin/'.$this->url_path.'/list');
         $data['module_name'] = $this->module_name;
@@ -114,15 +113,14 @@ class CategoryController extends BaseController
      */
     public function edit_form()
     {
-        $id = input('get.id');
-        $info = Db::table($this->table)->where(array('id'=>$id))->find();
-        $channels = Db::table('nj_channel')->where(array('delete'=>0))->select();
-
-        $data['info']       = $info;
-        $data['channels']   = $channels;
-        $data['goback'] = url('admin/'.$this->url_path.'/list');
-        $data['action'] = url('admin/'.$this->url_path.'/edit_submit');
-        $data['module_name'] = $this->module_name;
+        $id                     = input('get.id');
+        $info                   = Db::table($this->table)->where(array('id'=>$id))->find();
+        $channels               = Db::table('nj_channel')->where(array('delete'=>0))->select();
+        $data['channels']       = $channels;
+        $data['info']           = $info;
+        $data['goback']         = url('admin/'.$this->url_path.'/list');
+        $data['action']         = url('admin/'.$this->url_path.'/edit_submit');
+        $data['module_name']    = $this->module_name;
         return view($this->url_path.'/edit_form', $data);
     }
 

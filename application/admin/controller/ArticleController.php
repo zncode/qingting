@@ -1,13 +1,13 @@
 <?php
 namespace app\admin\controller;
 
-use app\index\controller\BaseController;
+use app\admin\controller\BaseController;
 use think\Db;
 
 class ArticleController extends BaseController
 {
     public $pager = 20;
-    public $table = 'zw_article';
+    public $table = 'nj_article';
     public $url_path = 'article';
     public $module_name = '文章';
 
@@ -16,29 +16,36 @@ class ArticleController extends BaseController
      */
     public function index()
     {
-        $keyword = input('get.keyword') ? input('get.keyword') : NULL;
-        if($keyword){
-            $where['title'] = ['like', '%'.$keyword.'%'];
-        }
-        $where['delete'] = 0;
-
-        $pages  = Db::table($this->table)->where($where)->order('create_time desc')->paginate($this->pager);
+        $pages  = Db::table($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
         $render = $pages->render();
         $lists  = $pages->all();
 
-        if(is_array($lists) && count($lists)){
-            foreach($lists as $key => $value){
-                $lists[$key]['picture_number'] = 0;
-            }
-        }
-
-        $data['list'] = $lists;
-        $data['render'] = $render;
-        $data['goback'] = url('admin/'.$this->url_path.'/add');
+        $data['list']           = $lists;
+        $data['render']         = $render;
+        $data['goback']         = url('admin/'.$this->url_path.'/add');
         $data['module_name']    = $this->module_name;
         $data['path']           = $this->url_path;
-        $data['action']         = url('admin/'.$this->url_path.'/list');
         return view($this->url_path.'/list', $data);
+    }
+
+    /**
+     * 列表
+     */
+    public function index_data()
+    {
+        $pages  = Db::table($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
+        $lists  = $pages->all();
+        foreach($lists as $key => $value){
+            $url_view   = url('admin/'.$this->url_path.'/info', ['id'=>$value['id']]);
+            $url_edit   = url('admin/'.$this->url_path.'/edit', ['id'=>$value['id']]);
+            $url_delete = url('admin/'.$this->url_path.'/delete', ['id'=>$value['id']]);
+        }
+        $data = [
+            'code'  => 0,
+            'message' => '获取列表成功!',
+            'data'=> $lists,
+        ];
+        $this->json($data);
     }
 
     /**
@@ -48,10 +55,15 @@ class ArticleController extends BaseController
     {
         $id = input('get.id');
         $info = Db::table($this->table)->where(array('id'=>$id))->find();
-
+        $category = Db::table('nj_category')->where(array('id'=>$info['category_id']))->find();
+        if($category){
+            $info['category_name'] = $category['name'];
+        }else{
+            $info['category_name'] = '';
+        }
         $data['info'] = $info;
         $data['goback'] = url('admin/'.$this->url_path.'/list');
-        $data['module_name']    = $this->module_name;
+        $data['module_name'] = $this->module_name;
         return view($this->url_path.'/info', $data);
     }
 
@@ -60,10 +72,11 @@ class ArticleController extends BaseController
      */
     public function add_form()
     {
-        $data['goback'] = url('admin/'.$this->url_path.'/list');
-        $data['action'] = url('admin/'.$this->url_path.'/add_submit');
+        $categorys              = Db::table('nj_category')->where(array('delete'=>0))->select();
+        $data['goback']         = url('admin/'.$this->url_path.'/list');
+        $data['action']         = url('admin/'.$this->url_path.'/add_submit');
         $data['module_name']    = $this->module_name;
-        $data['upload_image']   = url('/upload/image_editor');
+        $data['categorys']      =  $categorys;
         return view($this->url_path.'/add_form', $data);
     }
 
@@ -73,32 +86,22 @@ class ArticleController extends BaseController
     public function add_form_submit()
     {
         $formData = input('request.');
-
         $data = [
-            'category_id'       => $formData['category_id'],
-            'status'            => $formData['status'],
-            'source'            => $formData['source'],
-            'author'            => $formData['author'],
-            'meta_keyword'      => $formData['meta_keyword'],
-            'meta_description'  => $formData['meta_description'],
-            'summary'           => $formData['summary'],
             'title'             => $formData['title'],
+            'category_id'       => $formData['category_id'],
+            'meta_keyword'      => $formData['meta_keyword'],
+            'meta_description'  => $formData['summary'],
+            'summary'           => $formData['summary'],
             'content'           => $formData['content'],
+            'status'            => 1,
             'create_time'       => date("Y-m-d H:i:s", time()),
         ];
         $result = Db::table($this->table)->insert($data);
-        $id = Db::table($this->table)->getLastInsID();
-
-        //更新图片
-        if(is_array($formData['upload_images']) && count($formData['upload_images'])){
-            foreach($formData['upload_images'] as $picture_name){
-                Db::table($this->table.'_picture')->where(array('picture_name'=>$picture_name))->update(array('article_id'=>$id));
-            }
-        }
         if($result){
-            $this->success('添加成功', 'admin/'.$this->url_path.'/add');
+
+            $this->json(array('code'=>0, 'msg'=>'添加成功', 'data'=>array()));
         }else{
-            $this->error('添加失败');
+            $this->json(array('code'=>1, 'msg'=>'添加失败', 'data'=>array()));
         }
     }
 
@@ -109,11 +112,12 @@ class ArticleController extends BaseController
     {
         $id = input('get.id');
         $info = Db::table($this->table)->where(array('id'=>$id))->find();
-
+        $categorys              = Db::table('nj_category')->where(array('delete'=>0))->select();
+        $data['categorys']      = $categorys;
         $data['info'] = $info;
         $data['goback'] = url('admin/'.$this->url_path.'/list');
         $data['action'] = url('admin/'.$this->url_path.'/edit_submit');
-        $data['module_name']    = $this->module_name;
+        $data['module_name'] = $this->module_name;
         return view($this->url_path.'/edit_form', $data);
     }
 
@@ -125,22 +129,19 @@ class ArticleController extends BaseController
         $formData = input('request.');
         $id = $formData['id'];
         $data = [
-            'category_id'       => $formData['category_id'],
-            'status'            => $formData['status'],
-            'source'            => $formData['source'],
-            'author'            => $formData['author'],
-            'meta_keyword'      => $formData['meta_keyword'],
-            'meta_description'  => $formData['meta_description'],
-            'summary'           => $formData['summary'],
             'title'             => $formData['title'],
+            'category_id'       => $formData['category_id'],
+            'meta_keyword'      => $formData['meta_keyword'],
+            'meta_description'  => $formData['summary'],
+            'summary'           => $formData['summary'],
             'content'           => $formData['content'],
             'update_time'       => date("Y-m-d H:i:s", time()),
         ];
         $result = Db::table($this->table)->where(array('id'=>$id))->update($data);
         if($result){
-            $this->success('编辑成功', 'admin/'.$this->url_path.'/edit?id='.$id);
+            $this->json(array('code'=>0, 'msg'=>'编辑成功', 'data'=>array('id'=>$id)));
         }else{
-            $this->error('编辑失败');
+            $this->json(array('code'=>1, 'msg'=>'编辑失败', 'data'=>array()));
         }
     }
 
@@ -155,13 +156,10 @@ class ArticleController extends BaseController
         ];
         $result = Db::table($this->table)->where('id',$id)->update($data);
         if($result){
-            $this->success('删除成功', 'admin/'.$this->url_path.'/list');
+            $this->json(array('code'=>0, 'msg'=>'删除成功', 'data'=>array('id'=>$id)));
         }else{
-            $this->error('删除失败');
+            $this->json(array('code'=>1, 'msg'=>'删除失败', 'data'=>array()));
         }
     }
 
-    public function test(){
-        echo $_SERVER['PHP_SELF'];
-    }
 }

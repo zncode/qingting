@@ -1,95 +1,122 @@
-<!-- 头部开始 -->
 {include file="page/header" /}
-<!-- 头部结束 -->
+<div class="layui-layout layui-layout-admin">
+    {include file="page/body_top" /}
+    {include file="page/menu" /}
 
-<!-- 菜单开始 -->
-{include file="page/menu" /}
-<!-- 菜单结束 -->
+    <div class="layui-body">
 
-<!-- 内容开始 -->
-<div class="content-wrapper">
-
-    <!-- 内容标题开始 -->
-    <section class="content-header">
-        <h1>
-            {$module_name}列表
-        </h1>
-        <ol class="breadcrumb">
-            <li><i class="fa fa-dashboard"></i>首页</li>
-            <li><i class="fa fa-dashboard"></i>{$module_name}列表</li>
-        </ol>
-    </section>
-    <!-- 内容标题结束 -->
-
-    <!-- 主内容开始 -->
-    <section class="content">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <div class="rows">
-                            <div class="col-md-6"><a  href="{$goback}" class="btn btn-primary">添加</a></div>
-                            <div class="col-md-6 text-right">
-                                <form id="search_form" action="{$action}" method="get" class="form-inline">
-                                    <input type="input" name="keyword" class="form-control"  placeholder="标题" >
-                                    <button type="submit" class="btn btn-primary">搜索</button>
-                                </form>
-
-                            </div>
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
+                            <a lay-href="">主页</a><span lay-separator="">/</span>
+                            <a><cite>{$module_name}管理</cite></a><span lay-separator="">/</span>
+                            <a><cite>{$module_name}详情</cite></a><span lay-separator=""></span>
                         </div>
+                        <div class="go_back"><a href="{:url('admin/'.$path.'/add')}" class="layui-btn layui-btn-sm">添加</a></div>
+                        <div class="layui-card-body">
+                            <table class="layui-table" lay-data="{height:650, url:'{$Think.BASE_PATH}admin/{$path}/list_data', page:true, id:'idTest'}" lay-filter="demo">
+                                <thead>
+                                <tr>
+                                    <th lay-data="{type:'checkbox', fixed: 'left'}"></th>
+                                    <th lay-data="{field:'id', width:80, sort: true, fixed: true}">ID</th>
+                                    <th lay-data="{field:'title', width:100}">{$module_name}名称</th>
+                                    <th lay-data="{field:'create_time', width:200}">创建时间</th>
+                                    <th lay-data="{fixed: 'right', toolbar: '#barDemo'}">操作</th>
+                                </tr>
+                                </thead>
+                            </table>
 
-                    </div>
-
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <table  class="table table-bordered table-hover dataTable">
-                                    <thead>
-                                        <tr role="row">
-                                            <th>序号</th>
-                                            <th>标题</th>
-                                            <th>来源</th>
-                                            <th>作者</th>
-                                            <th>图片</th>
-                                            <th>添加时间</th>
-                                            <th>更新时间</th>
-                                            <th>操作</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {volist name="list" id="vo"}
-                                        <tr>
-                                            <td>{$vo.id}</td>
-                                            <td>{$vo.title}</td>
-                                            <td>{$vo.source}</td>
-                                            <td>{$vo.author}</td>
-                                            <td>{$vo.picture_number}</td>
-                                            <td>{$vo.create_time}</td>
-                                            <td>{$vo.update_time}</td>
-                                            <td><a href="{:url('admin/'.$path.'/info', array('id'=>$vo.id))}">查看</a> | <a href="{:url('admin/'.$path.'/edit', array('id'=>$vo.id))}">编辑</a> | <a href="{:url('admin/'.$path.'/delete', array('id'=>$vo.id))}">删除</a></td>
-                                        </tr>
-                                        {/volist}
-                                    </tbody>
-                                </table>
-
-                                <!-- 分页开始 -->
-                                {$render}
-                                <!-- 分页结束 -->
-                            </div>
+                            <script type="text/html" id="barDemo">
+                                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+                                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
+                                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="del">删除</a>
+                            </script>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
-    </section>
-    <!-- 主内容结束 -->
+
+    </div>
+
+    {include file="page/body_bottom" /}
 
 </div>
-<!-- 内容结束 -->
 
-<!-- 脚部开始 -->
 {include file="page/footer" /}
-<!-- 脚部结束 -->
 
+<script>
+    layui.use(['table','jquery'], function(){
+        var table = layui.table;
+        var $ = layui.$;
 
+        table.on('checkbox(demo)', function(obj){
+            console.log(obj)
+        });
+
+        //监听工具条
+        table.on('tool(demo)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'detail'){
+//                layer.msg('ID：'+ data.id + ' 的查看操作');
+                window.location.href = '{$Think.BASE_PATH}admin/{$path}/info?id=' + data.id;
+            } else if(obj.event === 'del'){
+                layer.confirm('真的删除行么', function(index){
+                    //提交
+                    $.ajax({
+                        url: "{$Think.BASE_PATH}admin/{$path}/delete?id=" + data.id,
+                        type: "get",
+                        success:function(result){
+                            var result = JSON.parse(result);
+                            var code = result.code;
+                            var msg  = result.msg;
+                            var data = result.data;
+                            if(code==0){
+                                layer.msg(msg, {
+                                    time: 2000,
+                                    icon: 16,
+                                    shade: 0.2
+                                }, function(){
+                                    obj.del();
+//                                    parent.location.reload();
+                                });
+                            }else{
+                                layer.msg(msg);
+                            }
+                            layer.close(index);
+                        }
+                    })
+
+                });
+            } else if(obj.event === 'edit'){
+//                layer.alert('编辑行：<br>'+ JSON.stringify(data))
+                window.location.href = '{$Think.BASE_PATH}admin/{$path}/edit?id=' + data.id;
+            }
+        });
+
+        var active = {
+            getCheckData: function(){ //获取选中数据
+                var checkStatus = table.checkStatus('idTest')
+                    ,data = checkStatus.data;
+                layer.alert(JSON.stringify(data));
+            }
+            ,getCheckLength: function(){ //获取选中数目
+                var checkStatus = table.checkStatus('idTest')
+                    ,data = checkStatus.data;
+                layer.msg('选中了：'+ data.length + ' 个');
+            }
+            ,isAll: function(){ //验证是否全选
+                var checkStatus = table.checkStatus('idTest');
+                layer.msg(checkStatus.isAll ? '全选': '未全选')
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+</script>

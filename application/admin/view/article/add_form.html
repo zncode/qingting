@@ -1,157 +1,107 @@
-<!-- 头部开始 -->
 {include file="page/header" /}
-<!-- 头部结束 -->
+<div class="layui-layout layui-layout-admin">
+    {include file="page/body_top" /}
+    {include file="page/menu" /}
 
-<!-- 菜单开始 -->
-{include file="page/menu" /}
-<!-- 菜单结束 -->
+    <div class="layui-body">
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
 
-<!-- 内容开始 -->
-<div class="content-wrapper">
+                        <div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
+                            <a lay-href="">主页</a><span lay-separator="">/</span>
+                            <a><cite>{$module_name}管理</cite></a><span lay-separator="">/</span>
+                            <a><cite>{$module_name}详情</cite></a><span lay-separator=""></span>
+                        </div>
 
-    <!-- 内容标题开始 -->
-    <section class="content-header">
-        <h1>
-            {$module_name}添加
-        </h1>
-        <ol class="breadcrumb">
-            <li><i class="fa fa-dashboard"></i>首页</li>
-            <li><i class="fa fa-dashboard"></i>{$module_name}添加</li>
-        </ol>
-    </section>
-    <!-- 内容标题结束 -->
+                        <div class="go_back"><a href="{$goback}" class="layui-btn layui-btn-sm">返回</a></div>
 
-    <!-- 主内容开始 -->
-    <section class="content">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-
-                        <a  href="{$goback}" class="btn btn-primary">返回</a>
+                        <div class="layui-card-body">
+                            <form id="add_form" action="{$action}" method="post" class="layui-form">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">标题</label>
+                                    <div class="layui-input-block">
+                                        <input type="input" name="title" placeholder="" class="layui-input" >
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">栏目</label>
+                                    <div class="layui-input-block">
+                                        <select name="category_id" class="layui-select">
+                                            <option value=""> - 选择 - </option>
+                                            {volist name="categorys" id="vo"}
+                                                <option value="{$vo.id}">{$vo.name}</option>
+                                            {/volist}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" >关键字</label>
+                                    <div class="layui-input-block">
+                                        <input type="input" name="meta_keyword" name="" class="layui-input"  placeholder="keyword1, keyword2, keyword3">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" >摘要</label>
+                                    <div class="layui-input-block">
+                                        <textarea class="layui-textarea" name="summary" rows="2" placeholder="Enter ..." ></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" >内容</label>
+                                    <div class="layui-input-block">
+                                        <textarea class="layui-textarea" name="content" rows="20" placeholder="Enter ..." ></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <button type="submit" class="layui-btn" lay-submit lay-filter="add" >提交</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <!-- /.box-header -->
-                    <!-- form start -->
-                    <form id="add_form" action="{$action}" method="post" >
-                        <div class="box-body">
-                            <div class="form-group">
-                                <label >标题</label>
-                                <input type="input" name="title" class="form-control"  placeholder="">
-                            </div>
-                            <div class="form-group">
-                                <label>目录</label>
-                                <select class="form-control" id="category_id" name="category_id" >
-                                    <option value="0"> - Select - </option>
-                                    <option value="6"> 趣味植物 </option>
-                                    <option value="19"> 植物新闻 </option>
-                                    <option value="20"> 植物科学 </option>
-                                    <option value="21"> 植物之最 </option>
-                                    <option value="22"> 植物知识 </option>
-                                    <option value="23"> 植物历史 </option>
-                                    <option value="24"> 植物故事 </option>
-                                    <option value="25"> 植物保护 </option>
-                                    <option value="26"> 植物学家 </option>
-                                    <option value="27"> 植物名词 </option>
-                                    <option value="28"> 每日养眼 </option>
-                                    <option value="29"> 植物栽培 </option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="status" id="optionsRadios1" value="1" checked="">
-                                        默认
-                                    </label>
-                                </div>
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="status" id="optionsRadios2" value="2">
-                                        网站首页
-                                    </label>
-                                </div>
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="status" id="optionsRadios3" value="3" disabled="">
-                                        关闭
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label >来源</label>
-                                <input type="input" name="source" class="form-control"  placeholder="www.baidu.com">
-                            </div>
-                            <div class="form-group">
-                                <label >作者</label>
-                                <input type="input" name="author" class="form-control"  placeholder="未知">
-                            </div>
-                            <div class="form-group">
-                                <label >Meta关键字</label>
-                                <input type="input" name="meta_keyword" name="" class="form-control"  placeholder="keyword1, keyword2, keyword3">
-                            </div>
-                            <div class="form-group">
-                                <label >Meta描述</label>
-                                <input type="input" name="meta_description" class="form-control"  placeholder="description">
-                            </div>
-                            <div class="form-group">
-                                <label>摘要</label>
-                                <textarea class="form-control" name="summary" rows="3" placeholder="Enter ..."></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label>内容</label>
-                                <textarea id="text1" class="form-control" name="content" rows="10" placeholder="Enter ..." style="display:none" ></textarea>
-                            </div>
-                            <div id="editor">
-
-                            </div>
-                            <div id="upload_image" style="display:none;">{$upload_image}</div>
-                            <script  type="text/javascript" src="https://unpkg.com/wangeditor/release/wangEditor.min.js"></script>
-                            <script type="text/javascript">
-                                var E = window.wangEditor;
-                                var editor = new E('#editor');
-                                var text1 = $('#text1');
-                                var upload_image = $('#upload_image').text();
-                                editor.customConfig.uploadImgServer = upload_image;
-                                editor.customConfig.uploadImgParams = {
-                                    // 如果版本 <=v3.1.0 ，属性值会自动进行 encode ，此处无需 encode
-                                    // 如果版本 >=v3.1.1 ，属性值不会自动 encode ，如有需要自己手动 encode
-                                    category: 'article'
-                                },
-                                editor.customConfig.uploadImgHooks = {
-                                    success: function (xhr, editor, result) {
-                                        // 图片上传并返回结果，图片插入成功之后触发
-                                        // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象，result 是服务器端返回的结果
-                                        var filename = result.filename;
-                                        for(var i = 0;i < filename.length; i++) {
-                                            $('#upload_images').append('<input type="hidden" name="upload_images[]" value="'+filename[i]+'" >');
-                                        }
-                                    },
-                                },
-                                editor.customConfig.onchange = function (html) {
-                                    // 监控变化，同步更新到 textarea
-                                    text1.val(html);
-                                }
-                                editor.create();
-                                // 初始化 textarea 的值
-                                text1.val(editor.txt.html());
-                            </script>
-                        </div>
-                        <!-- /.box-body -->
-                        <div id="upload_images"></div>
-                        <div class="box-footer">
-                            <button type="submit" class="btn btn-primary">提交</button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
-    </section>
-    <!-- 主内容结束 -->
-
+    </div>
+    {include file="page/body_bottom" /}
 </div>
-<!-- 内容结束 -->
 
-<!-- 脚部开始 -->
 {include file="page/footer" /}
-<!-- 脚部结束 -->
 
+<script>
 
+    layui.use('form', function(){
+        var form = layui.form;
+        $ = layui.jquery;
+
+        form.on('submit(add)', function(data){
+            //提交
+            $.ajax({
+                url: "{$action}",
+                type: "post",
+                data: data.field,
+                success:function(result){
+                    var result = JSON.parse(result);
+                    var code = result.code;
+                    var msg  = result.msg;
+                    var data = result.data;
+                    if(code==0){
+                        layer.msg(msg, {
+                            time: 2000,
+                            icon: 16,
+                            shade: 0.2
+                        }, function(){
+                            parent.location.reload();
+                        });
+                    }else{
+                        layer.msg(msg);
+                    }
+                }
+            })
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+    });
+</script>
