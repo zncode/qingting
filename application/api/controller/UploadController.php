@@ -65,7 +65,7 @@ class UploadController extends BaseController
                 if($_SERVER['HTTP_HOST'] == 'localhost'){
                     $src = 'http://'.$_SERVER['HTTP_HOST'].'/nongjia/public/upload/'.$category.'/'.$date_dir.'/'.$picture['filename'];
                 }else{
-                    $src = 'http://'.$_SERVER['HTTP_HOST'].'/public/upload/'.$category.'/'.$date_dir.'/'.$picture['filename'];
+                    $src = 'http://'.$_SERVER['HTTP_HOST'].'/upload/'.$category.'/'.$date_dir.'/'.$picture['filename'];
                 }
                 $picture['src']  = $src;
 
@@ -82,7 +82,7 @@ class UploadController extends BaseController
                     'status'        => 1,
                     'filename'      => $picture['filename'],
                     'size'          => $picture['size'],
-                    'save_path'     => '/public/upload/'.$category.'/'.$date_dir.'/'.$picture['filename'],
+                    'save_path'     => '/upload/'.$category.'/'.$date_dir.'/'.$picture['filename'],
                     'extension'     => $picture['extension'],
                     'create_time'   => date("Y-m-d H:i:s", time()),
                 ];

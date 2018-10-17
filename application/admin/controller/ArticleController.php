@@ -62,7 +62,7 @@ class ArticleController extends BaseController
             ->find();
         if($info['save_path']){
             if($_SERVER['HTTP_HOST'] == 'localhost'){
-                $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].'/nongjia/'.$info['save_path'];
+                $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].'/nongjia/public/'.$info['save_path'];
             }else{
                 $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].$info['save_path'];
             }
@@ -138,7 +138,7 @@ class ArticleController extends BaseController
             ->find();
         if($info['save_path']){
             if($_SERVER['HTTP_HOST'] == 'localhost'){
-                $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].'/nongjia/'.$info['save_path'];
+                $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].'/nongjia/public/'.$info['save_path'];
             }else{
                 $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].$info['save_path'];
             }
