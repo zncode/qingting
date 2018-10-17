@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50540
 File Encoding         : 65001
 
-Date: 2018-10-16 10:52:13
+Date: 2018-10-17 17:39:47
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -34,7 +34,7 @@ CREATE TABLE `nj_article` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of nj_article
@@ -58,6 +58,29 @@ INSERT INTO `nj_article` VALUES ('16', '6', '11', '1', '111', '111', '11', '1112
 INSERT INTO `nj_article` VALUES ('17', '6', '11', '1', '11', '11', '11', '11', '<p>111<img src=\"http://localhost/zw/public/upload/article/20180517/d9052da92ca898c6449f7d7d1b672bc7.jpg\" style=\"max-width: 100%;\"></p><p>222</p><p><img src=\"http://localhost/zw/public/upload/article/20180517/3e302d22f622bd28bb1e32b4f1c52989.jpg\" style=\"max-width:100%;\"><br></p>', '', '0', '2018-05-17 15:03:56', '0000-00-00 00:00:00');
 INSERT INTO `nj_article` VALUES ('18', '6', '0', '1', '11112', '22212', '22212', 'aaa12', '22212312312', '', '1', '2018-10-16 10:13:48', '2018-10-16 10:37:20');
 INSERT INTO `nj_article` VALUES ('19', '3', '0', '1', 'ttt', 'testtest', 'testtest', 'test', 'etstestst', '', '0', '2018-10-16 10:45:13', '0000-00-00 00:00:00');
+INSERT INTO `nj_article` VALUES ('20', '0', '0', '1', '', '', '', '', '', '', '1', '2018-10-17 10:36:45', '0000-00-00 00:00:00');
+INSERT INTO `nj_article` VALUES ('21', '0', '0', '1', '', '', '', '', '', '', '1', '2018-10-17 11:01:18', '0000-00-00 00:00:00');
+INSERT INTO `nj_article` VALUES ('22', '3', '0', '1', '111', '111', '111', '1111', '111', '', '0', '2018-10-17 13:40:59', '0000-00-00 00:00:00');
+INSERT INTO `nj_article` VALUES ('23', '2', '0', '1', '123', '123', '123', '123213', '123', '', '0', '2018-10-17 13:47:00', '0000-00-00 00:00:00');
+INSERT INTO `nj_article` VALUES ('24', '1', '0', '1', '11', '11', '11', '111', '1111', '', '0', '2018-10-17 13:50:04', '0000-00-00 00:00:00');
+INSERT INTO `nj_article` VALUES ('25', '3', '0', '1', '1122', '121', '121', '12212', '12', '', '0', '2018-10-17 13:51:13', '0000-00-00 00:00:00');
+INSERT INTO `nj_article` VALUES ('26', '3', '0', '1', '12313', '123', '123', '23123', '123', '', '0', '2018-10-17 13:53:27', '0000-00-00 00:00:00');
+INSERT INTO `nj_article` VALUES ('27', '3', '0', '1', '1122', '11', '11', '12313', '11', '', '0', '2018-10-17 13:57:22', '0000-00-00 00:00:00');
+INSERT INTO `nj_article` VALUES ('28', '0', '0', '1', '', '', '', '', '', '', '1', '2018-10-17 13:57:48', '0000-00-00 00:00:00');
+INSERT INTO `nj_article` VALUES ('29', '1', '0', '1', '11', '11', '11', '111', '11', '25', '0', '2018-10-17 14:01:08', '0000-00-00 00:00:00');
+INSERT INTO `nj_article` VALUES ('30', '3', '0', '1', '11', '11', '11', '1111', '11', '', '0', '2018-10-17 14:04:10', '0000-00-00 00:00:00');
+INSERT INTO `nj_article` VALUES ('31', '3', '0', '1', '11231', '213123', '213123', '111222333', '123213', '', '0', '2018-10-17 14:13:43', '0000-00-00 00:00:00');
+INSERT INTO `nj_article` VALUES ('32', '3', '0', '1', '111', '111', '111', '111', '111', '31', '0', '2018-10-17 14:29:40', '0000-00-00 00:00:00');
+INSERT INTO `nj_article` VALUES ('33', '4', '0', '1', 'qqqq', 'qqqq', 'qqqq', 'qwqwewqe', 'qqqqqq', '32', '0', '2018-10-17 14:31:55', '0000-00-00 00:00:00');
+INSERT INTO `nj_article` VALUES ('34', '3', '0', '1', '111', '111', '111', '111', '1111', '33', '0', '2018-10-17 14:53:52', '0000-00-00 00:00:00');
+INSERT INTO `nj_article` VALUES ('35', '3', '0', '1', '11', '11', '11', '111', '111', '34', '0', '2018-10-17 14:54:25', '0000-00-00 00:00:00');
+INSERT INTO `nj_article` VALUES ('36', '0', '0', '1', '', '', '', '', '', '35', '1', '2018-10-17 15:27:05', '0000-00-00 00:00:00');
+INSERT INTO `nj_article` VALUES ('37', '0', '0', '1', '', '', '', '', '', '36', '1', '2018-10-17 15:28:13', '0000-00-00 00:00:00');
+INSERT INTO `nj_article` VALUES ('38', '0', '0', '1', '', '', '', '', '', '37', '1', '2018-10-17 15:31:02', '0000-00-00 00:00:00');
+INSERT INTO `nj_article` VALUES ('39', '0', '0', '1', '', '', '', '', '', '38', '1', '2018-10-17 15:32:14', '0000-00-00 00:00:00');
+INSERT INTO `nj_article` VALUES ('40', '2', '0', '1', '111', '111', '111', '1111', '11', '0', '0', '2018-10-17 15:34:24', '0000-00-00 00:00:00');
+INSERT INTO `nj_article` VALUES ('41', '3', '0', '1', '113', '1133', '1133', '1113', '<p>\n	113333333333\n</p>\n<p>\n	<strong>112121212</strong>\n</p>\n<p>\n	<img src=\"http://localhost/nongjia/public/kindeditor/attached/image/20181017/20181017171949_60325.jpg\" alt=\"\" /> \n</p>', '47', '0', '2018-10-17 15:35:53', '2018-10-17 17:31:41');
+INSERT INTO `nj_article` VALUES ('42', '3', '0', '1', '11', '1111', '1111', '113213', '<strong>1111111</strong>', '48', '0', '2018-10-17 17:34:53', '0000-00-00 00:00:00');
 
 -- ----------------------------
 -- Table structure for nj_category
@@ -120,6 +143,39 @@ INSERT INTO `nj_channel` VALUES ('3', 'test11112', '0', 't2', '0', 't2', '111222
 INSERT INTO `nj_channel` VALUES ('4', '1212333', '0', '1212', '1212', '1212', '1212', '0', '2018-09-17 17:18:57', '2018-09-18 11:13:53');
 INSERT INTO `nj_channel` VALUES ('5', '331', '0', '33', '33', '33', '33', '1', '2018-09-17 17:19:08', '2018-09-17 17:26:30');
 INSERT INTO `nj_channel` VALUES ('6', '111222', '0', '111', '1', '111', '111', '0', '2018-10-08 14:03:05', '0000-00-00 00:00:00');
+
+-- ----------------------------
+-- Table structure for nj_upload
+-- ----------------------------
+DROP TABLE IF EXISTS `nj_upload`;
+CREATE TABLE `nj_upload` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `node_id` int(11) NOT NULL,
+  `module` varchar(32) NOT NULL COMMENT '模块: 文章 | 广告',
+  `type` tinyint(1) NOT NULL COMMENT '类型: 1=图片 | 2=视频',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=不显示 1=显示',
+  `filename` varchar(255) NOT NULL COMMENT '文件名',
+  `size` varchar(32) NOT NULL COMMENT '文件大小',
+  `save_path` varchar(255) NOT NULL COMMENT '保存路径',
+  `extension` varchar(32) NOT NULL COMMENT '扩展名',
+  `delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=不删除 1=删除',
+  `create_time` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of nj_upload
+-- ----------------------------
+INSERT INTO `nj_upload` VALUES ('39', '41', 'article', '1', '1', 'c733b17f37224d16ee7e7d5dd683f2ec.jpg', '120429', '/public/upload/article/20181017/c733b17f37224d16ee7e7d5dd683f2ec.jpg', 'jpg', '0', '2018-10-17 15:35:53');
+INSERT INTO `nj_upload` VALUES ('40', '0', 'article', '1', '1', '6bae155f63f55f06f9290b21477c97f9.jpg', '67317', '/public/upload/article/20181017/6bae155f63f55f06f9290b21477c97f9.jpg', 'jpg', '0', '2018-10-17 15:43:45');
+INSERT INTO `nj_upload` VALUES ('41', '0', 'article', '1', '1', 'bf70b7d2a28a01b7b5037757d1daccd7.jpg', '67317', '/public/upload/article/20181017/bf70b7d2a28a01b7b5037757d1daccd7.jpg', 'jpg', '0', '2018-10-17 15:45:17');
+INSERT INTO `nj_upload` VALUES ('42', '41', 'article', '1', '1', 'aa1383facca1d55c83d08262db1b858b.jpg', '67317', '/public/upload/article/20181017/aa1383facca1d55c83d08262db1b858b.jpg', 'jpg', '0', '2018-10-17 15:46:28');
+INSERT INTO `nj_upload` VALUES ('43', '41', 'article', '1', '1', '97b13004334680cf1cf35590dff5bd59.jpg', '164006', '/public/upload/article/20181017/97b13004334680cf1cf35590dff5bd59.jpg', 'jpg', '0', '2018-10-17 15:48:50');
+INSERT INTO `nj_upload` VALUES ('44', '41', 'article', '1', '1', '0c344878e2803acc402ed104ee73f08c.jpg', '60932', '/public/upload/article/20181017/0c344878e2803acc402ed104ee73f08c.jpg', 'jpg', '0', '2018-10-17 15:49:08');
+INSERT INTO `nj_upload` VALUES ('45', '41', 'article', '1', '1', '52818cab005f4b17c0a173a5d3dce3ff.jpg', '155600', '/public/upload/article/20181017/52818cab005f4b17c0a173a5d3dce3ff.jpg', 'jpg', '0', '2018-10-17 16:15:43');
+INSERT INTO `nj_upload` VALUES ('46', '41', 'article', '1', '1', '64d6babb9cfce0963c1a567c8389aa1b.jpg', '120429', '/public/upload/article/20181017/64d6babb9cfce0963c1a567c8389aa1b.jpg', 'jpg', '0', '2018-10-17 17:31:26');
+INSERT INTO `nj_upload` VALUES ('47', '41', 'article', '1', '1', '050b0ed258c68f98746525e989937f47.jpg', '60932', '/public/upload/article/20181017/050b0ed258c68f98746525e989937f47.jpg', 'jpg', '0', '2018-10-17 17:31:41');
+INSERT INTO `nj_upload` VALUES ('48', '42', 'article', '1', '1', '6b292e873bfde8bf9debb57263283f26.jpg', '77726', '/public/upload/article/20181017/6b292e873bfde8bf9debb57263283f26.jpg', 'jpg', '0', '2018-10-17 17:34:52');
 
 -- ----------------------------
 -- Table structure for nj_user
