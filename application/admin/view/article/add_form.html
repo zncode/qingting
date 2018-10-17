@@ -63,7 +63,7 @@
                                 <div class="layui-form-item">
                                     <label class="layui-form-label" >内容</label>
                                     <div class="layui-input-block">
-                                        <textarea class="layui-textarea" name="content" rows="20" placeholder="Enter ..." ></textarea>
+                                        <textarea class="layui-textarea content" name="content" rows="20" placeholder="Enter ..." ></textarea>
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
@@ -83,7 +83,8 @@
 </div>
 
 {include file="page/footer" /}
-
+<script charset="utf-8" type="text/javascript" src='__ROOT__/kindeditor/kindeditor-all.js'></script>
+<script charset="utf-8" type="text/javascript" src="__ROOT__/kindeditor/lang/zh-CN.js"></script>
 <script>
     layui.use(['upload','form'], function(){
         var form = layui.form;
@@ -187,6 +188,25 @@
                 area: ['auto', 'auto'],
                 content: '<img src="'+thumb_image_src+'">',
             });
+        });
+    });
+
+    //编辑器的调用对象
+    var editor;
+    KindEditor.ready(function(e){
+        editor=e.create(".content",{
+            "width":"100%",
+            "height":"500px",
+            "items":[
+                'source', '|', 'undo', 'redo', '|', 'preview', 'justifyleft', 'justifycenter', 'justifyright',
+                'justifyfull',  'indent', 'outdent',  'clearhtml', 'selectall', '|',
+                'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+                'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|','image',
+                'hr', 'emoticons',
+                'anchor', 'link', 'unlink','|','baidumap','media','source'
+            ],
+            "urlType":'domain',
+            afterBlur: function(){this.sync();}
         });
     });
 </script>
