@@ -45,19 +45,29 @@ class UploadController extends BaseController
     public function image()
     {
         $category = input('post.category') ? input('post.category') : 'article';
-        $file = request()->file('image');
+        $file = request()->file();
+        if(is_array($file)){
+            $file = $file['file'];
+        }
 
         if($file){
             $date_dir = date('Ymd', time());
             $upload_save_path       = ROOT_PATH . 'public' . DS . 'upload' . DS . $category;
 //            $upload_save_path_thumb = ROOT_PATH . 'public' . DS . 'upload' . DS . $category . DS . $date_dir . DS . 'thumb' . DS;
+
             $info = $file->move($upload_save_path);
+
             if($info){
                 $picture['extension'] = $info->getExtension();
                 $picture['save_path'] = $info->getSaveName();
                 $picture['filename']  = $info->getFilename();
                 $picture['size']      = $info->getSize();
-                $picture['src']  = 'http://'.$_SERVER['HTTP_HOST'].'/public/upload/'.$category.'/'.$date_dir.'/'.$picture['filename'];
+                if($_SERVER['HTTP_HOST'] == 'localhost'){
+                    $src = 'http://'.$_SERVER['HTTP_HOST'].'/nongjia/public/upload/'.$category.'/'.$date_dir.'/'.$picture['filename'];
+                }else{
+                    $src = 'http://'.$_SERVER['HTTP_HOST'].'/public/upload/'.$category.'/'.$date_dir.'/'.$picture['filename'];
+                }
+                $picture['src']  = $src;
 
 
 //                //生成缩略图
@@ -76,7 +86,8 @@ class UploadController extends BaseController
                     'extension'     => $picture['extension'],
                     'create_time'   => date("Y-m-d H:i:s", time()),
                 ];
-                $upload_id = Db::table('nj_upload')->insert($data);
+                Db::table('nj_upload')->insert($data);
+                $upload_id = Db::table('nj_upload')->getLastInsID();
                 $picture['upload_id'] = $upload_id;
 
                 $data = ['code'=>0, 'message'=>'上传图片成功', 'data'=>$picture];
@@ -86,6 +97,8 @@ class UploadController extends BaseController
             }
 
             echo json_encode($data);die;
+        }else{
+            echo json_encode(['code'=>1, 'message'=>$file->getError(), 'data'=>array()]);die;
         }
     }
 

@@ -54,7 +54,20 @@ class ArticleController extends BaseController
     public function info()
     {
         $id = input('get.id');
-        $info = Db::table($this->table)->where(array('id'=>$id))->find();
+        $info = Db::table($this->table)
+            ->alias([$this->table=>'a', 'nj_upload'=>'b'])
+            ->field('a.*,b.save_path')
+            ->join('nj_upload','a.thumb = b.id', 'left')
+            ->where(array('a.id'=>$id))
+            ->find();
+        if($info['save_path']){
+            if($_SERVER['HTTP_HOST'] == 'localhost'){
+                $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].'/nongjia/'.$info['save_path'];
+            }else{
+                $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].$info['save_path'];
+            }
+        }
+
         $category = Db::table('nj_category')->where(array('id'=>$info['category_id']))->find();
         if($category){
             $info['category_name'] = $category['name'];
@@ -95,11 +108,16 @@ class ArticleController extends BaseController
             'summary'           => $formData['summary'],
             'content'           => $formData['content'],
             'status'            => 1,
+            'thumb'             => $formData['upload_id'],
             'create_time'       => date("Y-m-d H:i:s", time()),
         ];
-        $result = Db::table($this->table)->insert($data);
-        if($result){
+        $result     = Db::table($this->table)->insert($data);
+        $node_id    = Db::table($this->table)->getLastInsID();
+        if($formData['upload_id']){
+            Db::table('nj_upload')->where(array('id'=>$formData['upload_id']))->update(array('node_id'=>$node_id));
+        }
 
+        if($result){
             $this->json(array('code'=>0, 'msg'=>'添加成功', 'data'=>array()));
         }else{
             $this->json(array('code'=>1, 'msg'=>'添加失败', 'data'=>array()));
@@ -112,13 +130,26 @@ class ArticleController extends BaseController
     public function edit_form()
     {
         $id = input('get.id');
-        $info = Db::table($this->table)->where(array('id'=>$id))->find();
+        $info = Db::table($this->table)
+            ->alias([$this->table=>'a', 'nj_upload'=>'b'])
+            ->field('a.*,b.save_path')
+            ->join('nj_upload','a.thumb = b.id', 'left')
+            ->where(array('a.id'=>$id))
+            ->find();
+        if($info['save_path']){
+            if($_SERVER['HTTP_HOST'] == 'localhost'){
+                $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].'/nongjia/'.$info['save_path'];
+            }else{
+                $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].$info['save_path'];
+            }
+        }
         $categorys              = Db::table('nj_category')->where(array('delete'=>0))->select();
         $data['categorys']      = $categorys;
-        $data['info'] = $info;
-        $data['goback'] = url('admin/'.$this->url_path.'/list');
-        $data['action'] = url('admin/'.$this->url_path.'/edit_submit');
-        $data['module_name'] = $this->module_name;
+        $data['info']           = $info;
+        $data['goback']         = url('admin/'.$this->url_path.'/list');
+        $data['action']         = url('admin/'.$this->url_path.'/edit_submit');
+        $data['module_name']    = $this->module_name;
+        $data['url_upload']     = url('/upload/image');
         return view($this->url_path.'/edit_form', $data);
     }
 
@@ -136,9 +167,15 @@ class ArticleController extends BaseController
             'meta_description'  => $formData['summary'],
             'summary'           => $formData['summary'],
             'content'           => $formData['content'],
+            'thumb'             => $formData['upload_id'],
             'update_time'       => date("Y-m-d H:i:s", time()),
         ];
         $result = Db::table($this->table)->where(array('id'=>$id))->update($data);
+
+        if($formData['upload_id']){
+            Db::table('nj_upload')->where(array('id'=>$formData['upload_id']))->update(array('node_id'=>$id));
+        }
+
         if($result){
             $this->json(array('code'=>0, 'msg'=>'编辑成功', 'data'=>array('id'=>$id)));
         }else{

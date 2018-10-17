@@ -18,7 +18,7 @@
                         <div class="go_back"><a href="{$goback}" class="layui-btn layui-btn-sm">返回</a></div>
 
                         <div class="layui-card-body">
-                            <form id="add_form" action="{$action}" method="post" class="layui-form">
+                            <form id="add_form" action="{$action}" method="post" class="layui-form" enctype="multipart/form-data" >
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">标题</label>
                                     <div class="layui-input-block">
@@ -37,11 +37,14 @@
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">缩略图</label>
+                                    <label class="layui-form-label">列表图</label>
                                     <div class="layui-input-block">
-                                        <button type="button" class="layui-btn" id="image_upload">
-                                            <i class="layui-icon">&#xe67c;</i>上传图片
-                                        </button>
+                                        <div style="margin-bottom: 5px;cursor:pointer;" class="thumb_image" ></div>
+                                        <div>
+                                            <button type="button" class="layui-btn" id="image_upload" >
+                                                <i class="layui-icon">&#xe67c;</i>上传图片
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -65,7 +68,8 @@
                                 </div>
                                 <div class="layui-form-item">
                                     <div class="layui-input-block">
-                                        <button type="submit" class="layui-btn" lay-submit lay-filter="add" >提交</button>
+                                        <input type="hidden" value="0" name="upload_id" >
+                                        <button type="submit" class="layui-btn" lay-submit lay-filter="add" id="submit">提交</button>
                                     </div>
                                 </div>
                             </form>
@@ -81,49 +85,108 @@
 {include file="page/footer" /}
 
 <script>
-
     layui.use(['upload','form'], function(){
         var form = layui.form;
         var upload = layui.upload;
         $ = layui.jquery;
 
-        form.on('submit(add)', function(data){
-            //提交
-            $.ajax({
-                url: "{$action}",
-                type: "post",
-                data: data.field,
-                success:function(result){
-                    var result = JSON.parse(result);
-                    var code = result.code;
-                    var msg  = result.msg;
-                    var data = result.data;
-                    if(code==0){
-                        layer.msg(msg, {
-                            time: 2000,
-                            icon: 16,
-                            shade: 0.2
-                        }, function(){
-                            parent.location.reload();
-                        });
-                    }else{
-                        layer.msg(msg);
-                    }
-                }
-            })
-            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
-        });
-
         //执行实例
         var uploadInst = upload.render({
-            elem: '#image_upload' //绑定元素
-            ,url: '{$url_upload}' //上传接口
+            elem: '#image_upload'
+            ,url: '{$url_upload}'
+            ,data: {'category':'article'}
+            ,size: 2048
+            ,auto: false
+            ,bindAction: '#submit'
+            ,choose: function(obj){
+                obj.preview(function(index, file, result){
+                    var thumb_image = '<img src="'+result+'" width="150px" height="auto" class="thumb_image_picture">';
+                    $('.thumb_image').html(thumb_image);
+                });
+            }
             ,done: function(res){
-                //上传完毕回调
+                var code    = res.code;
+                var msg     = res.message;
+                var data    = res.data;
+                if(code == 0){
+                    $('#upload_id').attr('value', data.upload_id);
+                }
+
+                var  field = {
+                    'title': $("[name='title']").val(),
+                    'category_id': $("[name='category_id']").val(),
+                    'meta_keyword': $("[name='meta_keyword']").val(),
+                    'summary': $("[name='summary']").val(),
+                    'content': $("[name='content']").val(),
+                    'upload_id': data.upload_id
+                };
+
+                //提交
+                $.ajax({
+                    url: "{$action}",
+                    type: "post",
+                    data: field,
+                    success:function(result){
+                        var result = JSON.parse(result);
+                        var code = result.code;
+                        var msg  = result.msg;
+                        var data = result.data;
+                        if(code==0){
+                            layer.msg(msg, {
+                                time: 2000,
+                                icon: 16,
+                                shade: 0.2
+                            }, function(){
+                                parent.location.reload();
+                            });
+                        }else{
+                            layer.msg(msg);
+                        }
+                    }
+                })
             }
-            ,error: function(){
-                //请求异常回调
+        });
+
+        //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        form.on('submit(add)', function(data){
+            var objFile = $("[name='file']").val();
+            if(objFile.length == "") {
+                //提交
+                $.ajax({
+                    url: "{$action}",
+                    type: "post",
+                    data: data.field,
+                    success:function(result){
+                        var result = JSON.parse(result);
+                        var code = result.code;
+                        var msg  = result.msg;
+                        var data = result.data;
+                        if(code==0){
+                            layer.msg(msg, {
+                                time: 2000,
+                                icon: 16,
+                                shade: 0.2
+                            }, function(){
+//                                parent.location.reload();
+                            });
+                        }else{
+                            layer.msg(msg);
+                        }
+                    }
+                })
             }
+            return false;
+        });
+
+        //看大图
+        $('.thumb_image').click(function(){
+            var thumb_image_src = $('.thumb_image_picture').attr('src');
+            layer.open({
+                type: 1,
+                title: false,
+                area: ['auto', 'auto'],
+                content: '<img src="'+thumb_image_src+'">',
+            });
         });
     });
 </script>
