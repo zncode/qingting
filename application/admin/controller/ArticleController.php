@@ -12,7 +12,7 @@ class ArticleController extends BaseController
     public $module_name = '文章';
 
     /**
-     * 列表1
+     * 列表
      */
     public function index()
     {
