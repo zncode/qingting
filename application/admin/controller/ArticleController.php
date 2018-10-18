@@ -91,6 +91,7 @@ class ArticleController extends BaseController
         $data['url_upload']     = url('/upload/image');
         $data['module_name']    = $this->module_name;
         $data['categorys']      =  $categorys;
+        $data['url_upload_editor']     = url('/upload/image_editor',array('category'=>'article'));
         return view($this->url_path.'/add_form', $data);
     }
 
@@ -99,7 +100,8 @@ class ArticleController extends BaseController
      */
     public function add_form_submit()
     {
-        $formData = input('request.');
+        $formData   = input('request.');
+        $upload_ids = $formData['upload_ids'];
         $data = [
             'title'             => $formData['title'],
             'category_id'       => $formData['category_id'],
@@ -113,6 +115,18 @@ class ArticleController extends BaseController
         ];
         $result     = Db::table($this->table)->insert($data);
         $node_id    = Db::table($this->table)->getLastInsID();
+
+        //更新内容上传文件
+        if($upload_ids != ''){
+            $upload_ids_array = explode(',', $upload_ids);
+            foreach ($upload_ids_array as $upload_id){
+                if($upload_id){
+                    Db::table('nj_upload')->where(array('id'=>$upload_id))->update(array('node_id'=>$node_id));
+                }
+            }
+        }
+
+        //更新列表图上传文件
         if($formData['upload_id']){
             Db::table('nj_upload')->where(array('id'=>$formData['upload_id']))->update(array('node_id'=>$node_id));
         }
