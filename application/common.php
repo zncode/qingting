@@ -39,3 +39,10 @@ function get_client_ip($type = 0,$adv=false) {
     $ip   = $long ? array($ip, $long) : array('0.0.0.0', 0);
     return $ip[$type];
 }
+
+/**
+ * 判断系统windows
+ */
+function check_windows(){
+    return strtoupper(substr(PHP_OS,0,3))==='WIN'? 1: 0;
+}
