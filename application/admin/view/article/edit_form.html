@@ -77,6 +77,7 @@
                                     <div class="layui-input-block">
                                         <input type="hidden" name="id" name="id" value="{$info.id}">
                                         <input type="hidden" value="0" name="upload_id" >
+                                        <input type="hidden" value="" name="upload_ids" >
                                         <button class="layui-btn" lay-submit lay-filter="update" id="submit">提交</button>
                                     </div>
                                 </div>
@@ -132,7 +133,8 @@
                     'meta_keyword': $("[name='meta_keyword']").val(),
                     'summary': $("[name='summary']").val(),
                     'content': $("[name='content']").val(),
-                    'upload_id': data.upload_id
+                    'upload_id': data.upload_id,
+                    'upload_ids': $("[name='upload_ids']").val(),
                 };
 
                 //提交
@@ -207,7 +209,7 @@
     //编辑器的调用对象
     var editor;
     KindEditor.ready(function(e){
-        editor=e.create(".content",{
+        editor = e.create(".content",{
             "width":"100%",
             "height":"500px",
             "items":[
@@ -219,7 +221,22 @@
                 'anchor', 'link', 'unlink','|','baidumap','media','source'
             ],
             "urlType":'domain',
-            afterBlur: function(){this.sync();}
+            "uploadJson" : '{$url_upload_editor}',
+//            "fileManagerJson" : '__ROOT__/kindeditor/php/file_manager_json.php',
+//            "allowFileManager" : true,
+            "afterBlur": function(){this.sync();},
+            "afterUpload" : function(url,result) {
+                var data = result.data;
+                var upload_id = data.upload_id;
+                var upload_ids = $("[name='upload_ids']").val();
+                if(upload_ids){
+                    upload_ids = upload_ids + ',' + upload_id;
+                    $("[name='upload_ids']").val(upload_ids);
+                }else{
+                    $("[name='upload_ids']").val(upload_id);
+                }
+
+            }
         });
     });
 

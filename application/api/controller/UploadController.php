@@ -9,33 +9,52 @@ class UploadController extends BaseController
 
     /**
      * 网页编辑器上传图片
+     * kindeditor
      */
     public function image_editor()
     {
-        $category = input('post.category');
-        $files = request()->file();
-        if($files){
-            foreach($files as $file){
-                $date_dir = date('Ymd', time());
-                $upload_save_path       = ROOT_PATH . 'public' . DS . 'upload' . DS . $category;
-                $info = $file->move($upload_save_path);
-                if($info){
-                    $view_url  = 'http://'.$_SERVER['HTTP_HOST'].'/zw/public/upload/'.$category.'/'.$date_dir.'/'.$info->getFilename();
-                    $data[] = $view_url;
-                    $filename[] = $info->getFilename();
-
-                    //保存数据库
-                    $image['category']      = $category;
-                    $image['save_path']     = $info->getSaveName();
-                    $image['picture_name']  = $info->getFilename();
-                    $image['size']          = $info->getSize();
-                    $image['extension']     = $info->getExtension();
-                    $this->insert_image($image);
-                }
-            }
-            echo json_encode($data = ['errno'=>0,'data'=>$data, 'filename'=>$filename]);die;
+        $category   = input('category') ? input('category') : '';
+        $file       = request()->file('imgFile');
+        $date_dir   = date('Ymd', time());
+        if($category){
+            $upload_save_path       = ROOT_PATH . 'public' . DS . 'upload' . DS . 'kindeditor' . DS .$category;
         }else{
-            echo json_encode($data = ['errno'=>1,'data'=>array()]);die;
+            $upload_save_path       = ROOT_PATH . 'public' . DS . 'upload' . DS . 'kindeditor';
+        }
+
+        $info = $file->move($upload_save_path);
+        if($info) {
+            if ($_SERVER['HTTP_HOST'] == 'localhost') {
+                $view_url = 'http://' . $_SERVER['HTTP_HOST'] . '/nongjia/public/upload/kindeditor/' . $category . '/' . $date_dir . '/' . $info->getFilename();
+            } else {
+                $view_url = 'http://' . $_SERVER['HTTP_HOST'] . '/upload/kindeditor/' . $category . '/' . $date_dir . '/' . $info->getFilename();
+            }
+
+            $picture['extension'] = $info->getExtension();
+            $picture['save_path'] = $info->getSaveName();
+            $picture['filename']  = $info->getFilename();
+            $picture['size']      = $info->getSize();
+
+            //保存数据库
+            $data = [
+                'module'        => 'kindeditor/'.$category,
+                'type'          => 1,
+                'status'        => 1,
+                'filename'      => $picture['filename'],
+                'size'          => $picture['size'],
+                'save_path'     => '/upload/kindeditor/'.$category.'/'.$date_dir.'/'.$picture['filename'],
+                'extension'     => $picture['extension'],
+                'create_time'   => date("Y-m-d H:i:s", time()),
+            ];
+            Db::table('nj_upload')->insert($data);
+            $upload_id = Db::table('nj_upload')->getLastInsID();
+            $picture['upload_id'] = $upload_id;
+
+            $data= ['view_url'=>$view_url, 'upload_id'=>$upload_id];
+
+            echo json_encode($data = ['error'=>0,'data'=>$data,'url'=>$view_url]);die;
+        }else{
+            echo json_encode($data = ['error'=>1,'data'=>array()]);die;
         }
     }
 

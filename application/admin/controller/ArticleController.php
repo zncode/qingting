@@ -150,6 +150,7 @@ class ArticleController extends BaseController
         $data['action']         = url('admin/'.$this->url_path.'/edit_submit');
         $data['module_name']    = $this->module_name;
         $data['url_upload']     = url('/upload/image');
+        $data['url_upload_editor']     = url('/upload/image_editor',array('category'=>'article'));
         return view($this->url_path.'/edit_form', $data);
     }
 
@@ -158,8 +159,11 @@ class ArticleController extends BaseController
      */
     public function edit_form_submit()
     {
-        $formData = input('request.');
-        $id = $formData['id'];
+        $formData   = input('request.');
+        $id         = $formData['id'];
+        $upload_ids = $formData['upload_ids'];
+
+        //更新内容
         $data = [
             'title'             => $formData['title'],
             'category_id'       => $formData['category_id'],
@@ -172,6 +176,17 @@ class ArticleController extends BaseController
         ];
         $result = Db::table($this->table)->where(array('id'=>$id))->update($data);
 
+        //更新内容上传文件
+        if($upload_ids != ''){
+            $upload_ids_array = explode(',', $upload_ids);
+            foreach ($upload_ids_array as $upload_id){
+                if($upload_id){
+                    Db::table('nj_upload')->where(array('id'=>$upload_id))->update(array('node_id'=>$id));
+                }
+            }
+        }
+
+        //更新列表图上传文件
         if($formData['upload_id']){
             Db::table('nj_upload')->where(array('id'=>$formData['upload_id']))->update(array('node_id'=>$id));
         }
