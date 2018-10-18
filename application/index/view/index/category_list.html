@@ -9,20 +9,36 @@
       <div class="breadcrumb">
         <a href="#">首页</a> <span>》</span> <a href="#">风景</a> <span>》</span> 湖水
       </div>
-      {for start="1" end="10"}
+      {if condition="isset($list)"}
+        {volist name="list" id="v"}
+            <div class="line_wrapper">
+                <div class="line_picture">
+                    <a href="{:url('/page',array('id'=>$v.id))}"><img src="{$v.view_url}" width="180px" height="120px"></a>
+                </div>
+                <div class="line_content">
+                    <div class="line_content_title"><a href="{:url('/page',array('id'=>$v.id))}">{$v.title}</a></div>
+                    <div class="line_content_body">{$v.summary}</div>
+                    <div class="line_content_bottom">1216浏览</div>
+                </div>
+            </div>
+        {/volist}
+      {else /}
+        {for start="1" end="10"}
         <!-- 行 -->
         <div class="line_wrapper">
-          <div class="line_picture">
-            <img src="{$Think.BASE_PATH}image/tmp/list_1.jpg" width="180px" height="120px">
-          </div>
-          <div class="line_content">
-              <div class="line_content_title"><a href="{:url('/page')}">普吉岛｜这些拥有私密沙滩的酒店让你再也不人挤人！</a></div>
-              <div class="line_content_body">蜂蜂们的困扰我们都听到了！为你看过了千百个普吉酒店，精挑细选了9家可享私密沙滩的五星酒店，分分钟甩开拥挤人潮、冲入碧海蓝天，让人恨不得现在就想把机票买下去啊。</div>
-              <div class="line_content_bottom">1216浏览</div>
-          </div>
+            <div class="line_picture">
+                <img src="{$Think.BASE_PATH}image/tmp/list_1.jpg" width="180px" height="120px">
+            </div>
+            <div class="line_content">
+                <div class="line_content_title"><a href="{:url('/page')}">普吉岛｜这些拥有私密沙滩的酒店让你再也不人挤人！</a></div>
+                <div class="line_content_body">蜂蜂们的困扰我们都听到了！为你看过了千百个普吉酒店，精挑细选了9家可享私密沙滩的五星酒店，分分钟甩开拥挤人潮、冲入碧海蓝天，让人恨不得现在就想把机票买下去啊。</div>
+                <div class="line_content_bottom">1216浏览</div>
+            </div>
         </div>
         <!-- 行 -->
-      {/for}
+        {/for}
+      {/if}
+
 
       <div id="page"></div>
     </div>

@@ -46,3 +46,16 @@ function get_client_ip($type = 0,$adv=false) {
 function check_windows(){
     return strtoupper(substr(PHP_OS,0,3))==='WIN'? 1: 0;
 }
+
+/**
+ * 获取图片url
+ */
+function get_view_url($path){
+    if($_SERVER['HTTP_HOST'] == 'localhost'){
+        $view_url = 'http://'.$_SERVER['HTTP_HOST'].'/nongjia/public/'.$path;
+    }else{
+        $view_url = 'http://'.$_SERVER['HTTP_HOST'].$path;
+    }
+
+    return $view_url;
+}
