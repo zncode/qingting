@@ -92,6 +92,7 @@ class ArticleController extends BaseController
         $data['module_name']    = $this->module_name;
         $data['categorys']      =  $categorys;
         $data['url_upload_editor']     = url('/upload/image_editor',array('category'=>'article'));
+        $data['kindeditor_file_manager']    = url('/upload/kindeditor_file_manager');
         return view($this->url_path.'/add_form', $data);
     }
 

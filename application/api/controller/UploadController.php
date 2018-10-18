@@ -64,7 +64,8 @@ class UploadController extends BaseController
      */
     public function image()
     {
-        $category = input('post.category') ? input('post.category') : 'article';
+        $category       = input('post.category') ? input('post.category') : 'article';
+        $old_upload_id  = input('old_upload_id') ? input('old_upload_id') : '';
         $file = request()->file();
         if(is_array($file)){
             $file = $file['file'];
@@ -110,6 +111,23 @@ class UploadController extends BaseController
                 $upload_id = Db::table('nj_upload')->getLastInsID();
                 $picture['upload_id'] = $upload_id;
 
+                //删除旧图片
+                if($old_upload_id){
+                    $upload =  Db::table('nj_upload')->where(array('id'=>$old_upload_id))->find();
+                    $save_path = $upload['save_path'];
+                    if(check_windows()){
+                        $file_path = $_SERVER['DOCUMENT_ROOT'] . '/nongjia/public'.$save_path;
+                    }else{
+                        $file_path = $_SERVER['DOCUMENT_ROOT'] . $save_path;
+                    }
+
+                    if(file_exists($file_path)){
+                        $result = unlink($file_path);
+                        if($result){
+                            Db::table('nj_upload')->where(array('id'=>$old_upload_id))->delete();
+                        }
+                    }
+                }
                 $data = ['code'=>0, 'message'=>'上传图片成功', 'data'=>$picture];
             }else{
                 // 上传失败获取错误信息
