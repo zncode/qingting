@@ -154,7 +154,7 @@ class UploadController extends BaseController
         if($windows){
             $root_path = $_SERVER['DOCUMENT_ROOT'] . '/nongjia/public/upload/';
         }else{
-            $root_path = $_SERVER['DOCUMENT_ROOT'] . 'upload/';
+            $root_path = $_SERVER['DOCUMENT_ROOT'] . '/upload/';
         }
 
         //根目录URL，可以指定绝对路径，比如 http://www.yoursite.com/attached/
