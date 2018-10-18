@@ -148,10 +148,14 @@ class UploadController extends BaseController
      * 网页编辑器文件空间查看
      */
     function kindeditor_file_manager(){
-
+        $windows = strtoupper(substr(PHP_OS,0,3))==='WIN'? 1: 0;
 
         //根目录路径，可以指定绝对路径，比如 /var/www/attached/
-        $root_path = $_SERVER['DOCUMENT_ROOT'] . '/nongjia/public/upload/';
+        if($windows){
+            $root_path = $_SERVER['DOCUMENT_ROOT'] . '/nongjia/public/upload/';
+        }else{
+            $root_path = $_SERVER['DOCUMENT_ROOT'] . 'upload/';
+        }
 
         //根目录URL，可以指定绝对路径，比如 http://www.yoursite.com/attached/
         if($_SERVER['HTTP_HOST'] == 'localhost'){
