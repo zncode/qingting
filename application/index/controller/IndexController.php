@@ -21,7 +21,7 @@ class IndexController extends BaseController
             ->join('nj_upload', 'a.thumb = b.id', 'left')
             ->where(array('a.category_id'=>$id,'a.delete'=>0))
             ->order('create_time desc')
-            ->paginate(2);
+            ->paginate(10);
 
         $page = $pages->render();
         $lists  = $pages->all();
@@ -48,6 +48,10 @@ class IndexController extends BaseController
             ->join('nj_upload', 'a.thumb = b.id', 'left')
             ->where(array('a.id'=>$id))
             ->find();
+
+        $category = Db::table('nj_category')->where(array('id'=>$info['category_id']))->find();
+
+        $data['category']     = $category;
         $info['view_url'] = get_view_url($info['save_path']);
         $data['info'] = $info;
         return view('index/page_info', $data);

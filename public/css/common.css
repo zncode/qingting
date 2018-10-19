@@ -9,3 +9,7 @@ ul.pagination{}
 ul.pagination li{float: left; width: 30px;height: 20px;line-height: 20px; border:1px solid #ccc; margin-left:5px;}
 ul.pagination li.active{background-color: #d0e7fc}
 ul.pagination a:hover{font-weight: bold; text-decoration-line: underline}
+
+.breadcrumb1{height: 30px; overflow: hidden;}
+.breadcrumb1 a {color: #999!important;  }
+.breadcrumb1 span {  margin: 0 2px;  color: #999;  }

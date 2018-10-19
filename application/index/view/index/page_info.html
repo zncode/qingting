@@ -6,8 +6,8 @@
       {include file="page/menu" /}
     </div>
     <div class="page_center">
-        <div class="breadcrumb">
-        <a href="#">首页</a> <span>》</span> <a href="#">风景</a> <span>》</span> 湖水
+        <div class="breadcrumb1">
+            <a href="{:url('/')}">首页</a> <span>》</span> <a href="{:url('category/id/'.$category.id)}">{$category.name}</a> <span>》</span> {$info.title}
         </div>
 
         <div class="page_content">
