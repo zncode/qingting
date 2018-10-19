@@ -14,15 +14,16 @@ class IndexController extends BaseController
     public function category_list()
     {
         $id = input('id');
+
         $pages  = Db::table('nj_article')
             ->alias(['nj_article'=>'a', 'nj_upload'=>'b'])
             ->field('a.id,a.title,a.summary,a.create_time,a.category_id,b.save_path')
             ->join('nj_upload', 'a.thumb = b.id', 'left')
             ->where(array('a.category_id'=>$id,'a.delete'=>0))
             ->order('create_time desc')
-            ->paginate(10);
+            ->paginate(2);
 
-        $render = $pages->render();
+        $page = $pages->render();
         $lists  = $pages->all();
         if(is_array($lists) && count($lists)){
             foreach($lists as $key => $value){
@@ -30,8 +31,11 @@ class IndexController extends BaseController
             }
         }
 
-        $data['list']           = $lists;
-        $data['render']         = $render;
+        $category = Db::table('nj_category')->where(array('id'=>$id))->find();
+
+        $data['category']     = $category;
+        $data['list']         = $lists;
+        $data['page']         = $page;
         return view('index/category_list', $data);
     }
 
