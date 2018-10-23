@@ -28,10 +28,10 @@
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">频道</label>
                                     <div class="layui-input-block">
-                                        <select name="channel_id" class="layui-select">
+                                        <select name="parent_id" class="layui-select">
                                             <option value=""> - 选择 - </option>{
-                                            {volist name="channels" id="vo"}
-                                                {if condition="$info.channel_id eq $vo.id"}
+                                            {volist name="parent" id="vo"}
+                                                {if condition="$info.parent_id eq $vo.id"}
                                                     <option value="{$vo.id}" selected="selected">{$vo.name}</option>
                                                 {else /}
                                                     <option value="{$vo.id}">{$vo.name}</option>

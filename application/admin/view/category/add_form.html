@@ -26,11 +26,11 @@
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">频道</label>
+                                    <label class="layui-form-label">上级</label>
                                     <div class="layui-input-block">
-                                        <select name="channel_id" class="layui-select">
+                                        <select name="parent_id" class="layui-select">
                                             <option value=""> - 选择 - </option>
-                                            {volist name="channels" id="vo"}
+                                            {volist name="parent" id="vo"}
                                                 <option value="{$vo.id}">{$vo.name}</option>
                                             {/volist}
                                         </select>

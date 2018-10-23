@@ -11,11 +11,32 @@ class CategoryController extends BaseController
     public $url_path = 'category';
     public $module_path = 'category';
     public $module_name = '栏目';
+    public $level; //栏目等级
+    public $parent; //上级
 
     public function __construct()
     {
         if(input('get.url_path')){
             $this->url_path = input('get.url_path');
+        }
+        $this->level = input('level') ? input('level') : 1;
+        switch ($this->level){
+            case 1:
+                $this->table  = 'nj_category';
+                $this->parent = 'nj_channel';
+                break;
+            case 2:
+                $this->table  = 'nj_category_2';
+                $this->parent = 'nj_category';
+                break;
+            case 3:
+                $this->table  = 'nj_category_3';
+                $this->parent = 'nj_category_2';
+                break;
+            default:
+                $this->table  = 'nj_category';
+                $this->parent = 'nj_channel';
+                break;
         }
     }
 
@@ -24,15 +45,10 @@ class CategoryController extends BaseController
      */
     public function index()
     {
-        $pages  = Db::table($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
-        $render = $pages->render();
-        $lists  = $pages->all();
-
-        $data['list']           = $lists;
-        $data['render']         = $render;
-        $data['goback']         = url('admin/'.$this->url_path.'/add');
+        $data['goback']         = url('admin/'.$this->url_path.'/add',array('level'=>$this->level));
         $data['module_name']    = $this->module_name;
         $data['path']           = $this->url_path;
+        $data['level']          = $this->level;
         return view($this->url_path.'/list', $data);
     }
 
@@ -43,10 +59,14 @@ class CategoryController extends BaseController
     {
         $pages  = Db::table($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
         $lists  = $pages->all();
-        foreach($lists as $key => $value){
-            $url_view   = url('admin/channel/info', ['id'=>$value['id']]);
-            $url_edit   = url('admin/channel/edit', ['id'=>$value['id']]);
-            $url_delete = url('admin/channel/delete', ['id'=>$value['id']]);
+        if(is_array($lists) && count($lists)){
+            foreach($lists as $key => $value){
+                $url_view   = url('admin/category/info', ['id'=>$value['id'],'level'=>$this->level]);
+                $url_edit   = url('admin/category/edit', ['id'=>$value['id'],'level'=>$this->level]);
+                $url_delete = url('admin/category/delete', ['id'=>$value['id'],'level'=>$this->level]);
+                $parent = Db::table($this->parent)->where(array('id'=>$value['parent_id']))->find();
+                $lists[$key]['parent_name'] = $parent['name'];
+            }
         }
         $data = [
             'code'  => 0,
@@ -61,11 +81,13 @@ class CategoryController extends BaseController
      */
     public function info()
     {
-        $id = input('get.id');
-        $info = Db::table($this->table)->where(array('id'=>$id))->find();
-        $data['info'] = $info;
-        $data['goback'] = url('admin/'.$this->url_path.'/list');
-        $data['module_name'] = $this->module_name;
+        $id                     = input('get.id');
+        $info                   = Db::table($this->table)->where(array('id'=>$id))->find();
+        $parent                 = Db::table($this->parent)->where(array('id'=>$info['parent_id']))->find();
+        $info['parent_name']    = $parent['name'];
+        $data['info']           = $info;
+        $data['goback']         = url('admin/'.$this->url_path.'/list',array('level'=>$this->level));
+        $data['module_name']    = $this->module_name;
         return view($this->url_path.'/info', $data);
     }
 
@@ -74,11 +96,11 @@ class CategoryController extends BaseController
      */
     public function add_form()
     {
-        $channels = Db::table('nj_channel')->where(array('delete'=>0))->select();
-        $data['goback'] = url('admin/'.$this->url_path.'/list');
-        $data['action'] = url('admin/'.$this->url_path.'/add_submit');
+        $parents = Db::table($this->parent)->where(array('delete'=>0))->select();
+        $data['goback'] = url('admin/'.$this->url_path.'/list',array('level'=>$this->level));
+        $data['action'] = url('admin/'.$this->url_path.'/add_submit',array('level'=>$this->level));
         $data['module_name'] = $this->module_name;
-        $data['channels'] =  $channels;
+        $data['parent'] =  $parents;
         return view($this->url_path.'/add_form', $data);
     }
 
@@ -90,7 +112,7 @@ class CategoryController extends BaseController
         $formData = input('request.');
         $data = [
             'name'          => $formData['name'],
-            'channel_id'    => $formData['channel_id'],
+            'parent_id'     => $formData['parent_id'],
             'path'          => $formData['path'],
             'weight'        => $formData['weight'],
             'status'        => 1,
@@ -101,7 +123,6 @@ class CategoryController extends BaseController
         $result = Db::table($this->table)->insert($data);
 
         if($result){
-
             $this->json(array('code'=>0, 'msg'=>'添加成功', 'data'=>array()));
         }else{
             $this->json(array('code'=>1, 'msg'=>'添加失败', 'data'=>array()));
@@ -115,11 +136,11 @@ class CategoryController extends BaseController
     {
         $id                     = input('get.id');
         $info                   = Db::table($this->table)->where(array('id'=>$id))->find();
-        $channels               = Db::table('nj_channel')->where(array('delete'=>0))->select();
-        $data['channels']       = $channels;
+        $parent                 = Db::table($this->parent)->where(array('delete'=>0))->select();
+        $data['parent']         = $parent;
         $data['info']           = $info;
-        $data['goback']         = url('admin/'.$this->url_path.'/list');
-        $data['action']         = url('admin/'.$this->url_path.'/edit_submit');
+        $data['goback']         = url('admin/'.$this->url_path.'/list',array('level'=>$this->level));
+        $data['action']         = url('admin/'.$this->url_path.'/edit_submit',array('level'=>$this->level));
         $data['module_name']    = $this->module_name;
         return view($this->url_path.'/edit_form', $data);
     }
@@ -133,7 +154,7 @@ class CategoryController extends BaseController
         $id = $formData['id'];
         $data = [
             'name'          => $formData['name'],
-            'channel_id'    => $formData['channel_id'],
+            'parent_id'     => $formData['parent_id'],
             'path'          => $formData['path'],
             'weight'        => $formData['weight'],
             'keyword'       => $formData['keyword'],

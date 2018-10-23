@@ -38,8 +38,16 @@
                   <td>{$info.title}</td>
                 </tr>
                 <tr>
-                  <td align="right" >栏目</td>
-                  <td>{$info.category_name}</td>
+                  <td align="right" >频道</td>
+                  <td>{$info.channel_name}</td>
+                </tr>
+                <tr>
+                  <td align="right" >一级栏目</td>
+                  <td>{$info.category_1}</td>
+                </tr>
+                <tr>
+                  <td align="right" >二级栏目</td>
+                  <td>{$info.category_2}</td>
                 </tr>
                 {if condition="isset($info.thumb_image)"}
                   <tr>

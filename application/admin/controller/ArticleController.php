@@ -16,12 +16,6 @@ class ArticleController extends BaseController
      */
     public function index()
     {
-        $pages  = Db::table($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
-        $render = $pages->render();
-        $lists  = $pages->all();
-
-        $data['list']           = $lists;
-        $data['render']         = $render;
         $data['goback']         = url('admin/'.$this->url_path.'/add');
         $data['module_name']    = $this->module_name;
         $data['path']           = $this->url_path;
@@ -39,6 +33,25 @@ class ArticleController extends BaseController
             $url_view   = url('admin/'.$this->url_path.'/info', ['id'=>$value['id']]);
             $url_edit   = url('admin/'.$this->url_path.'/edit', ['id'=>$value['id']]);
             $url_delete = url('admin/'.$this->url_path.'/delete', ['id'=>$value['id']]);
+
+            $channel = Db::table('nj_channel')->where(array('id'=>$value['channel_id']))->find();
+            if($channel){
+                $lists[$key]['channel_name'] = $channel['name'];
+            }else{
+                $lists[$key]['channel_name'] = '';
+            }
+            $category_1 = Db::table('category')->where(array('id'=>$value['category_1']))->find();
+            if($category_1){
+                $lists[$key]['category_1'] = $category_1['name'];
+            }else{
+                $lists[$key]['category_1'] = '';
+            }
+            $category_2 = Db::table('category_2')->where(array('id'=>$value['category_2']))->find();
+            if($category_2){
+                $lists[$key]['category_2'] = $category_2['name'];
+            }else{
+                $lists[$key]['category_2'] = '';
+            }
         }
         $data = [
             'code'  => 0,
@@ -68,12 +81,25 @@ class ArticleController extends BaseController
             }
         }
 
-        $category = Db::table('nj_category')->where(array('id'=>$info['category_id']))->find();
-        if($category){
-            $info['category_name'] = $category['name'];
+        $channel = Db::table('nj_channel')->where(array('id'=>$info['channel_id']))->find();
+        if($channel){
+            $info['channel_name'] = $channel['name'];
         }else{
-            $info['category_name'] = '';
+            $info['channel_name'] = '';
         }
+        $category_1 = Db::table('category')->where(array('id'=>$info['category_1']))->find();
+        if($category_1){
+            $info['category_1'] = $category_1['name'];
+        }else{
+            $info['category_1'] = '';
+        }
+        $category_2 = Db::table('category_2')->where(array('id'=>$info['category_2']))->find();
+        if($category_2){
+            $info['category_2'] = $category_2['name'];
+        }else{
+            $info['category_2'] = '';
+        }
+
         $data['info'] = $info;
         $data['goback'] = url('admin/'.$this->url_path.'/list');
         $data['module_name'] = $this->module_name;
@@ -85,14 +111,15 @@ class ArticleController extends BaseController
      */
     public function add_form()
     {
-        $categorys              = Db::table('nj_category')->where(array('delete'=>0))->select();
+        $channel              = Db::table('nj_channel')->where(array('delete'=>0))->select();
         $data['goback']         = url('admin/'.$this->url_path.'/list');
         $data['action']         = url('admin/'.$this->url_path.'/add_submit');
         $data['url_upload']     = url('/upload/image');
         $data['module_name']    = $this->module_name;
-        $data['categorys']      =  $categorys;
+        $data['channel']        =  $channel;
         $data['url_upload_editor']     = url('/upload/image_editor',array('category'=>'article'));
         $data['kindeditor_file_manager']    = url('/upload/kindeditor_file_manager');
+        $data['province']       = get_province();
         return view($this->url_path.'/add_form', $data);
     }
 
@@ -106,6 +133,9 @@ class ArticleController extends BaseController
         $data = [
             'title'             => $formData['title'],
             'category_id'       => $formData['category_id'],
+            'province'          => $formData['province'],
+            'city'              => $formData['city'],
+            'dist'              => $formData['dist'],
             'meta_keyword'      => $formData['meta_keyword'],
             'meta_description'  => $formData['summary'],
             'summary'           => $formData['summary'],
@@ -167,6 +197,7 @@ class ArticleController extends BaseController
         $data['url_upload']     = url('/upload/image');
         $data['url_upload_editor']          = url('/upload/image_editor',array('category'=>'article'));
         $data['kindeditor_file_manager']    = url('/upload/kindeditor_file_manager');
+        $data['province']       = get_province();
         return view($this->url_path.'/edit_form', $data);
     }
 
@@ -183,6 +214,9 @@ class ArticleController extends BaseController
         $data = [
             'title'             => $formData['title'],
             'category_id'       => $formData['category_id'],
+            'province'          => $formData['province'],
+            'city'              => $formData['city'],
+            'dist'              => $formData['dist'],
             'meta_keyword'      => $formData['meta_keyword'],
             'meta_description'  => $formData['summary'],
             'summary'           => $formData['summary'],
@@ -231,4 +265,19 @@ class ArticleController extends BaseController
         }
     }
 
+    /**
+     * 获取栏目
+     */
+    public function get_category(){
+        $level = input('level') ? input('level') : 1;
+        if($level == 1){
+            $table = 'nj_category';
+        }
+        if($level == 2){
+            $table = 'nj_category_2';
+        }
+
+        $categorys  = Db::table($table)->where(array('delete'=>0))->select();
+        $this->json(array('code'=>0, 'msg'=>'获取成功', 'data'=>array('categorys'=>$categorys)));
+    }
 }

@@ -28,12 +28,14 @@
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">栏目</label>
                                     <div class="layui-input-block">
-                                        <select name="category_id" class="layui-select">
-                                            <option value=""> - 选择 - </option>
-                                            {volist name="categorys" id="vo"}
-                                                <option value="{$vo.id}">{$vo.name}</option>
-                                            {/volist}
-                                        </select>
+                                        <div class="layui-input-inline">
+                                            <select name="channel_id" class="layui-select">
+                                                <option value=""> - 选择 - </option>
+                                                {volist name="channel" id="vo"}
+                                                    <option value="{$vo.id}">{$vo.name}</option>
+                                                {/volist}
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
@@ -86,6 +88,7 @@
 {include file="page/footer" /}
 <script charset="utf-8" type="text/javascript" src='__ROOT__/kindeditor/kindeditor-all.js'></script>
 <script charset="utf-8" type="text/javascript" src="__ROOT__/kindeditor/lang/zh-CN.js"></script>
+
 <script>
     layui.use(['upload','form'], function(){
         var form = layui.form;
@@ -122,6 +125,9 @@
                     'content': $("[name='content']").val(),
                     'upload_id': data.upload_id,
                     'upload_ids': $("[name='upload_ids']").val(),
+                    'province': $("[name='province']").val(),
+                    'city': $("[name='city']").val(),
+                    'dist': $("[name='dist']").val(),
                 };
 
                 //提交
@@ -170,7 +176,7 @@
                                 icon: 16,
                                 shade: 0.2
                             }, function(){
-//                                parent.location.reload();
+                                parent.location.reload();
                             });
                         }else{
                             layer.msg(msg);

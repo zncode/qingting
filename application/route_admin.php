@@ -31,6 +31,7 @@ Route::get('admin/category/info', 			'admin/CategoryController/info');
 Route::get('admin/category/delete', 		'admin/CategoryController/delete');
 Route::get('admin/category/json_data', 		'admin/CategoryController/json_data');
 Route::get('admin/category/list_data', 		'admin/CategoryController/index_data');
+Route::get('admin/category/get_category',   'admin/CategoryController/get_category');
 
 //内容
 Route::get('admin/article/add', 			'admin/ArticleController/add_form');

@@ -1,4 +1,15 @@
 {include file="page/header" /}
+<!--<script charset="utf-8" type="text/javascript" src="__ROOT__/js/jquery-3.3.1.js"></script>-->
+<!--<script charset="utf-8" type="text/javascript" src="__ROOT__/js/city/jquery.cityselect.js"></script>-->
+<!--<script type="text/javascript">-->
+    <!--$(function(){-->
+        <!--$(".city").citySelect({-->
+            <!--prov:"{$province}",-->
+            <!--city:"{$city}",-->
+            <!--dist:"{$dist}",-->
+        <!--});-->
+    <!--});-->
+<!--</script>-->
 <div class="layui-layout layui-layout-admin">
     {include file="page/body_top" /}
     {include file="page/menu" /}
@@ -40,6 +51,24 @@
                                         </select>
                                     </div>
                                 </div>
+
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">所在地区：</label>
+                                    <div class="layui-input-block">
+                                        <dd class="city">
+                                            <div class="layui-input-inline">
+                                                <select class="prov" name='province'></select>
+                                            </div>
+                                            <div class="layui-input-inline">
+                                                <select class="city" name='city' style="margin-left:20px;"></select>
+                                            </div>
+                                            <div class="layui-input-inline">
+                                                <select class="dist" name='dist' style="margin-left:20px;"></select>
+                                            </div>
+                                        </dd>
+                                    </div>
+                                </div>
+
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">列表图</label>
                                     <div class="layui-input-block">
@@ -98,6 +127,7 @@
 {include file="page/footer" /}
 <script charset="utf-8" type="text/javascript" src='__ROOT__/kindeditor/kindeditor-all.js'></script>
 <script charset="utf-8" type="text/javascript" src="__ROOT__/kindeditor/lang/zh-CN.js"></script>
+
 <script>
 
     layui.use(['form','upload'], function(){
@@ -138,6 +168,9 @@
                     'content': $("[name='content']").val(),
                     'upload_id': data.upload_id,
                     'upload_ids': $("[name='upload_ids']").val(),
+                    'province': $("[name='province']").val(),
+                    'city': $("[name='city']").val(),
+                    'dist': $("[name='dist']").val(),
                 };
 
                 //提交

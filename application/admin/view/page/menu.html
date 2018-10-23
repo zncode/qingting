@@ -14,8 +14,10 @@
         <dl class="layui-nav-child">
           <dd><a href="{:url('@admin/channel/list')}">频道列表</a></dd>
           <dd><a href="{:url('@admin/channel/add')}">频道添加</a></dd>
-          <dd><a href="{:url('@admin/category/list')}">栏目列表</a></dd>
-          <dd><a href="{:url('@admin/category/add')}">栏目添加</a></dd>
+          <dd><a href="{:url('@admin/category/list',array('level'=>1))}">一级栏目列表</a></dd>
+          <dd><a href="{:url('@admin/category/add',array('level'=>1))}">一级栏目添加</a></dd>
+          <dd><a href="{:url('@admin/category/list',array('level'=>2))}">二级栏目列表</a></dd>
+          <dd><a href="{:url('@admin/category/add',array('level'=>2))}">二级栏目添加</a></dd>
         </dl>
       </li>
       <li class="layui-nav-item layui-nav-itemed">
