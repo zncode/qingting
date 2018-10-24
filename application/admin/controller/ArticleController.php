@@ -189,8 +189,22 @@ class ArticleController extends BaseController
                 $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].$info['save_path'];
             }
         }
-        $categorys              = Db::table('nj_category')->where(array('delete'=>0))->select();
-        $data['categorys']      = $categorys;
+
+        if($info['channel_id']){
+            $channel = Db::table('nj_channel')->where(array('delete'=>0))->select();
+            $data['channel'] = $channel;
+        }
+
+        if($info['category_1']){
+            $category_1 = Db::table('nj_category')->where(array('delete'=>0))->select();
+            $info['category_1'] = $category_1;
+        }
+
+        if($info['category_2']){
+            $category_2 = Db::table('nj_category_2')->where(array('delete'=>0))->select();
+            $info['category_2'] = $category_2;
+        }
+
         $data['info']           = $info;
         $data['goback']         = url('admin/'.$this->url_path.'/list');
         $data['action']         = url('admin/'.$this->url_path.'/edit_submit');

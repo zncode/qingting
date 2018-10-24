@@ -37,18 +37,44 @@
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">栏目</label>
+                                    <label class="layui-form-label">频道</label>
                                     <div class="layui-input-block">
-                                        <select name="category_id" class="layui-select">
-                                            <option value=""> - 选择 - </option>{
-                                            {volist name="categorys" id="vo"}
-                                                {if condition="$info.category_id eq $vo.id"}
-                                                    <option value="{$vo.id}" selected="selected">{$vo.name}</option>
-                                                {else /}
-                                                    <option value="{$vo.id}">{$vo.name}</option>
-                                                {/if}
-                                            {/volist}
-                                        </select>
+                                        <div class="layui-input-inline">
+                                            <select name="channel_id" class="layui-select"  lay-filter="channel">
+                                                <option value=""> - 选择 - </option>
+                                                {volist name="channel" id="vo"}
+                                                    {if condition="$info.channel_id eq $vo.id"}
+                                                        <option value="{$vo.id}" checked="checked">{$vo.name}</option>
+                                                    {else /}
+                                                        <option value="{$vo.id}">{$vo.name}</option>
+                                                    {/if}
+                                                {/volist}
+                                            </select>
+                                        </div>
+                                        {if condition="$info.category_1 neq ''"}
+                                            <div class="layui-input-inline getegory_1" style="" >
+                                                <select name="gategory_1" class="layui-select" lay-filter="gategory_1" id="gategory_1" >
+                                                    {volist name="$info.gategory_1" id="vo"}
+                                                        {if condition="$info.gategory_1 eq $vo.id"}
+                                                            <option value="{$vo.id}" checked="checked">{$vo.name}</option>
+                                                        {else /}
+                                                            <option value="{$vo.id}">{$vo.name}</option>
+                                                        {/if}
+                                                    {/volist}
+                                                </select>
+                                            </div>
+                                        {else /}
+                                            <div class="layui-input-inline getegory_1" style="display: none" >
+                                                <select name="gategory_1" class="layui-select" lay-filter="gategory_1" id="gategory_1" >
+                                                    <option value=""> - 一级栏目选择 - </option>
+                                                </select>
+                                            </div>
+                                        {/if}
+                                        <div class="layui-input-inline getegory_2" style="display: none" >
+                                            <select name="getegory_2" class="layui-select" lay-filter="gategory_2" id="getegory_2" >
+                                                <option value=""> - 二级栏目选择 - </option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
 
