@@ -28,6 +28,7 @@ class ArticleController extends BaseController
     public function index_data()
     {
         $pages  = Db::table($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
+
         $lists  = $pages->all();
         foreach($lists as $key => $value){
             $url_view   = url('admin/'.$this->url_path.'/info', ['id'=>$value['id']]);
@@ -40,13 +41,13 @@ class ArticleController extends BaseController
             }else{
                 $lists[$key]['channel_name'] = '';
             }
-            $category_1 = Db::table('category')->where(array('id'=>$value['category_1']))->find();
+            $category_1 = Db::table('nj_category')->where(array('id'=>$value['category_1']))->find();
             if($category_1){
                 $lists[$key]['category_1'] = $category_1['name'];
             }else{
                 $lists[$key]['category_1'] = '';
             }
-            $category_2 = Db::table('category_2')->where(array('id'=>$value['category_2']))->find();
+            $category_2 = Db::table('nj_category_2')->where(array('id'=>$value['category_2']))->find();
             if($category_2){
                 $lists[$key]['category_2'] = $category_2['name'];
             }else{
@@ -87,13 +88,13 @@ class ArticleController extends BaseController
         }else{
             $info['channel_name'] = '';
         }
-        $category_1 = Db::table('category')->where(array('id'=>$info['category_1']))->find();
+        $category_1 = Db::table('nj_category')->where(array('id'=>$info['category_1']))->find();
         if($category_1){
             $info['category_1'] = $category_1['name'];
         }else{
             $info['category_1'] = '';
         }
-        $category_2 = Db::table('category_2')->where(array('id'=>$info['category_2']))->find();
+        $category_2 = Db::table('nj_category_2')->where(array('id'=>$info['category_2']))->find();
         if($category_2){
             $info['category_2'] = $category_2['name'];
         }else{
@@ -197,7 +198,7 @@ class ArticleController extends BaseController
         $data['url_upload']     = url('/upload/image');
         $data['url_upload_editor']          = url('/upload/image_editor',array('category'=>'article'));
         $data['kindeditor_file_manager']    = url('/upload/kindeditor_file_manager');
-        $data['province']       = get_province();
+
         return view($this->url_path.'/edit_form', $data);
     }
 

@@ -36,13 +36,13 @@
                                                 {/volist}
                                             </select>
                                         </div>
-                                        <div class="layui-input-inline" style="display: none" >
-                                            <select name="getegory_1" class="layui-select">
+                                        <div class="layui-input-inline getegory_1" style="display: none" >
+                                            <select name="getegory_1" class="layui-select" lay-filter="gategory_1" id="getegory_1" >
                                                 <option value=""> - 一级栏目选择 - </option>
                                             </select>
                                         </div>
-                                        <div class="layui-input-inline" style="display: none" >
-                                            <select name="getegory_1" class="layui-select">
+                                        <div class="layui-input-inline getegory_2" style="display: none" >
+                                            <select name="getegory_2" class="layui-select" lay-filter="gategory_2" id="getegory_2" >
                                                 <option value=""> - 二级栏目选择 - </option>
                                             </select>
                                         </div>
@@ -209,12 +209,12 @@
             });
         });
 
-        //栏目选择
+        //一级栏目选择
         form.on('select(channel)', function(data){
-            var channel_id = data.value;
+            var id = data.value;
             var data = {
                 'level': 1,
-                'channel_id': channel_id,
+                'id': id,
             };
             //提交
             $.ajax({
@@ -227,20 +227,63 @@
                     var msg  = result.msg;
                     var data = result.data;
                     if(code==0){
+//                        layer.msg(msg, {
+//                            time: 2000,
+//                            icon: 16,
+//                            shade: 0.2
+//                        }, function(){
+//                            layer.msg(data.category);
+//                        });
 
-                        layer.msg(msg, {
-                            time: 2000,
-                            icon: 16,
-                            shade: 0.2
-                        }, function(){
-                            layer.msg(data.category);
+                        $("#getegory_1").html("");
+                        $("#getegory_2").html("");
+                        $(".getegory_2").hide();
+                        $.each(data.category, function(key, val) {
+                            var option1 = $("<option>").val(val.id).text(val.name);
+                            $("#getegory_1").append(option1);
+                            form.render('select');
                         });
+                        $("#getegory_1").get(0).selectedIndex=0;
+                        $(".getegory_1").show();
                     }else{
                         layer.msg(msg);
                     }
                 }
             })
         });
+
+        //二级栏目选择
+        form.on('select(gategory_1)', function(data){
+            var id = data.value;
+            var data = {
+                'level': 2,
+                'id': id,
+            };
+            //提交
+            $.ajax({
+                url: "{:url('admin/category/get_category')}",
+                type: "post",
+                data: data,
+                success:function(result){
+                    var result = JSON.parse(result);
+                    var code = result.code;
+                    var msg  = result.msg;
+                    var data = result.data;
+                    if(code==0 && data.category != false){
+                        $("#getegory_2").html("");
+                        $.each(data.category, function(key, val) {
+                            var option1 = $("<option>").val(val.id).text(val.name);
+                            $("#getegory_2").append(option1);
+                            form.render('select');
+                        });
+                        $("#getegory_2").get(0).selectedIndex=0;
+                        $(".getegory_2").show();
+                    }
+                }
+            })
+        });
+
+
     });
 
     //编辑器的调用对象

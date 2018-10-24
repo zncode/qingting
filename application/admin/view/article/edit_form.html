@@ -4,9 +4,9 @@
 <!--<script type="text/javascript">-->
     <!--$(function(){-->
         <!--$(".city").citySelect({-->
-            <!--prov:"{$province}",-->
-            <!--city:"{$city}",-->
-            <!--dist:"{$dist}",-->
+            <!--prov:"{111}",-->
+            <!--city:"{222}",-->
+            <!--dist:"{333}",-->
         <!--});-->
     <!--});-->
 <!--</script>-->
@@ -52,22 +52,6 @@
                                     </div>
                                 </div>
 
-                                <div class="layui-form-item">
-                                    <label class="layui-form-label">所在地区：</label>
-                                    <div class="layui-input-block">
-                                        <dd class="city">
-                                            <div class="layui-input-inline">
-                                                <select class="prov" name='province'></select>
-                                            </div>
-                                            <div class="layui-input-inline">
-                                                <select class="city" name='city' style="margin-left:20px;"></select>
-                                            </div>
-                                            <div class="layui-input-inline">
-                                                <select class="dist" name='dist' style="margin-left:20px;"></select>
-                                            </div>
-                                        </dd>
-                                    </div>
-                                </div>
 
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">列表图</label>
@@ -168,9 +152,6 @@
                     'content': $("[name='content']").val(),
                     'upload_id': data.upload_id,
                     'upload_ids': $("[name='upload_ids']").val(),
-                    'province': $("[name='province']").val(),
-                    'city': $("[name='city']").val(),
-                    'dist': $("[name='dist']").val(),
                 };
 
                 //提交

@@ -191,6 +191,8 @@ class CategoryController extends BaseController
      */
     public function get_category(){
         $level = input('level') ? input('level') : 1;
+        $parent_id = input('id') ? input('id') : 1;
+
         if($level == 1){
             $table = 'nj_category';
         }
@@ -198,13 +200,14 @@ class CategoryController extends BaseController
             $table = 'nj_category_2';
         }
 
-        $categorys  = Db::table($table)->where(array('delete'=>0))->select();
-        if(is_array($categorys) && count($categorys)){
-            foreach($categorys as $category){
-                $category_html[] = '<option value="'.$category['id'].'"> '.$category['name'].' </option>';
-            }
-            $category_html = implode('', $category_html);
-        }
-        $this->json(array('code'=>0, 'msg'=>'获取成功', 'data'=>array('category'=>$category_html)));
+        $categorys  = Db::table($table)->where(array('delete'=>0, 'parent_id'=>$parent_id))->select();
+
+//        if(is_array($categorys) && count($categorys)){
+//            foreach($categorys as $category){
+//                $category_html[] = '<option value="'.$category['id'].'"> '.$category['name'].' </option>';
+//            }
+//            $category_html = implode('', $category_html);
+//        }
+        $this->json(array('code'=>0, 'msg'=>'获取成功', 'data'=>array('category'=>$categorys)));
     }
 }
