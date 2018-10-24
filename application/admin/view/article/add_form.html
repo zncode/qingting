@@ -26,18 +26,29 @@
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">栏目</label>
+                                    <label class="layui-form-label">频道</label>
                                     <div class="layui-input-block">
                                         <div class="layui-input-inline">
-                                            <select name="channel_id" class="layui-select">
+                                            <select name="channel_id" class="layui-select"  lay-filter="channel">
                                                 <option value=""> - 选择 - </option>
                                                 {volist name="channel" id="vo"}
                                                     <option value="{$vo.id}">{$vo.name}</option>
                                                 {/volist}
                                             </select>
                                         </div>
+                                        <div class="layui-input-inline" style="display: none" >
+                                            <select name="getegory_1" class="layui-select">
+                                                <option value=""> - 一级栏目选择 - </option>
+                                            </select>
+                                        </div>
+                                        <div class="layui-input-inline" style="display: none" >
+                                            <select name="getegory_1" class="layui-select">
+                                                <option value=""> - 二级栏目选择 - </option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
+
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">列表图</label>
                                     <div class="layui-input-block">
@@ -196,6 +207,39 @@
                 area: ['auto', 'auto'],
                 content: '<img src="'+thumb_image_src+'">',
             });
+        });
+
+        //栏目选择
+        form.on('select(channel)', function(data){
+            var channel_id = data.value;
+            var data = {
+                'level': 1,
+                'channel_id': channel_id,
+            };
+            //提交
+            $.ajax({
+                url: "{:url('admin/category/get_category')}",
+                type: "post",
+                data: data,
+                success:function(result){
+                    var result = JSON.parse(result);
+                    var code = result.code;
+                    var msg  = result.msg;
+                    var data = result.data;
+                    if(code==0){
+
+                        layer.msg(msg, {
+                            time: 2000,
+                            icon: 16,
+                            shade: 0.2
+                        }, function(){
+                            layer.msg(data.category);
+                        });
+                    }else{
+                        layer.msg(msg);
+                    }
+                }
+            })
         });
     });
 

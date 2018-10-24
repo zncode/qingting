@@ -185,4 +185,26 @@ class CategoryController extends BaseController
             $this->json(array('code'=>1, 'msg'=>'删除失败', 'data'=>array()));
         }
     }
+
+    /**
+     * 获取栏目
+     */
+    public function get_category(){
+        $level = input('level') ? input('level') : 1;
+        if($level == 1){
+            $table = 'nj_category';
+        }
+        if($level == 2){
+            $table = 'nj_category_2';
+        }
+
+        $categorys  = Db::table($table)->where(array('delete'=>0))->select();
+        if(is_array($categorys) && count($categorys)){
+            foreach($categorys as $category){
+                $category_html[] = '<option value="'.$category['id'].'"> '.$category['name'].' </option>';
+            }
+            $category_html = implode('', $category_html);
+        }
+        $this->json(array('code'=>0, 'msg'=>'获取成功', 'data'=>array('category'=>$category_html)));
+    }
 }
