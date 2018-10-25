@@ -133,10 +133,9 @@ class ArticleController extends BaseController
         $upload_ids = $formData['upload_ids'];
         $data = [
             'title'             => $formData['title'],
-            'category_id'       => $formData['category_id'],
-            'province'          => $formData['province'],
-            'city'              => $formData['city'],
-            'dist'              => $formData['dist'],
+            'channel_id'        => $formData['channel_id'],
+            'category_1'        => $formData['category_1'],
+            'category_2'        => $formData['category_2'],
             'meta_keyword'      => $formData['meta_keyword'],
             'meta_description'  => $formData['summary'],
             'summary'           => $formData['summary'],
@@ -205,7 +204,7 @@ class ArticleController extends BaseController
         }
 
         if($info['category_2']){
-            $category_2 = Db::table('nj_category_2')->where(array('delete'=>0))->select();
+            $category_2 = Db::table('nj_category_2')->where(array('parent_id'=>$info['category_1'], 'delete'=>0))->select();
             $data['category_2'] = $category_2;
         }else{
             $data['category_2'] = '';
@@ -234,10 +233,9 @@ class ArticleController extends BaseController
         //更新内容
         $data = [
             'title'             => $formData['title'],
-            'category_id'       => $formData['category_id'],
-            'province'          => $formData['province'],
-            'city'              => $formData['city'],
-            'dist'              => $formData['dist'],
+            'channel_id'        => $formData['channel_id'],
+            'category_1'        => $formData['category_1'],
+            'category_2'        => $formData['category_2'],
             'meta_keyword'      => $formData['meta_keyword'],
             'meta_description'  => $formData['summary'],
             'summary'           => $formData['summary'],

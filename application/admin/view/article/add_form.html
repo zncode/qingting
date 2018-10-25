@@ -36,13 +36,13 @@
                                                 {/volist}
                                             </select>
                                         </div>
-                                        <div class="layui-input-inline getegory_1" style="display: none" >
-                                            <select name="getegory_1" class="layui-select" lay-filter="gategory_1" id="getegory_1" >
+                                        <div class="layui-input-inline category_1" style="display: none" >
+                                            <select name="category_1" class="layui-select" lay-filter="category_1" id="category_1" >
                                                 <option value=""> - 一级栏目选择 - </option>
                                             </select>
                                         </div>
-                                        <div class="layui-input-inline getegory_2" style="display: none" >
-                                            <select name="getegory_2" class="layui-select" lay-filter="gategory_2" id="getegory_2" >
+                                        <div class="layui-input-inline category_2" style="display: none" >
+                                            <select name="category_2" class="layui-select" lay-filter="category_2" id="category_2" >
                                                 <option value=""> - 二级栏目选择 - </option>
                                             </select>
                                         </div>
@@ -130,7 +130,9 @@
 
                 var  field = {
                     'title': $("[name='title']").val(),
-                    'category_id': $("[name='category_id']").val(),
+                    'channel_id': $("[name='channel_id']").val(),
+                    'category_1': $("[name='category_1']").val(),
+                    'category_2': $("[name='category_2']").val(),
                     'meta_keyword': $("[name='meta_keyword']").val(),
                     'summary': $("[name='summary']").val(),
                     'content': $("[name='content']").val(),
@@ -235,16 +237,16 @@
 //                            layer.msg(data.category);
 //                        });
 
-                        $("#getegory_1").html("");
-                        $("#getegory_2").html("");
-                        $(".getegory_2").hide();
+                        $("#category_1").html("");
+                        $("#category_2").html("");
+                        $(".category_2").hide();
                         $.each(data.category, function(key, val) {
                             var option1 = $("<option>").val(val.id).text(val.name);
-                            $("#getegory_1").append(option1);
+                            $("#category_1").append(option1);
                             form.render('select');
                         });
-                        $("#getegory_1").get(0).selectedIndex=0;
-                        $(".getegory_1").show();
+                        $("#category_1").get(0).selectedIndex=0;
+                        $(".category_1").show();
                     }else{
                         layer.msg(msg);
                     }
@@ -253,7 +255,7 @@
         });
 
         //二级栏目选择
-        form.on('select(gategory_1)', function(data){
+        form.on('select(category_1)', function(data){
             var id = data.value;
             var data = {
                 'level': 2,
@@ -270,14 +272,14 @@
                     var msg  = result.msg;
                     var data = result.data;
                     if(code==0 && data.category != false){
-                        $("#getegory_2").html("");
+                        $("#category_2").html("");
                         $.each(data.category, function(key, val) {
                             var option1 = $("<option>").val(val.id).text(val.name);
-                            $("#getegory_2").append(option1);
+                            $("#category_2").append(option1);
                             form.render('select');
                         });
-                        $("#getegory_2").get(0).selectedIndex=0;
-                        $(".getegory_2").show();
+                        $("#category_2").get(0).selectedIndex=0;
+                        $(".category_2").show();
                     }
                 }
             })
