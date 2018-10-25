@@ -193,16 +193,22 @@ class ArticleController extends BaseController
         if($info['channel_id']){
             $channel = Db::table('nj_channel')->where(array('delete'=>0))->select();
             $data['channel'] = $channel;
+        }else{
+            $data['channel'] = '';
         }
 
         if($info['category_1']){
             $category_1 = Db::table('nj_category')->where(array('delete'=>0))->select();
-            $info['category_1'] = $category_1;
+            $data['category_1'] = $category_1;
+        }else{
+            $data['category_1'] = '';
         }
 
         if($info['category_2']){
             $category_2 = Db::table('nj_category_2')->where(array('delete'=>0))->select();
-            $info['category_2'] = $category_2;
+            $data['category_2'] = $category_2;
+        }else{
+            $data['category_2'] = '';
         }
 
         $data['info']           = $info;

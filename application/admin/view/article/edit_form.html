@@ -44,7 +44,7 @@
                                                 <option value=""> - 选择 - </option>
                                                 {volist name="channel" id="vo"}
                                                     {if condition="$info.channel_id eq $vo.id"}
-                                                        <option value="{$vo.id}" checked="checked">{$vo.name}</option>
+                                                        <option value="{$vo.id}" selected="selected">{$vo.name}</option>
                                                     {else /}
                                                         <option value="{$vo.id}">{$vo.name}</option>
                                                     {/if}
@@ -52,11 +52,11 @@
                                             </select>
                                         </div>
                                         {if condition="$info.category_1 neq ''"}
-                                            <div class="layui-input-inline getegory_1" style="" >
-                                                <select name="gategory_1" class="layui-select" lay-filter="gategory_1" id="gategory_1" >
-                                                    {volist name="$info.gategory_1" id="vo"}
-                                                        {if condition="$info.gategory_1 eq $vo.id"}
-                                                            <option value="{$vo.id}" checked="checked">{$vo.name}</option>
+                                            <div class="layui-input-inline cetegory_1" style="" >
+                                                <select name="category_1" class="layui-select" lay-filter="gategory_1" id="category_1" >
+                                                    {volist name="category_1" id="vo"}
+                                                        {if condition="$info.category_1 eq $vo.id"}
+                                                            <option value="{$vo.id}" selected="selected">{$vo.name}</option>
                                                         {else /}
                                                             <option value="{$vo.id}">{$vo.name}</option>
                                                         {/if}
@@ -64,17 +64,31 @@
                                                 </select>
                                             </div>
                                         {else /}
-                                            <div class="layui-input-inline getegory_1" style="display: none" >
-                                                <select name="gategory_1" class="layui-select" lay-filter="gategory_1" id="gategory_1" >
+                                            <div class="layui-input-inline cetegory_1" style="display: none" >
+                                                <select name="category_1" class="layui-select" lay-filter="category_1" id="category_1" >
                                                     <option value=""> - 一级栏目选择 - </option>
                                                 </select>
                                             </div>
                                         {/if}
-                                        <div class="layui-input-inline getegory_2" style="display: none" >
-                                            <select name="getegory_2" class="layui-select" lay-filter="gategory_2" id="getegory_2" >
+                                        {if condition="$info.category_2 neq ''"}
+                                        <div class="layui-input-inline cetegory_2" style="" >
+                                            <select name="category_2" class="layui-select" lay-filter="category_2" id="category_2" >
+                                                {volist name="category_2" id="vo"}
+                                                {if condition="$info.category_2 eq $vo.id"}
+                                                    <option value="{$vo.id}" selected="selected">{$vo.name}</option>
+                                                {else /}
+                                                    <option value="{$vo.id}">{$vo.name}</option>
+                                                {/if}
+                                                {/volist}
+                                            </select>
+                                        </div>
+                                        {else /}
+                                        <div class="layui-input-inline cetegory_2" style="display: none" >
+                                            <select name="category_2" class="layui-select" lay-filter="category_2" id="category_2" >
                                                 <option value=""> - 二级栏目选择 - </option>
                                             </select>
                                         </div>
+                                        {/if}
                                     </div>
                                 </div>
 
@@ -246,6 +260,73 @@
                 content: '<img src="'+thumb_image_src+'">',
             });
         });
+
+        //一级栏目选择
+        form.on('select(channel)', function(data){
+            var id = data.value;
+            var data = {
+                'level': 1,
+                'id': id,
+            };
+            //提交
+            $.ajax({
+                url: "{:url('admin/category/get_category')}",
+                type: "post",
+                data: data,
+                success:function(result){
+                    var result = JSON.parse(result);
+                    var code = result.code;
+                    var msg  = result.msg;
+                    var data = result.data;
+                    if(code==0){
+                        $("#category_1").html("");
+                        $("#category_2").html("");
+                        $(".category_2").hide();
+                        $.each(data.category, function(key, val) {
+                            var option1 = $("<option>").val(val.id).text(val.name);
+                            $("#category_1").append(option1);
+                            form.render('select');
+                        });
+                        $("#category_1").get(0).selectedIndex=0;
+                        $(".category_1").show();
+                    }else{
+                        layer.msg(msg);
+                    }
+                }
+            })
+        });
+
+        //二级栏目选择
+        form.on('select(category_1)', function(data){
+            var id = data.value;
+            var data = {
+                'level': 2,
+                'id': id,
+            };
+            //提交
+            $.ajax({
+                url: "{:url('admin/category/get_category')}",
+                type: "post",
+                data: data,
+                success:function(result){
+                    var result = JSON.parse(result);
+                    var code = result.code;
+                    var msg  = result.msg;
+                    var data = result.data;
+                    if(code==0 && data.category != false){
+                        $("#cetegory_2").html("");
+                        $.each(data.category, function(key, val) {
+                            var option1 = $("<option>").val(val.id).text(val.name);
+                            $("#cetegory_2").append(option1);
+                            form.render('select');
+                        });
+                        $("#cetegory_2").get(0).selectedIndex=0;
+                        $(".cetegory_2").show();
+                    }
+                }
+            })
+        });
+
 
     });
 
