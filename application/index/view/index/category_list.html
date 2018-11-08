@@ -18,7 +18,15 @@
                 <div class="line_content">
                     <div class="line_content_title"><a href="{:url('/page',array('id'=>$v.id))}">{$v.title}</a></div>
                     <div class="line_content_body">{$v.summary}</div>
-                    <div class="line_content_bottom">1216浏览</div>
+                    <div class="line_content_bottom">
+                        {if condition="$v.category_name_1 neq ''"}
+                            {$v.category_name_1}
+                        {/if}
+                        &nbsp;&nbsp;
+                        {if condition="$v.category_name_2 neq ''"}
+                            {$v.category_name_2}
+                        {/if}
+                        &nbsp;&nbsp;1216浏览</div>
                 </div>
             </div>
         {/volist}
