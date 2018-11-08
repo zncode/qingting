@@ -16,4 +16,15 @@ class BaseController extends Controller
 
         return $document_root;
     }
+
+    /**
+     * 处理导航条
+     */
+    public function get_breadcrumb($breadcrumb){
+        foreach($breadcrumb as $key => $value){
+            $breads[] = '<a href="'.$value['path'].'">'.$value['title'].'</a>';
+        }
+        $breads = implode('<span>》</span>', $breads);
+        return $breads;
+    }
 }

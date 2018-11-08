@@ -6,20 +6,25 @@ use think\Db;
 
 class IndexController extends BaseController
 {
+    const CHANNEL_ID = 'channel_id';
+
     public function index()
     {
         return view('index/index');
     }
 
-    public function category_list()
+    /**
+     * 频道列表
+     */
+    public function channel_list()
     {
-        $id = input('id');
+        $channel_id = input('id');
 
         $pages  = Db::table('nj_article')
             ->alias(['nj_article'=>'a', 'nj_upload'=>'b'])
-            ->field('a.id,a.title,a.summary,a.create_time,a.category_id,b.save_path')
+            ->field('a.id,a.title,a.summary,a.create_time,a.channel_id,b.save_path')
             ->join('nj_upload', 'a.thumb = b.id', 'left')
-            ->where(array('a.category_id'=>$id,'a.delete'=>0))
+            ->where(array('a.channel_id'=>$channel_id,'a.delete'=>0))
             ->order('create_time desc')
             ->paginate(10);
 
@@ -31,9 +36,101 @@ class IndexController extends BaseController
             }
         }
 
-        $category = Db::table('nj_category')->where(array('id'=>$id))->find();
+        $channel = Db::table('nj_channel')->where(array('id'=>$channel_id))->find();
 
-        $data['category']     = $category;
+        //导航条
+        $breadcrumb[] = array('path'=>url('/'),'title'=>'首页');
+        if($channel){
+            $breadcrumb[] = array('path'=>'','title'=>$channel['name']);
+        }
+
+        $data['breadcrumb']   = $this->get_breadcrumb($breadcrumb);
+        $data['list']         = $lists;
+        $data['page']         = $page;
+        return view('index/category_list', $data);
+    }
+
+    /**
+     * 一级栏目列表
+     */
+    public function category1_list()
+    {
+        $id = input('id');
+
+        $pages  = Db::table('nj_article')
+            ->alias(['nj_article'=>'a', 'nj_upload'=>'b'])
+            ->field('a.id,a.title,a.summary,a.create_time,a.channel_id,b.save_path')
+            ->join('nj_upload', 'a.thumb = b.id', 'left')
+            ->where(array('a.category_1'=>$id,'a.delete'=>0))
+            ->order('create_time desc')
+            ->paginate(10);
+
+        $page = $pages->render();
+        $lists  = $pages->all();
+        if(is_array($lists) && count($lists)){
+            foreach($lists as $key => $value){
+                $lists[$key]['view_url'] = get_view_url($value['save_path']);
+            }
+        }
+
+        $category_1 = Db::table('nj_category')->where(array('id'=>$id))->find();
+        $channel    = Db::table('nj_channel')->where(array('id'=>$category_1['parent_id']))->find();
+
+        //导航条
+        $breadcrumb[] = array('path'=>url('/'),'title'=>'首页');
+        if($channel){
+            $breadcrumb[] = array('path'=>'','title'=>$channel['name']);
+        }
+        if($category_1){
+            $breadcrumb[] = array('path'=>url('category1/id/'.$category_1['id']),'title'=>$category_1['name']);
+        }
+
+        $data['breadcrumb']   = $this->get_breadcrumb($breadcrumb);
+        $data['list']         = $lists;
+        $data['page']         = $page;
+        return view('index/category_list', $data);
+    }
+
+    /**
+     * 二级栏目列表
+     */
+    public function category2_list()
+    {
+        $id = input('id');
+
+        $pages  = Db::table('nj_article')
+            ->alias(['nj_article'=>'a', 'nj_upload'=>'b'])
+            ->field('a.id,a.title,a.summary,a.create_time,a.channel_id,b.save_path')
+            ->join('nj_upload', 'a.thumb = b.id', 'left')
+            ->where(array('a.category_1'=>$id,'a.delete'=>0))
+            ->order('create_time desc')
+            ->paginate(10);
+
+        $page = $pages->render();
+        $lists  = $pages->all();
+        if(is_array($lists) && count($lists)){
+            foreach($lists as $key => $value){
+                $lists[$key]['view_url'] = get_view_url($value['save_path']);
+            }
+        }
+
+        $category_2 = Db::table('nj_category_2')->where(array('id'=>$id))->find();
+        $category_1 = Db::table('nj_category')->where(array('parent_id'=>$id))->find();
+        $channel    = Db::table('nj_channel')->where(array('id'=>$category_1['parent_id']))->find();
+
+        //导航条
+        $breadcrumb[] = array('path'=>url('/'),'title'=>'首页');
+        if($channel){
+            $breadcrumb[] = array('path'=>'','title'=>$channel['name']);
+        }
+        if($category_1){
+            $breadcrumb[] = array('path'=>url('category1/id/'.$category_1['id']),'title'=>$category_1['name']);
+        }
+        if($category_2){
+            $breadcrumb[] = array('path'=>url('category2/id/'.$category_2['id']),'title'=>$category_2['name']);
+        }
+
+        $data['breadcrumb']   = $this->get_breadcrumb($breadcrumb);
         $data['list']         = $lists;
         $data['page']         = $page;
         return view('index/category_list', $data);
@@ -44,16 +141,30 @@ class IndexController extends BaseController
         $id = input('id');
         $info  = Db::table('nj_article')
             ->alias(['nj_article'=>'a', 'nj_upload'=>'b'])
-            ->field('a.id,a.title,a.content,a.create_time,a.category_id,a.meta_keyword,a.meta_description,b.save_path')
+            ->field('a.id,a.title,a.content,a.create_time,a.channel_id,a.category_1,a.category_2,a.meta_keyword,a.meta_description,b.save_path')
             ->join('nj_upload', 'a.thumb = b.id', 'left')
             ->where(array('a.id'=>$id))
             ->find();
 
-        $category = Db::table('nj_category')->where(array('id'=>$info['category_id']))->find();
+        $channel     = Db::table('nj_channel')->where(array('id'=>$info['channel_id']))->find();
+        $category_1  = Db::table('nj_category')->where(array('id'=>$info['category_1']))->find();
+        $category_2  = Db::table('nj_category_2')->where(array('id'=>$info['category_2']))->find();
 
-        $data['category']     = $category;
-        $info['view_url'] = get_view_url($info['save_path']);
-        $data['info'] = $info;
+        $breadcrumb[] = array('path'=>url('/'),'title'=>'首页');
+        if($channel){
+            $breadcrumb[] = array('path'=>url('channel/id/'.$channel['id']),'title'=>$channel['name']);
+        }
+        if($category_1){
+            $breadcrumb[] = array('path'=>url('category1/id/'.$category_1['id']),'title'=>$category_1['name']);
+        }
+        if($category_2){
+            $breadcrumb[] = array('path'=>url('category2/id/'.$category_2['id']),'title'=>$category_2['name']);
+        }
+        $breadcrumb[] = array('path'=>'','title'=>$info['title']);
+
+        $data['breadcrumb']     = $this->get_breadcrumb($breadcrumb);
+        $info['view_url']       = get_view_url($info['save_path']);
+        $data['info']           = $info;
         return view('index/page_info', $data);
     }
 
