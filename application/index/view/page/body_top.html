@@ -5,12 +5,12 @@
         </div>
         <div class="top_menu_wrapper">
             <ul>
-                <li class="top_menu active"><a href="{:url('/')}">首页</a></li>
-                <li class="top_menu"><a href="{:url('/channel/id/1')}">自然景区</a></li>
-                <li class="top_menu"><a href="{:url('/channel/id/2')}">农家自种</a></li>
-                <li class="top_menu"><a href="{:url('/channel/id/3')}">采摘果园</a></li>
-                <li class="top_menu"><a href="{:url('/channel/id/4')}">海滨沙滩</a></li>
-                <li class="top_menu"><a href="{:url('/channel/id/5')}">绿色氧吧</a></li>
+                <li class="top_menu {php}if($channel_id == 0) echo 'active'; {/php}"><a href="{:url('/')}">首页</a></li>
+                <li class="top_menu {php}if($channel_id == 1) echo 'active'; {/php}"><a href="{:url('/channel/id/1')}">自然景区</a></li>
+                <li class="top_menu {php}if($channel_id == 2) echo 'active'; {/php}"><a href="{:url('/channel/id/2')}">农家自种</a></li>
+                <li class="top_menu {php}if($channel_id == 3) echo 'active'; {/php}"><a href="{:url('/channel/id/3')}">采摘果园</a></li>
+                <li class="top_menu {php}if($channel_id == 4) echo 'active'; {/php}"><a href="{:url('/channel/id/4')}">海滨沙滩</a></li>
+                <li class="top_menu {php}if($channel_id == 5) echo 'active'; {/php}"><a href="{:url('/channel/id/5')}">绿色氧吧</a></li>
             </ul>
         </div>
     </div>

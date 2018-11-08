@@ -10,7 +10,8 @@ class IndexController extends BaseController
 
     public function index()
     {
-        return view('index/index');
+        $data['channel_id']   = 0;
+        return view('index/index',$data);
     }
 
     /**
@@ -59,6 +60,7 @@ class IndexController extends BaseController
         $data['list']         = $lists;
         $data['page']         = $page;
         $data['category']     = $category;
+        $data['channel_id']   = $channel_id;
         return view('index/category_list', $data);
     }
 
