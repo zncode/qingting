@@ -40,15 +40,6 @@ class IndexController extends BaseController
         }
 
         $channel    = Db::table('nj_channel')->where(array('id'=>$channel_id))->find();
-        $category   = Db::table('nj_category')->where(array('parent_id'=>$channel_id))->select();
-        if(is_array($category) && count($category)){
-            foreach($category as $key => $value){
-                $category_2 = Db::table('nj_category_2')->where(array('parent_id'=>$value['id']))->select();
-                if(is_array($category_2) && count($category_2)){
-                    $category[$key]['child'] = $category_2;
-                }
-            }
-        }
 
         //导航条
         $breadcrumb[] = array('path'=>url('/'),'title'=>'首页');
@@ -56,10 +47,22 @@ class IndexController extends BaseController
             $breadcrumb[] = array('path'=>'','title'=>$channel['name']);
         }
 
+
+        //左侧菜单
+        $left_menu   = Db::table('nj_category')->where(array('parent_id'=>$channel_id))->select();
+        if(is_array($left_menu) && count($left_menu)){
+            foreach($left_menu as $key => $value){
+                $category_2 = Db::table('nj_category_2')->where(array('parent_id'=>$value['id']))->select();
+                if(is_array($category_2) && count($category_2)){
+                    $left_menu[$key]['child'] = $category_2;
+                }
+            }
+        }
+
         $data['breadcrumb']   = $this->get_breadcrumb($breadcrumb);
         $data['list']         = $lists;
         $data['page']         = $page;
-        $data['category']     = $category;
+        $data['left_menu']    = $left_menu;
         $data['channel_id']   = $channel_id;
         return view('index/category_list', $data);
     }
@@ -72,9 +75,11 @@ class IndexController extends BaseController
         $id = input('id');
 
         $pages  = Db::table('nj_article')
-            ->alias(['nj_article'=>'a', 'nj_upload'=>'b'])
-            ->field('a.id,a.title,a.summary,a.create_time,a.channel_id,b.save_path')
+            ->alias(['nj_article'=>'a', 'nj_upload'=>'b','nj_category'=>'c', 'nj_category_2'=>'d'])
+            ->field('a.id,a.title,a.summary,a.create_time,a.channel_id,b.save_path,c.name as category_name_1, d.name as category_name_2')
             ->join('nj_upload', 'a.thumb = b.id', 'left')
+            ->join('nj_category', 'a.category_1 = c.id', 'left')
+            ->join('nj_category_2', 'a.category_2 = d.id', 'left')
             ->where(array('a.category_1'=>$id,'a.delete'=>0))
             ->order('create_time desc')
             ->paginate(10);
@@ -99,9 +104,22 @@ class IndexController extends BaseController
             $breadcrumb[] = array('path'=>url('category1/id/'.$category_1['id']),'title'=>$category_1['name']);
         }
 
+        //左侧菜单
+        $left_menu   = Db::table('nj_category')->where(array('parent_id'=>$channel['id']))->select();
+        if(is_array($left_menu) && count($left_menu)){
+            foreach($left_menu as $key => $value){
+                $category_2 = Db::table('nj_category_2')->where(array('parent_id'=>$value['id']))->select();
+                if(is_array($category_2) && count($category_2)){
+                    $left_menu[$key]['child'] = $category_2;
+                }
+            }
+        }
+
         $data['breadcrumb']   = $this->get_breadcrumb($breadcrumb);
         $data['list']         = $lists;
         $data['page']         = $page;
+        $data['left_menu']    = $left_menu;
+        $data['channel_id']   = $channel['id'];
         return view('index/category_list', $data);
     }
 
@@ -113,9 +131,11 @@ class IndexController extends BaseController
         $id = input('id');
 
         $pages  = Db::table('nj_article')
-            ->alias(['nj_article'=>'a', 'nj_upload'=>'b'])
-            ->field('a.id,a.title,a.summary,a.create_time,a.channel_id,b.save_path')
+            ->alias(['nj_article'=>'a', 'nj_upload'=>'b','nj_category'=>'c', 'nj_category_2'=>'d'])
+            ->field('a.id,a.title,a.summary,a.create_time,a.channel_id,b.save_path,c.name as category_name_1, d.name as category_name_2')
             ->join('nj_upload', 'a.thumb = b.id', 'left')
+            ->join('nj_category', 'a.category_1 = c.id', 'left')
+            ->join('nj_category_2', 'a.category_2 = d.id', 'left')
             ->where(array('a.category_1'=>$id,'a.delete'=>0))
             ->order('create_time desc')
             ->paginate(10);
@@ -144,9 +164,22 @@ class IndexController extends BaseController
             $breadcrumb[] = array('path'=>url('category2/id/'.$category_2['id']),'title'=>$category_2['name']);
         }
 
+        //左侧菜单
+        $left_menu   = Db::table('nj_category')->where(array('parent_id'=>$channel['id']))->select();
+        if(is_array($left_menu) && count($left_menu)){
+            foreach($left_menu as $key => $value){
+                $category_2 = Db::table('nj_category_2')->where(array('parent_id'=>$value['id']))->select();
+                if(is_array($category_2) && count($category_2)){
+                    $left_menu[$key]['child'] = $category_2;
+                }
+            }
+        }
+
         $data['breadcrumb']   = $this->get_breadcrumb($breadcrumb);
         $data['list']         = $lists;
         $data['page']         = $page;
+        $data['left_menu']    = $left_menu;
+        $data['channel_id']   = $channel['id'];
         return view('index/category_list', $data);
     }
 
@@ -164,6 +197,7 @@ class IndexController extends BaseController
         $category_1  = Db::table('nj_category')->where(array('id'=>$info['category_1']))->find();
         $category_2  = Db::table('nj_category_2')->where(array('id'=>$info['category_2']))->find();
 
+        //导航条
         $breadcrumb[] = array('path'=>url('/'),'title'=>'首页');
         if($channel){
             $breadcrumb[] = array('path'=>url('channel/id/'.$channel['id']),'title'=>$channel['name']);
@@ -176,9 +210,22 @@ class IndexController extends BaseController
         }
         $breadcrumb[] = array('path'=>'','title'=>$info['title']);
 
+        //左侧菜单
+        $left_menu   = Db::table('nj_category')->where(array('parent_id'=>$channel['id']))->select();
+        if(is_array($left_menu) && count($left_menu)){
+            foreach($left_menu as $key => $value){
+                $category_2 = Db::table('nj_category_2')->where(array('parent_id'=>$value['id']))->select();
+                if(is_array($category_2) && count($category_2)){
+                    $left_menu[$key]['child'] = $category_2;
+                }
+            }
+        }
+
         $data['breadcrumb']     = $this->get_breadcrumb($breadcrumb);
         $info['view_url']       = get_view_url($info['save_path']);
         $data['info']           = $info;
+        $data['left_menu']    = $left_menu;
+        $data['channel_id']     = $channel['id'];
         return view('index/page_info', $data);
     }
 
