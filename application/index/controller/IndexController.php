@@ -192,6 +192,8 @@ class IndexController extends BaseController
             ->join('nj_upload', 'a.thumb = b.id', 'left')
             ->where(array('a.id'=>$id))
             ->find();
+        $info['create_time'] = explode(' ',  $info['create_time']);
+        $info['create_time'] = $info['create_time'][0];
 
         $channel     = Db::table('nj_channel')->where(array('id'=>$info['channel_id']))->find();
         $category_1  = Db::table('nj_category')->where(array('id'=>$info['category_1']))->find();
