@@ -16,7 +16,7 @@
                         </div>
                         <div class="go_back"><a href="{:url('admin/category/add',array('level'=>$level))}" class="layui-btn layui-btn-sm">添加</a></div>
                         <div class="layui-card-body">
-                            <table class="layui-table" lay-data="{height:500, url:'{$Think.BASE_PATH}admin/category/list_data?level={$level}', page:true, id:'idTest'}" lay-filter="demo">
+                            <table class="layui-table" lay-data="{height:900, url:'{$Think.BASE_PATH}admin/category/list_data?level={$level}',page:true,id:'idTest',limit:20}" lay-filter="demo">
                                 <thead>
                                     <tr>
                                         <th lay-data="{type:'checkbox', fixed: 'left'}"></th>

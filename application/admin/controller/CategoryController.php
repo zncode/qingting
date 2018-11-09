@@ -57,6 +57,7 @@ class CategoryController extends BaseController
      */
     public function index_data()
     {
+        $count  = Db::table($this->table)->where(array('delete'=>0))->count();
         $pages  = Db::table($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
         $lists  = $pages->all();
         if(is_array($lists) && count($lists)){
@@ -72,6 +73,7 @@ class CategoryController extends BaseController
             'code'  => 0,
             'message' => '获取列表成功!',
             'data'=> $lists,
+            'count' => $count,
         ];
         $this->json($data);
     }

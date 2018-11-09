@@ -15,7 +15,7 @@
                         </div>
                         <div class="go_back"><a href="{:url('admin/'.$path.'/add')}" class="layui-btn layui-btn-sm">添加</a></div>
                         <div class="layui-card-body">
-                            <table class="layui-table" lay-data="{height:650, url:'{$Think.BASE_PATH}admin/{$path}/list_data', page:true, id:'idTest'}" lay-filter="demo">
+                            <table class="layui-table" lay-data="{height:900, url:'{$Think.BASE_PATH}admin/{$path}/list_data', page:true, id:'idTest', limit:20}" lay-filter="demo">
                                 <thead>
                                 <tr>
                                     <th lay-data="{type:'checkbox', fixed: 'left'}"></th>
@@ -55,7 +55,7 @@
         var $ = layui.$;
 
         table.on('checkbox(demo)', function(obj){
-            console.log(obj)
+//            console.log(obj)
         });
 
         //监听工具条
