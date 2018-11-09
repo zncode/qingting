@@ -3,9 +3,12 @@
 .body-left{
     float:left;
     width:260px;
-    height:800px;
-    background-color: #f8f8f9;
+    height:auto;
+    background-color: #ffffff;
     /*border-top: 6px solid #101d37;*/
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
+    /*box-shadow: 0 3px 1px rgba(212,212,212,2);*/
+    border-radius: 5px;
 }
 .body-content{float:left; width:900px; height:auto;margin-left:20px;}
 .body-center{float:left; width:680px; height:auto;margin-left:20px;}
@@ -67,28 +70,30 @@
 
 
 .body-left .bd {
-    background-color: #fafafa;
-
+    /*background-color: #fafafa;*/
 }
 .body-left .bd dl {
     border-top-color: transparent;
-    height:120px;
-    border-bottom: 1px dashed #eaeaea;
-}
-.body-left .bd dl {
-    padding-bottom: 25px;
+    /*border-bottom: 1px dashed #eaeaea;*/
+    float: left;
 }
 .body-left .bd dt {
-    margin: 22px 0 12px;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 15px;
+    border-bottom: 1px solid #f6f6f6;
+    color: #333;
+    border-radius: 2px 2px 0 0;
+    font-size: 14px;
+}
+.body-left .bd dt a{
     padding-left: 10px;
-    line-height: 1;
-    font-size: 16px;
-    /*font-weight: bold;*/
     border-left: 3px #23b991 solid;
 }
 .body-left .bd dd {
-    line-height: 24px;
-    padding: 0 22px;
+    float: left;
+    padding: 10px 0 10px 20px;
+    height: auto;
 }
 .body-left .bd dd a {
     float: left;
@@ -105,7 +110,7 @@
     line-height: 26px;
     text-align: center;
     border: 1px #ebebeb solid;
-    background-color: #fff;
+    background-color: #fafafa;
     border-radius: 13px;
 }
 .body-left .bd dd a:hover {background-color: #23b991; color:#fff;}
@@ -114,6 +119,48 @@
 .ad_1 ul {float: left; width: 100%;}
 .ad_1 ul li{float: left; margin-left:10px; margin-right:10px;}
 
+.part_1_title {
+    height: 20px;
+    border-left: 3px #23b991 solid;
+}
+.part_1_title h2{
+    padding-left: 10px;
+    height: 20px;
+    font-size: 16px;
+    line-height: 20px;
+    color: #323232;
+}
+.part_1 {
+    position: relative;
+    margin: 10px 0 0 -19px;
+    height: 235px;
+}
+.part_1 li {
+    float: left;
+    width: 285px;
+    height: 235px;
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+.part_1 img {
+    width: 285px;
+    height: 171px;
+}
+.part_1 .tit-wrap {
+    display: block;
+    height: 53px;
+    border: 1px #f0f0f0 solid;
+    border-top: 0 none;
+    padding: 10px 30px 0 15px;
+    font-size: 14px;
+    line-height: 20px;
+}
+.part_1 .tit {
+    display: block;
+    height: 40px;
+    overflow: hidden;
+    color: #323232;
+}
 /* 列表页 */
 .breadcrumb{height: 30px; border-bottom: 1px solid #e5e5e5;overflow: hidden; margin-bottom: 20px;}
 .breadcrumb a {color: #999!important;  }
