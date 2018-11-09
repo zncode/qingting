@@ -1,12 +1,16 @@
+html{height: 100%;}
 body{
     background-color: #F2F2F2;
+    height: 100%;
 }
 .footer {
-    margin: 50px auto;
+    margin: 50px auto 0 auto;
     width: 100%;
-    height: 90px;
+    height: 100px;
     border-top: 1px solid #cccccc;
     text-align: center;
+    background-color: #fff;
+    box-shadow: 10px 10px 5px #888888;
 }
 ul.pagination{}
 ul.pagination li{float: left; width: 30px;height: 20px;line-height: 20px; border:1px solid #ccc; margin-left:5px;}
@@ -16,3 +20,39 @@ ul.pagination a:hover{font-weight: bold; text-decoration-line: underline}
 .breadcrumb1{height: 30px; overflow: hidden;}
 .breadcrumb1 a {color: #999!important;  }
 .breadcrumb1 span {  margin: 0 2px;  color: #999;  }
+
+.part_wrapper{
+    float: left;
+    background-color: #ffffff;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
+    border-radius: 3px;
+    padding: 10px;
+}
+
+.part_title_wrapper {
+    border-left: 3px #23b991 solid;
+    border-bottom: 1px solid #f6f6f6;
+}
+.part_title{
+    padding-left: 10px;
+    font-size: 16px;
+    color: #323232;
+    height: 25px;
+    line-height: 25px;
+}
+.part_title_wrapper .more{
+    float: right;
+    font-size: 12px;
+    color: #666;
+}
+.part_content {
+    float: left;
+    padding: 5px;
+}
+.part_content ul{
+}
+.part_content li {
+    float: left;
+    width: 50%;
+    margin: 3px 0 3px 0;
+}
