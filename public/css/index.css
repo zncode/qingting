@@ -1,6 +1,12 @@
 /* 布局 */
 .body{margin: 0 auto;width: 1200px;margin-top:30px;}
-.body-left{float:left; width:280px; height:800px; background-color: #f8f8f9;border-top: 6px solid #101d37;}
+.body-left{
+    float:left;
+    width:260px;
+    height:800px;
+    background-color: #f8f8f9;
+    /*border-top: 6px solid #101d37;*/
+}
 .body-content{float:left; width:900px; height:auto;margin-left:20px;}
 .body-center{float:left; width:680px; height:auto;margin-left:20px;}
 .body-right{float:left; width:200px; height:auto;margin-left:20px;padding-top:28px;}
@@ -61,31 +67,48 @@
 
 
 .body-left .bd {
-    background-color: #f8f8f9;
-    padding: 0 22px;
+    background-color: #fafafa;
+
 }
 .body-left .bd dl {
     border-top-color: transparent;
-    height:100px;
+    height:120px;
+    border-bottom: 1px dashed #eaeaea;
 }
 .body-left .bd dl {
     padding-bottom: 25px;
-    border-top: 1px dashed #eaeaea;
 }
 .body-left .bd dt {
-    padding: 22px 0 12px;
+    margin: 22px 0 12px;
+    padding-left: 10px;
     line-height: 1;
-    font-size: 18px;
-    font-weight: bold;
+    font-size: 16px;
+    /*font-weight: bold;*/
+    border-left: 3px #23b991 solid;
 }
 .body-left .bd dd {
     line-height: 24px;
+    padding: 0 22px;
 }
 .body-left .bd dd a {
     float: left;
-    width: 78px;
-    color: #7c7f80;
+    /*width: 78px;*/
+    /*color: #7c7f80;*/
+
+    /*display: inline-block;*/
+    margin: 5px 5px 0 5px;
+    min-width: 59px;
+    height: 26px;
+    padding: 0px;
+    font-size: 12px;
+    color: #969696;
+    line-height: 26px;
+    text-align: center;
+    border: 1px #ebebeb solid;
+    background-color: #fff;
+    border-radius: 13px;
 }
+.body-left .bd dd a:hover {background-color: #23b991; color:#fff;}
 .img-block img {margin-right: 10px;}
 .ad_1{margin-top: 20px;}
 .ad_1 ul {float: left; width: 100%;}
