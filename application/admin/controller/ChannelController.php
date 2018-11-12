@@ -7,7 +7,7 @@ use think\Db;
 class ChannelController extends BaseController
 {
     public $pager = 20;
-    public $table = 'nj_channel';
+    public $table = 'channel';
     public $url_path = 'channel';
     public $module_name = '频道';
 
@@ -16,7 +16,7 @@ class ChannelController extends BaseController
      */
     public function index()
     {
-        $pages  = Db::table($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
+        $pages  = Db::name($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
         $render = $pages->render();
         $lists  = $pages->all();
 
@@ -33,7 +33,7 @@ class ChannelController extends BaseController
      */
     public function index_data()
     {
-        $pages  = Db::table($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
+        $pages  = Db::name($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
         $lists  = $pages->all();
         foreach($lists as $key => $value){
             $url_view   = url('admin/channel/info', ['id'=>$value['id']]);
@@ -61,7 +61,7 @@ class ChannelController extends BaseController
     public function info()
     {
         $id = input('get.id');
-        $info = Db::table($this->table)->where(array('id'=>$id))->find();
+        $info = Db::name($this->table)->where(array('id'=>$id))->find();
 
         $data['info'] = $info;
         $data['goback'] = url('admin/'.$this->url_path.'/list');
@@ -94,7 +94,7 @@ class ChannelController extends BaseController
             'description'   => $formData['description'],
             'create_time'   => date("Y-m-d H:i:s", time()),
         ];
-        $result = Db::table($this->table)->insert($data);
+        $result = Db::name($this->table)->insert($data);
 //        if($result){
 //            $this->success('添加成功', 'admin/'.$this->url_path.'/add');
 //        }else{
@@ -114,7 +114,7 @@ class ChannelController extends BaseController
     public function edit_form()
     {
         $id = input('get.id');
-        $info = Db::table($this->table)->where(array('id'=>$id))->find();
+        $info = Db::name($this->table)->where(array('id'=>$id))->find();
 
         $data['info'] = $info;
         $data['goback'] = url('admin/'.$this->url_path.'/list');
@@ -138,7 +138,7 @@ class ChannelController extends BaseController
             'description'   => $formData['description'],
             'update_time'       => date("Y-m-d H:i:s", time()),
         ];
-        $result = Db::table($this->table)->where(array('id'=>$id))->update($data);
+        $result = Db::name($this->table)->where(array('id'=>$id))->update($data);
         if($result){
 //            $this->success('编辑成功', 'admin/'.$this->url_path.'/edit?id='.$id);
             $this->json(array('code'=>0, 'msg'=>'编辑成功', 'data'=>array('id'=>$id)));
@@ -157,7 +157,7 @@ class ChannelController extends BaseController
         $data = [
             'delete' => 1,
         ];
-        $result = Db::table($this->table)->where('id',$id)->update($data);
+        $result = Db::name($this->table)->where('id',$id)->update($data);
         if($result){
             $this->json(array('code'=>0, 'msg'=>'删除成功', 'data'=>array('id'=>$id)));
         }else{

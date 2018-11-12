@@ -7,7 +7,7 @@ use think\Db;
 class CategoryController extends BaseController
 {
     public $pager = 20;
-    public $table = 'nj_category';
+    public $table = 'category';
     public $url_path = 'category';
     public $module_path = 'category';
     public $module_name = '栏目';
@@ -22,20 +22,20 @@ class CategoryController extends BaseController
         $this->level = input('level') ? input('level') : 1;
         switch ($this->level){
             case 1:
-                $this->table  = 'nj_category';
-                $this->parent = 'nj_channel';
+                $this->table  = 'category';
+                $this->parent = 'channel';
                 break;
             case 2:
-                $this->table  = 'nj_category_2';
-                $this->parent = 'nj_category';
+                $this->table  = 'category_2';
+                $this->parent = 'category';
                 break;
             case 3:
-                $this->table  = 'nj_category_3';
-                $this->parent = 'nj_category_2';
+                $this->table  = 'category_3';
+                $this->parent = 'category_2';
                 break;
             default:
-                $this->table  = 'nj_category';
-                $this->parent = 'nj_channel';
+                $this->table  = 'category';
+                $this->parent = 'channel';
                 break;
         }
     }
@@ -57,15 +57,15 @@ class CategoryController extends BaseController
      */
     public function index_data()
     {
-        $count  = Db::table($this->table)->where(array('delete'=>0))->count();
-        $pages  = Db::table($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
+        $count  = Db::name($this->table)->where(array('delete'=>0))->count();
+        $pages  = Db::name($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
         $lists  = $pages->all();
         if(is_array($lists) && count($lists)){
             foreach($lists as $key => $value){
                 $url_view   = url('admin/category/info', ['id'=>$value['id'],'level'=>$this->level]);
                 $url_edit   = url('admin/category/edit', ['id'=>$value['id'],'level'=>$this->level]);
                 $url_delete = url('admin/category/delete', ['id'=>$value['id'],'level'=>$this->level]);
-                $parent = Db::table($this->parent)->where(array('id'=>$value['parent_id']))->find();
+                $parent = Db::name($this->parent)->where(array('id'=>$value['parent_id']))->find();
                 $lists[$key]['parent_name'] = $parent['name'];
             }
         }
@@ -84,8 +84,8 @@ class CategoryController extends BaseController
     public function info()
     {
         $id                     = input('get.id');
-        $info                   = Db::table($this->table)->where(array('id'=>$id))->find();
-        $parent                 = Db::table($this->parent)->where(array('id'=>$info['parent_id']))->find();
+        $info                   = Db::name($this->table)->where(array('id'=>$id))->find();
+        $parent                 = Db::name($this->parent)->where(array('id'=>$info['parent_id']))->find();
         $info['parent_name']    = $parent['name'];
         $data['info']           = $info;
         $data['goback']         = url('admin/'.$this->url_path.'/list',array('level'=>$this->level));
@@ -98,7 +98,7 @@ class CategoryController extends BaseController
      */
     public function add_form()
     {
-        $parents = Db::table($this->parent)->where(array('delete'=>0))->select();
+        $parents = Db::name($this->parent)->where(array('delete'=>0))->select();
         $data['goback'] = url('admin/'.$this->url_path.'/list',array('level'=>$this->level));
         $data['action'] = url('admin/'.$this->url_path.'/add_submit',array('level'=>$this->level));
         $data['module_name'] = $this->module_name;
@@ -122,7 +122,7 @@ class CategoryController extends BaseController
             'description'   => $formData['description'],
             'create_time'   => date("Y-m-d H:i:s", time()),
         ];
-        $result = Db::table($this->table)->insert($data);
+        $result = Db::name($this->table)->insert($data);
 
         if($result){
             $this->json(array('code'=>0, 'msg'=>'添加成功', 'data'=>array()));
@@ -137,8 +137,8 @@ class CategoryController extends BaseController
     public function edit_form()
     {
         $id                     = input('get.id');
-        $info                   = Db::table($this->table)->where(array('id'=>$id))->find();
-        $parent                 = Db::table($this->parent)->where(array('delete'=>0))->select();
+        $info                   = Db::name($this->table)->where(array('id'=>$id))->find();
+        $parent                 = Db::name($this->parent)->where(array('delete'=>0))->select();
         $data['parent']         = $parent;
         $data['info']           = $info;
         $data['goback']         = url('admin/'.$this->url_path.'/list',array('level'=>$this->level));
@@ -163,7 +163,7 @@ class CategoryController extends BaseController
             'description'   => $formData['description'],
             'update_time'       => date("Y-m-d H:i:s", time()),
         ];
-        $result = Db::table($this->table)->where(array('id'=>$id))->update($data);
+        $result = Db::name($this->table)->where(array('id'=>$id))->update($data);
         if($result){
             $this->json(array('code'=>0, 'msg'=>'编辑成功', 'data'=>array('id'=>$id)));
         }else{
@@ -180,7 +180,7 @@ class CategoryController extends BaseController
         $data = [
             'delete' => 1,
         ];
-        $result = Db::table($this->table)->where('id',$id)->update($data);
+        $result = Db::name($this->table)->where('id',$id)->update($data);
         if($result){
             $this->json(array('code'=>0, 'msg'=>'删除成功', 'data'=>array('id'=>$id)));
         }else{
@@ -196,13 +196,13 @@ class CategoryController extends BaseController
         $parent_id = input('id') ? input('id') : 1;
 
         if($level == 1){
-            $table = 'nj_category';
+            $table = 'category';
         }
         if($level == 2){
-            $table = 'nj_category_2';
+            $table = 'category_2';
         }
 
-        $categorys  = Db::table($table)->where(array('delete'=>0, 'parent_id'=>$parent_id))->select();
+        $categorys  = Db::name($table)->where(array('delete'=>0, 'parent_id'=>$parent_id))->select();
 
 //        if(is_array($categorys) && count($categorys)){
 //            foreach($categorys as $category){

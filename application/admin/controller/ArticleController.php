@@ -7,7 +7,7 @@ use think\Db;
 class ArticleController extends BaseController
 {
     public $pager = 20;
-    public $table = 'nj_article';
+    public $table = 'article';
     public $url_path = 'article';
     public $module_name = '文章';
 
@@ -27,8 +27,8 @@ class ArticleController extends BaseController
      */
     public function index_data()
     {
-        $count  = Db::table($this->table)->where(array('delete'=>0))->count();
-        $pages  = Db::table($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
+        $count  = Db::name($this->table)->where(array('delete'=>0))->count();
+        $pages  = Db::name($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
 
         $lists  = $pages->all();
         foreach($lists as $key => $value){
@@ -36,19 +36,19 @@ class ArticleController extends BaseController
             $url_edit   = url('admin/'.$this->url_path.'/edit', ['id'=>$value['id']]);
             $url_delete = url('admin/'.$this->url_path.'/delete', ['id'=>$value['id']]);
 
-            $channel = Db::table('nj_channel')->where(array('id'=>$value['channel_id']))->find();
+            $channel = Db::name('channel')->where(array('id'=>$value['channel_id']))->find();
             if($channel){
                 $lists[$key]['channel_name'] = $channel['name'];
             }else{
                 $lists[$key]['channel_name'] = '';
             }
-            $category_1 = Db::table('nj_category')->where(array('id'=>$value['category_1']))->find();
+            $category_1 = Db::name('category')->where(array('id'=>$value['category_1']))->find();
             if($category_1){
                 $lists[$key]['category_1'] = $category_1['name'];
             }else{
                 $lists[$key]['category_1'] = '';
             }
-            $category_2 = Db::table('nj_category_2')->where(array('id'=>$value['category_2']))->find();
+            $category_2 = Db::name('category_2')->where(array('id'=>$value['category_2']))->find();
             if($category_2){
                 $lists[$key]['category_2'] = $category_2['name'];
             }else{
@@ -70,12 +70,12 @@ class ArticleController extends BaseController
     public function info()
     {
         $id = input('get.id');
-        $info = Db::table($this->table)
-            ->alias([$this->table=>'a', 'nj_upload'=>'b'])
+        $info = Db::name($this->table)->alias('a')
             ->field('a.*,b.save_path')
-            ->join('nj_upload','a.thumb = b.id', 'left')
+            ->join('upload b','a.thumb = b.id', 'left')
             ->where(array('a.id'=>$id))
             ->find();
+
         if($info['save_path']){
             if($_SERVER['HTTP_HOST'] == 'localhost'){
                 $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].'/nongjia/public/'.$info['save_path'];
@@ -84,19 +84,19 @@ class ArticleController extends BaseController
             }
         }
 
-        $channel = Db::table('nj_channel')->where(array('id'=>$info['channel_id']))->find();
+        $channel = db('channel')->where(array('id'=>$info['channel_id']))->find();
         if($channel){
             $info['channel_name'] = $channel['name'];
         }else{
             $info['channel_name'] = '';
         }
-        $category_1 = Db::table('nj_category')->where(array('id'=>$info['category_1']))->find();
+        $category_1 = db('category')->where(array('id'=>$info['category_1']))->find();
         if($category_1){
             $info['category_1'] = $category_1['name'];
         }else{
             $info['category_1'] = '';
         }
-        $category_2 = Db::table('nj_category_2')->where(array('id'=>$info['category_2']))->find();
+        $category_2 = db('category_2')->where(array('id'=>$info['category_2']))->find();
         if($category_2){
             $info['category_2'] = $category_2['name'];
         }else{
@@ -114,7 +114,7 @@ class ArticleController extends BaseController
      */
     public function add_form()
     {
-        $channel              = Db::table('nj_channel')->where(array('delete'=>0))->select();
+        $channel              = Db::name('channel')->where(array('delete'=>0))->select();
         $data['goback']         = url('admin/'.$this->url_path.'/list');
         $data['action']         = url('admin/'.$this->url_path.'/add_submit');
         $data['url_upload']     = url('/upload/image');
@@ -146,22 +146,22 @@ class ArticleController extends BaseController
             'thumb'             => $formData['upload_id'],
             'create_time'       => date("Y-m-d H:i:s", time()),
         ];
-        $result     = Db::table($this->table)->insert($data);
-        $node_id    = Db::table($this->table)->getLastInsID();
+        $result     = Db::name($this->table)->insert($data);
+        $node_id    = Db::name($this->table)->getLastInsID();
 
         //更新内容上传文件
         if($upload_ids != ''){
             $upload_ids_array = explode(',', $upload_ids);
             foreach ($upload_ids_array as $upload_id){
                 if($upload_id){
-                    Db::table('nj_upload')->where(array('id'=>$upload_id))->update(array('node_id'=>$node_id));
+                    Db::name('upload')->where(array('id'=>$upload_id))->update(array('node_id'=>$node_id));
                 }
             }
         }
 
         //更新列表图上传文件
         if($formData['upload_id']){
-            Db::table('nj_upload')->where(array('id'=>$formData['upload_id']))->update(array('node_id'=>$node_id));
+            Db::name('upload')->where(array('id'=>$formData['upload_id']))->update(array('node_id'=>$node_id));
         }
 
         if($result){
@@ -177,10 +177,9 @@ class ArticleController extends BaseController
     public function edit_form()
     {
         $id = input('get.id');
-        $info = Db::table($this->table)
-            ->alias([$this->table=>'a', 'nj_upload'=>'b'])
+        $info = Db::name($this->table)->alias('a')
             ->field('a.*,b.save_path')
-            ->join('nj_upload','a.thumb = b.id', 'left')
+            ->join('upload b','a.thumb = b.id', 'left')
             ->where(array('a.id'=>$id))
             ->find();
         if($info['save_path']){
@@ -192,21 +191,21 @@ class ArticleController extends BaseController
         }
 
         if($info['channel_id']){
-            $channel = Db::table('nj_channel')->where(array('delete'=>0))->select();
+            $channel = Db::name('channel')->where(array('delete'=>0))->select();
             $data['channel'] = $channel;
         }else{
             $data['channel'] = '';
         }
 
         if($info['category_1']){
-            $category_1 = Db::table('nj_category')->where(array('delete'=>0))->select();
+            $category_1 = Db::name('category')->where(array('delete'=>0))->select();
             $data['category_1'] = $category_1;
         }else{
             $data['category_1'] = '';
         }
 
         if($info['category_2']){
-            $category_2 = Db::table('nj_category_2')->where(array('parent_id'=>$info['category_1'], 'delete'=>0))->select();
+            $category_2 = Db::name('category_2')->where(array('parent_id'=>$info['category_1'], 'delete'=>0))->select();
             $data['category_2'] = $category_2;
         }else{
             $data['category_2'] = '';
@@ -245,21 +244,21 @@ class ArticleController extends BaseController
             'thumb'             => $formData['upload_id'],
             'update_time'       => date("Y-m-d H:i:s", time()),
         ];
-        $result = Db::table($this->table)->where(array('id'=>$id))->update($data);
+        $result = Db::name($this->table)->where(array('id'=>$id))->update($data);
 
         //更新内容上传文件
         if($upload_ids != ''){
             $upload_ids_array = explode(',', $upload_ids);
             foreach ($upload_ids_array as $upload_id){
                 if($upload_id){
-                    Db::table('nj_upload')->where(array('id'=>$upload_id))->update(array('node_id'=>$id));
+                    Db::name('upload')->where(array('id'=>$upload_id))->update(array('node_id'=>$id));
                 }
             }
         }
 
         //更新列表图上传文件
         if($formData['upload_id']){
-            Db::table('nj_upload')->where(array('id'=>$formData['upload_id']))->update(array('node_id'=>$id));
+            Db::name('upload')->where(array('id'=>$formData['upload_id']))->update(array('node_id'=>$id));
         }
 
         if($result){
@@ -278,7 +277,7 @@ class ArticleController extends BaseController
         $data = [
             'delete' => 1,
         ];
-        $result = Db::table($this->table)->where('id',$id)->update($data);
+        $result = Db::name($this->table)->where('id',$id)->update($data);
         if($result){
             $this->json(array('code'=>0, 'msg'=>'删除成功', 'data'=>array('id'=>$id)));
         }else{

@@ -21,12 +21,12 @@ class IndexController extends BaseController
     {
         $channel_id = input('id');
 
-        $pages  = Db::table('nj_article')
-            ->alias(['nj_article'=>'a', 'nj_upload'=>'b','nj_category'=>'c', 'nj_category_2'=>'d'])
+        $pages  = Db::name('article')
+            ->alias('a')
             ->field('a.id,a.title,a.summary,a.create_time,a.channel_id,b.save_path,c.name as category_name_1, d.name as category_name_2')
-            ->join('nj_upload', 'a.thumb = b.id', 'left')
-            ->join('nj_category', 'a.category_1 = c.id', 'left')
-            ->join('nj_category_2', 'a.category_2 = d.id', 'left')
+            ->join('nj_upload b', 'a.thumb = b.id', 'left')
+            ->join('nj_category c', 'a.category_1 = c.id', 'left')
+            ->join('nj_category_2 d', 'a.category_2 = d.id', 'left')
             ->where(array('a.channel_id'=>$channel_id,'a.delete'=>0))
             ->order('create_time desc')
             ->paginate(10);
@@ -39,7 +39,7 @@ class IndexController extends BaseController
             }
         }
 
-        $channel    = Db::table('nj_channel')->where(array('id'=>$channel_id))->find();
+        $channel    = Db::name('channel')->where(array('id'=>$channel_id))->find();
 
         //导航条
         $breadcrumb[] = array('path'=>url('/'),'title'=>'首页');
@@ -49,10 +49,10 @@ class IndexController extends BaseController
 
 
         //左侧菜单
-        $left_menu   = Db::table('nj_category')->where(array('parent_id'=>$channel_id))->select();
+        $left_menu   = Db::name('category')->where(array('parent_id'=>$channel_id))->select();
         if(is_array($left_menu) && count($left_menu)){
             foreach($left_menu as $key => $value){
-                $category_2 = Db::table('nj_category_2')->where(array('parent_id'=>$value['id']))->select();
+                $category_2 = Db::name('category_2')->where(array('parent_id'=>$value['id']))->select();
                 if(is_array($category_2) && count($category_2)){
                     $left_menu[$key]['child'] = $category_2;
                 }
@@ -74,12 +74,12 @@ class IndexController extends BaseController
     {
         $id = input('id');
 
-        $pages  = Db::table('nj_article')
-            ->alias(['nj_article'=>'a', 'nj_upload'=>'b','nj_category'=>'c', 'nj_category_2'=>'d'])
+        $pages  = Db::name('article')
+            ->alias('a')
             ->field('a.id,a.title,a.summary,a.create_time,a.channel_id,b.save_path,c.name as category_name_1, d.name as category_name_2')
-            ->join('nj_upload', 'a.thumb = b.id', 'left')
-            ->join('nj_category', 'a.category_1 = c.id', 'left')
-            ->join('nj_category_2', 'a.category_2 = d.id', 'left')
+            ->join('nj_upload b', 'a.thumb = b.id', 'left')
+            ->join('nj_category c', 'a.category_1 = c.id', 'left')
+            ->join('nj_category_2 d', 'a.category_2 = d.id', 'left')
             ->where(array('a.category_1'=>$id,'a.delete'=>0))
             ->order('create_time desc')
             ->paginate(10);
@@ -92,8 +92,8 @@ class IndexController extends BaseController
             }
         }
 
-        $category_1 = Db::table('nj_category')->where(array('id'=>$id))->find();
-        $channel    = Db::table('nj_channel')->where(array('id'=>$category_1['parent_id']))->find();
+        $category_1 = Db::name('category')->where(array('id'=>$id))->find();
+        $channel    = Db::name('channel')->where(array('id'=>$category_1['parent_id']))->find();
 
         //导航条
         $breadcrumb[] = array('path'=>url('/'),'title'=>'首页');
@@ -105,10 +105,10 @@ class IndexController extends BaseController
         }
 
         //左侧菜单
-        $left_menu   = Db::table('nj_category')->where(array('parent_id'=>$channel['id']))->select();
+        $left_menu   = Db::name('category')->where(array('parent_id'=>$channel['id']))->select();
         if(is_array($left_menu) && count($left_menu)){
             foreach($left_menu as $key => $value){
-                $category_2 = Db::table('nj_category_2')->where(array('parent_id'=>$value['id']))->select();
+                $category_2 = Db::name('category_2')->where(array('parent_id'=>$value['id']))->select();
                 if(is_array($category_2) && count($category_2)){
                     $left_menu[$key]['child'] = $category_2;
                 }
@@ -131,11 +131,11 @@ class IndexController extends BaseController
         $id = input('id');
 
         $pages  = Db::table('nj_article')
-            ->alias(['nj_article'=>'a', 'nj_upload'=>'b','nj_category'=>'c', 'nj_category_2'=>'d'])
+            ->alias('a')
             ->field('a.id,a.category_1,a.category_2,a.title,a.summary,a.create_time,a.channel_id,b.save_path,c.name as category_name_1, d.name as category_name_2')
-            ->join('nj_upload', 'a.thumb = b.id', 'left')
-            ->join('nj_category', 'a.category_1 = c.id', 'left')
-            ->join('nj_category_2', 'a.category_2 = d.id', 'left')
+            ->join('nj_upload b', 'a.thumb = b.id', 'left')
+            ->join('nj_category c', 'a.category_1 = c.id', 'left')
+            ->join('nj_category_2 d', 'a.category_2 = d.id', 'left')
             ->where(array('a.category_2'=>$id,'a.delete'=>0))
             ->order('a.create_time desc')
             ->paginate(10);
@@ -148,9 +148,9 @@ class IndexController extends BaseController
             }
         }
 
-        $category_2 = Db::table('nj_category_2')->where(array('id'=>$id))->find();
-        $category_1 = Db::table('nj_category')->where(array('id'=>$category_2['parent_id']))->find();
-        $channel    = Db::table('nj_channel')->where(array('id'=>$category_1['parent_id']))->find();
+        $category_2 = Db::name('category_2')->where(array('id'=>$id))->find();
+        $category_1 = Db::name('category')->where(array('id'=>$category_2['parent_id']))->find();
+        $channel    = Db::name('channel')->where(array('id'=>$category_1['parent_id']))->find();
 
         //导航条
         $breadcrumb[] = array('path'=>url('/'),'title'=>'首页');
@@ -165,10 +165,10 @@ class IndexController extends BaseController
         }
 
         //左侧菜单
-        $left_menu   = Db::table('nj_category')->where(array('parent_id'=>$channel['id']))->select();
+        $left_menu   = Db::name('category')->where(array('parent_id'=>$channel['id']))->select();
         if(is_array($left_menu) && count($left_menu)){
             foreach($left_menu as $key => $value){
-                $category_2 = Db::table('nj_category_2')->where(array('parent_id'=>$value['id']))->select();
+                $category_2 = Db::name('category_2')->where(array('parent_id'=>$value['id']))->select();
                 if(is_array($category_2) && count($category_2)){
                     $left_menu[$key]['child'] = $category_2;
                 }
@@ -186,18 +186,18 @@ class IndexController extends BaseController
     public function page_info()
     {
         $id = input('id');
-        $info  = Db::table('nj_article')
-            ->alias(['nj_article'=>'a', 'nj_upload'=>'b'])
+        $info  = Db::name('article')
+            ->alias('a')
             ->field('a.id,a.title,a.content,a.create_time,a.channel_id,a.category_1,a.category_2,a.meta_keyword,a.meta_description,b.save_path')
-            ->join('nj_upload', 'a.thumb = b.id', 'left')
+            ->join('nj_upload b', 'a.thumb = b.id', 'left')
             ->where(array('a.id'=>$id))
             ->find();
         $info['create_time'] = explode(' ',  $info['create_time']);
         $info['create_time'] = $info['create_time'][0];
 
-        $channel     = Db::table('nj_channel')->where(array('id'=>$info['channel_id']))->find();
-        $category_1  = Db::table('nj_category')->where(array('id'=>$info['category_1']))->find();
-        $category_2  = Db::table('nj_category_2')->where(array('id'=>$info['category_2']))->find();
+        $channel     = Db::name('channel')->where(array('id'=>$info['channel_id']))->find();
+        $category_1  = Db::name('category')->where(array('id'=>$info['category_1']))->find();
+        $category_2  = Db::name('category_2')->where(array('id'=>$info['category_2']))->find();
 
         //导航条
         $breadcrumb[] = array('path'=>url('/'),'title'=>'首页');
@@ -213,10 +213,10 @@ class IndexController extends BaseController
         $breadcrumb[] = array('path'=>'','title'=>$info['title']);
 
         //左侧菜单
-        $left_menu   = Db::table('nj_category')->where(array('parent_id'=>$channel['id']))->select();
+        $left_menu   = Db::name('category')->where(array('parent_id'=>$channel['id']))->select();
         if(is_array($left_menu) && count($left_menu)){
             foreach($left_menu as $key => $value){
-                $category_2 = Db::table('nj_category_2')->where(array('parent_id'=>$value['id']))->select();
+                $category_2 = Db::name('category_2')->where(array('parent_id'=>$value['id']))->select();
                 if(is_array($category_2) && count($category_2)){
                     $left_menu[$key]['child'] = $category_2;
                 }
