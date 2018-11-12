@@ -132,12 +132,12 @@ class IndexController extends BaseController
 
         $pages  = Db::table('nj_article')
             ->alias(['nj_article'=>'a', 'nj_upload'=>'b','nj_category'=>'c', 'nj_category_2'=>'d'])
-            ->field('a.id,a.title,a.summary,a.create_time,a.channel_id,b.save_path,c.name as category_name_1, d.name as category_name_2')
+            ->field('a.id,a.category_1,a.category_2,a.title,a.summary,a.create_time,a.channel_id,b.save_path,c.name as category_name_1, d.name as category_name_2')
             ->join('nj_upload', 'a.thumb = b.id', 'left')
             ->join('nj_category', 'a.category_1 = c.id', 'left')
             ->join('nj_category_2', 'a.category_2 = d.id', 'left')
-            ->where(array('a.category_1'=>$id,'a.delete'=>0))
-            ->order('create_time desc')
+            ->where(array('a.category_2'=>$id,'a.delete'=>0))
+            ->order('a.create_time desc')
             ->paginate(10);
 
         $page = $pages->render();
@@ -149,7 +149,7 @@ class IndexController extends BaseController
         }
 
         $category_2 = Db::table('nj_category_2')->where(array('id'=>$id))->find();
-        $category_1 = Db::table('nj_category')->where(array('parent_id'=>$id))->find();
+        $category_1 = Db::table('nj_category')->where(array('id'=>$category_2['parent_id']))->find();
         $channel    = Db::table('nj_channel')->where(array('id'=>$category_1['parent_id']))->find();
 
         //导航条
