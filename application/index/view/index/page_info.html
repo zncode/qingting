@@ -6,22 +6,24 @@
       {include file="page/menu" /}
     </div>
     <div class="page_center">
-        <div class="breadcrumb1">
-            {$breadcrumb}
+        <div class="part_wrapper" style="" >
+            <div class="breadcrumb">
+                <div class="breadcrumb_left">&nbsp;</div>
+                {$breadcrumb}
+            </div>
+            <div class="page_content">
+                <div class="page_content_title">
+                    {$info.title}
+                </div>
+                <div class="page_content_subtitle">
+                    <span class="date">{$info.create_time}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="read">阅读 1260</span>
+                </div>
+                <div class="page_content_body">
+                    {$info.content}
+                </div>
+            </div>
         </div>
-        <div class="page_content">
-            <div class="page_content_title">
-                {$info.title}
-            </div>
-            <div class="page_content_subtitle">
-                <span class="date">{$info.create_time}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                <span class="read">阅读 1260</span>
-            </div>
-            <div class="page_content_body">
-                {$info.content}
-            </div>
-        </div>
-
     </div>
 
   <div style="clear: both"></div>

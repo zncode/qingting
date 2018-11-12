@@ -17,7 +17,12 @@ ul.pagination li{float: left; width: 30px;height: 20px;line-height: 20px; border
 ul.pagination li.active{background-color: #d0e7fc}
 ul.pagination a:hover{font-weight: bold; text-decoration-line: underline}
 
-.breadcrumb1{height: 30px; overflow: hidden;}
+.breadcrumb{height: 30px; border-bottom: 1px solid #e5e5e5;overflow: hidden; margin-bottom: 20px; line-height: 30px;}
+.breadcrumb a {color: #999!important;  }
+.breadcrumb span {  margin: 0 2px;  color: #999;  }
+.breadcrumb .breadcrumb_left {border-left: 3px #23b991 solid;  width: 10px; float: left; height: 15px; margin-top:8px;}
+
+.breadcrumb1{height: 30px; border-bottom: 1px solid #e5e5e5; overflow: hidden;}
 .breadcrumb1 a {color: #999!important;  }
 .breadcrumb1 span {  margin: 0 2px;  color: #999;  }
 

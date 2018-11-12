@@ -24,7 +24,7 @@ class BaseController extends Controller
         foreach($breadcrumb as $key => $value){
             $breads[] = '<a href="'.$value['path'].'">'.$value['title'].'</a>';
         }
-        $breads = implode('<span>》</span>', $breads);
+        $breads = implode('<span> > </span>', $breads);
         return $breads;
     }
 }
