@@ -24,9 +24,9 @@ class IndexController extends BaseController
         $pages  = Db::name('article')
             ->alias('a')
             ->field('a.id,a.title,a.summary,a.create_time,a.channel_id,b.save_path,c.name as category_name_1, d.name as category_name_2')
-            ->join('nj_upload b', 'a.thumb = b.id', 'left')
-            ->join('nj_category c', 'a.category_1 = c.id', 'left')
-            ->join('nj_category_2 d', 'a.category_2 = d.id', 'left')
+            ->join('upload b', 'a.thumb = b.id', 'left')
+            ->join('category c', 'a.category_1 = c.id', 'left')
+            ->join('category_2 d', 'a.category_2 = d.id', 'left')
             ->where(array('a.channel_id'=>$channel_id,'a.delete'=>0))
             ->order('create_time desc')
             ->paginate(10);
@@ -77,9 +77,9 @@ class IndexController extends BaseController
         $pages  = Db::name('article')
             ->alias('a')
             ->field('a.id,a.title,a.summary,a.create_time,a.channel_id,b.save_path,c.name as category_name_1, d.name as category_name_2')
-            ->join('nj_upload b', 'a.thumb = b.id', 'left')
-            ->join('nj_category c', 'a.category_1 = c.id', 'left')
-            ->join('nj_category_2 d', 'a.category_2 = d.id', 'left')
+            ->join('upload b', 'a.thumb = b.id', 'left')
+            ->join('category c', 'a.category_1 = c.id', 'left')
+            ->join('category_2 d', 'a.category_2 = d.id', 'left')
             ->where(array('a.category_1'=>$id,'a.delete'=>0))
             ->order('create_time desc')
             ->paginate(10);
@@ -130,12 +130,12 @@ class IndexController extends BaseController
     {
         $id = input('id');
 
-        $pages  = Db::table('nj_article')
+        $pages  = Db::name('article')
             ->alias('a')
             ->field('a.id,a.category_1,a.category_2,a.title,a.summary,a.create_time,a.channel_id,b.save_path,c.name as category_name_1, d.name as category_name_2')
-            ->join('nj_upload b', 'a.thumb = b.id', 'left')
-            ->join('nj_category c', 'a.category_1 = c.id', 'left')
-            ->join('nj_category_2 d', 'a.category_2 = d.id', 'left')
+            ->join('upload b', 'a.thumb = b.id', 'left')
+            ->join('category c', 'a.category_1 = c.id', 'left')
+            ->join('category_2 d', 'a.category_2 = d.id', 'left')
             ->where(array('a.category_2'=>$id,'a.delete'=>0))
             ->order('a.create_time desc')
             ->paginate(10);
@@ -189,7 +189,7 @@ class IndexController extends BaseController
         $info  = Db::name('article')
             ->alias('a')
             ->field('a.id,a.title,a.content,a.create_time,a.channel_id,a.category_1,a.category_2,a.meta_keyword,a.meta_description,b.save_path')
-            ->join('nj_upload b', 'a.thumb = b.id', 'left')
+            ->join('upload b', 'a.thumb = b.id', 'left')
             ->where(array('a.id'=>$id))
             ->find();
         $info['create_time'] = explode(' ',  $info['create_time']);
