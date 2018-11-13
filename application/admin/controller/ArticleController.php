@@ -78,7 +78,7 @@ class ArticleController extends BaseController
 
         if($info['save_path']){
             if($_SERVER['HTTP_HOST'] == 'localhost'){
-                $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].'/nongjia/public/'.$info['save_path'];
+                $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].'/qingting/public/'.$info['save_path'];
             }else{
                 $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].$info['save_path'];
             }
@@ -135,6 +135,7 @@ class ArticleController extends BaseController
         $upload_ids = $formData['upload_ids'];
         $data = [
             'title'             => $formData['title'],
+            'url'               => $formData['url'],
             'channel_id'        => $formData['channel_id'],
             'category_1'        => $formData['category_1'],
             'category_2'        => $formData['category_2'],
@@ -184,7 +185,7 @@ class ArticleController extends BaseController
             ->find();
         if($info['save_path']){
             if($_SERVER['HTTP_HOST'] == 'localhost'){
-                $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].'/nongjia/public/'.$info['save_path'];
+                $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].'/qingting/public/'.$info['save_path'];
             }else{
                 $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].$info['save_path'];
             }
@@ -234,6 +235,7 @@ class ArticleController extends BaseController
         //更新内容
         $data = [
             'title'             => $formData['title'],
+            'url'               => $formData['url'],
             'channel_id'        => $formData['channel_id'],
             'category_1'        => $formData['category_1'],
             'category_2'        => $formData['category_2'],

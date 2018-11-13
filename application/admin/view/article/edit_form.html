@@ -109,6 +109,12 @@
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
+                                    <label class="layui-form-label">URL</label>
+                                    <div class="layui-input-block">
+                                        <input type="input" name="url" placeholder="" class="layui-input" value="{$info.url}">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
                                     <label class="layui-form-label" >关键字</label>
                                     <div class="layui-input-block">
                                         <input type="input" name="meta_keyword" name="" class="layui-input"  placeholder="keyword1, keyword2, keyword3" value="{$info.meta_keyword}">
@@ -186,6 +192,7 @@
                 var  field = {
                     'id': $("[name='id']").val(),
                     'title': $("[name='title']").val(),
+                    'url': $("[name='url']").val(),
                     'channel_id': $("[name='channel_id']").val(),
                     'category_1': $("[name='category_1']").val(),
                     'category_2': $("[name='category_2']").val(),

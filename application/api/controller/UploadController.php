@@ -47,8 +47,8 @@ class UploadController extends BaseController
                 'extension'     => $picture['extension'],
                 'create_time'   => date("Y-m-d H:i:s", time()),
             ];
-            Db::table('nj_upload')->insert($data);
-            $upload_id = Db::table('nj_upload')->getLastInsID();
+            Db::name('upload')->insert($data);
+            $upload_id = Db::name('upload')->getLastInsID();
             $picture['upload_id'] = $upload_id;
 
             $data= ['view_url'=>$view_url, 'upload_id'=>$upload_id];
@@ -107,13 +107,13 @@ class UploadController extends BaseController
                     'extension'     => $picture['extension'],
                     'create_time'   => date("Y-m-d H:i:s", time()),
                 ];
-                Db::table('nj_upload')->insert($data);
-                $upload_id = Db::table('nj_upload')->getLastInsID();
+                Db::name('upload')->insert($data);
+                $upload_id = Db::name('upload')->getLastInsID();
                 $picture['upload_id'] = $upload_id;
 
                 //删除旧图片
                 if($old_upload_id){
-                    $upload =  Db::table('nj_upload')->where(array('id'=>$old_upload_id))->find();
+                    $upload =  Db::name('upload')->where(array('id'=>$old_upload_id))->find();
                     $save_path = $upload['save_path'];
                     if(check_windows()){
                         $file_path = $_SERVER['DOCUMENT_ROOT'] . '/nongjia/public'.$save_path;
@@ -124,7 +124,7 @@ class UploadController extends BaseController
                     if(file_exists($file_path)){
                         $result = unlink($file_path);
                         if($result){
-                            Db::table('nj_upload')->where(array('id'=>$old_upload_id))->delete();
+                            Db::name('upload')->where(array('id'=>$old_upload_id))->delete();
                         }
                     }
                 }
