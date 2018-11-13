@@ -3,6 +3,7 @@ namespace app\admin\controller;
 
 use app\admin\controller\BaseController;
 use think\Db;
+use think\Config;
 
 class ArticleController extends BaseController
 {
@@ -78,7 +79,7 @@ class ArticleController extends BaseController
 
         if($info['save_path']){
             if($_SERVER['HTTP_HOST'] == 'localhost'){
-                $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].'/qingting/public/'.$info['save_path'];
+                $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].'/'.Config::get('project_dirname').'/public/'.$info['save_path'];
             }else{
                 $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].$info['save_path'];
             }
@@ -117,6 +118,7 @@ class ArticleController extends BaseController
         $channel              = Db::name('channel')->where(array('delete'=>0))->select();
         $data['goback']         = url('admin/'.$this->url_path.'/list');
         $data['action']         = url('admin/'.$this->url_path.'/add_submit');
+        $data['get_favicon']    = url('admin/'.$this->url_path.'/get_favicon');
         $data['url_upload']     = url('/upload/image');
         $data['module_name']    = $this->module_name;
         $data['channel']        =  $channel;
@@ -163,6 +165,7 @@ class ArticleController extends BaseController
         //更新列表图上传文件
         if($formData['upload_id']){
             Db::name('upload')->where(array('id'=>$formData['upload_id']))->update(array('node_id'=>$node_id));
+            Db::name('article')->where(array('id'=>$node_id))->update(array('thumb'=>$formData['upload_id']));
         }
 
         if($result){
@@ -185,7 +188,7 @@ class ArticleController extends BaseController
             ->find();
         if($info['save_path']){
             if($_SERVER['HTTP_HOST'] == 'localhost'){
-                $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].'/qingting/public/'.$info['save_path'];
+                $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].'/'.Config::get('project_dirname').'/public/'.$info['save_path'];
             }else{
                 $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].$info['save_path'];
             }
@@ -215,6 +218,7 @@ class ArticleController extends BaseController
         $data['info']           = $info;
         $data['goback']         = url('admin/'.$this->url_path.'/list');
         $data['action']         = url('admin/'.$this->url_path.'/edit_submit');
+        $data['get_favicon']    = url('admin/'.$this->url_path.'/get_favicon');
         $data['module_name']    = $this->module_name;
         $data['url_upload']     = url('/upload/image');
         $data['url_upload_editor']          = url('/upload/image_editor',array('category'=>'article'));
@@ -261,6 +265,7 @@ class ArticleController extends BaseController
         //更新列表图上传文件
         if($formData['upload_id']){
             Db::name('upload')->where(array('id'=>$formData['upload_id']))->update(array('node_id'=>$id));
+            Db::name('article')->where(array('id'=>$id))->update(array('thumb'=>$formData['upload_id']));
         }
 
         if($result){
@@ -285,5 +290,39 @@ class ArticleController extends BaseController
         }else{
             $this->json(array('code'=>1, 'msg'=>'删除失败', 'data'=>array()));
         }
+    }
+
+    /**
+     * 获取favicon
+     */
+    function get_favicon(){
+        $url        = input('url');
+        $save_path  =  ROOT_PATH . 'public' . DS . 'upload' . DS .'favicon.jpg';
+        $new_icon   = "http://api.byi.pw/favicon/?url=".$url;
+        copy($new_icon, $save_path);
+
+        $curl = curl_init();
+        if (class_exists('\CURLFile')) {
+            curl_setopt($curl, CURLOPT_SAFE_UPLOAD, true);
+            $data = array('file' => new \CURLFile(realpath($save_path)));//>=5.5
+        } else {
+            if (defined('CURLOPT_SAFE_UPLOAD')) {
+                curl_setopt($curl, CURLOPT_SAFE_UPLOAD, false);
+            }
+            $data = array('file' => '@' . realpath($save_path));//<=5.5
+        }
+
+        $url = 'http://'.$_SERVER['HTTP_HOST'].url('/upload/image');
+//        print_r($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, false);
+        curl_setopt($curl, CURLOPT_USERAGENT,"TEST");
+        curl_exec($curl);
+//        $error = curl_error($curl);
+//        var_dump($result);die;
+//        print_r(json_decode($result));die;
+//        echo $result;die;
     }
 }

@@ -4,6 +4,7 @@ namespace app\api\controller;
 use app\api\controller\BaseController;
 use think\Db;
 use kindeditor\Services_JSON;
+use think\Config;
 
 class UploadController extends BaseController
 {
@@ -84,7 +85,7 @@ class UploadController extends BaseController
                 $picture['filename']  = $info->getFilename();
                 $picture['size']      = $info->getSize();
                 if($_SERVER['HTTP_HOST'] == 'localhost'){
-                    $src = 'http://'.$_SERVER['HTTP_HOST'].'/nongjia/public/upload/'.$category.'/'.$date_dir.'/'.$picture['filename'];
+                    $src = 'http://'.$_SERVER['HTTP_HOST'].'/'.Config::get('project_dirname').'/public/upload/'.$category.'/'.$date_dir.'/'.$picture['filename'];
                 }else{
                     $src = 'http://'.$_SERVER['HTTP_HOST'].'/upload/'.$category.'/'.$date_dir.'/'.$picture['filename'];
                 }
