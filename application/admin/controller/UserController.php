@@ -9,7 +9,7 @@ use app\model\UserModel;
 class UserController extends BaseController
 {
     public $pager = 20;
-    public $table = 'nj_user';
+    public $table = 'user';
     public $url_path = 'user';
     public $module_name = '用户';
 
@@ -27,7 +27,7 @@ class UserController extends BaseController
     public function login_form_submit(){
         $formData = input('request.');
 
-        $info = Db::table($this->table)->where(array('username'=>$formData['username'], 'password'=>md5($formData['password'])))->find();
+        $info = Db::name($this->table)->where(array('username'=>$formData['username'], 'password'=>md5($formData['password'])))->find();
         Session('user_id', $info['id']);
 
         if($info){
@@ -59,7 +59,7 @@ class UserController extends BaseController
     public function register_form_submit(){
         $formData = input('request.');
 
-        $info = Db::table($this->table)->where(array('username'=>$formData['username']))->find();
+        $info = Db::name($this->table)->where(array('username'=>$formData['username']))->find();
         if($info){
             return json(['code'=>1, 'msg'=>'用户已经存在!', 'data'=>[]]);
         }
@@ -91,7 +91,7 @@ class UserController extends BaseController
      */
     public function index()
     {
-        $pages  = Db::table($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
+        $pages  = Db::name($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
         $render = $pages->render();
         $lists  = $pages->all();
 
@@ -108,7 +108,7 @@ class UserController extends BaseController
      */
     public function index_data()
     {
-        $pages  = Db::table($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
+        $pages  = Db::name($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
         $lists  = $pages->all();
         foreach($lists as $key => $value){
             $url_view   = url('admin/channel/info', ['id'=>$value['id']]);
@@ -130,7 +130,7 @@ class UserController extends BaseController
     public function info()
     {
         $id = input('get.id');
-        $info = Db::table($this->table)->where(array('id'=>$id))->find();
+        $info = Db::name($this->table)->where(array('id'=>$id))->find();
 
         $data['info'] = $info;
         $data['goback'] = url('admin/'.$this->url_path.'/list');
@@ -163,7 +163,7 @@ class UserController extends BaseController
             'description'   => $formData['description'],
             'create_time'   => date("Y-m-d H:i:s", time()),
         ];
-        $result = Db::table($this->table)->insert($data);
+        $result = Db::name($this->table)->insert($data);
         if($result){
             $this->json(array('code'=>0, 'msg'=>'添加成功', 'data'=>array()));
         }else{
@@ -177,7 +177,7 @@ class UserController extends BaseController
     public function edit_form()
     {
         $id = input('get.id');
-        $info = Db::table($this->table)->where(array('id'=>$id))->find();
+        $info = Db::name($this->table)->where(array('id'=>$id))->find();
 
         $data['info'] = $info;
         $data['goback'] = url('admin/'.$this->url_path.'/list');
@@ -201,7 +201,7 @@ class UserController extends BaseController
             'description'   => $formData['description'],
             'update_time'       => date("Y-m-d H:i:s", time()),
         ];
-        $result = Db::table($this->table)->where(array('id'=>$id))->update($data);
+        $result = Db::name($this->table)->where(array('id'=>$id))->update($data);
         if($result){
             $this->json(array('code'=>0, 'msg'=>'编辑成功', 'data'=>array('id'=>$id)));
         }else{
@@ -218,7 +218,7 @@ class UserController extends BaseController
         $data = [
             'delete' => 1,
         ];
-        $result = Db::table($this->table)->where('id',$id)->update($data);
+        $result = Db::name($this->table)->where('id',$id)->update($data);
         if($result){
             $this->json(array('code'=>0, 'msg'=>'删除成功', 'data'=>array('id'=>$id)));
         }else{
