@@ -9,6 +9,8 @@
 // | Author: 流年 <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
+use Think\Config;
+
 // 应用公共文件
 /**
  * 获取客户端IP地址
@@ -52,7 +54,7 @@ function check_windows(){
  */
 function get_view_url($path){
     if($_SERVER['HTTP_HOST'] == 'localhost'){
-        $view_url = 'http://'.$_SERVER['HTTP_HOST'].'/nongjia/public/'.$path;
+        $view_url = 'http://'.$_SERVER['HTTP_HOST'].'/'.Config::get('project_dirname').'/public/'.$path;
     }else{
         $view_url = 'http://'.$_SERVER['HTTP_HOST'].$path;
     }

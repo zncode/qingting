@@ -130,35 +130,22 @@
     color: #323232;
 }
 .part_1_content {
-    margin: 10px 0 0 -19px;
+    width: 860px;
+    margin: 10px 0 0 20px;
+    height: 300px;
 }
 .part_1_content ul{
+    width: 100%;
 }
 .part_1_content li {
     float: left;
-    width: 275px;
-    height: 235px;
-    margin-left: 20px;
+    width: 120px;
+    height:30px;
+    line-height: 30px;
+    margin-right: 20px;
     margin-bottom: 10px;
 }
 .part_1_content img {
-    width: 275px;
-    height: 171px;
-}
-.part_1_content .tit-wrap {
-    display: block;
-    height: 53px;
-    border: 1px #f0f0f0 solid;
-    border-top: 0 none;
-    padding: 10px 30px 0 15px;
-    font-size: 14px;
-    line-height: 20px;
-}
-.part_1 .tit {
-    display: block;
-    height: 40px;
-    overflow: hidden;
-    color: #323232;
 }
 
 /* 搜索 */

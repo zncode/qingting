@@ -198,7 +198,8 @@ class ArticleController extends BaseController
             $channel = Db::name('channel')->where(array('delete'=>0))->select();
             $data['channel'] = $channel;
         }else{
-            $data['channel'] = '';
+            $channel = Db::name('channel')->where(array('delete'=>0))->select();
+            $data['channel'] = $channel;
         }
 
         if($info['category_1']){

@@ -37,8 +37,25 @@ class IndexController extends BaseController
         }
         $date = $date.'&nbsp;&nbsp;'.$week;
 
+        //热门站点
+        $hot_site  = Db::name('article')
+            ->alias('a')
+            ->field('a.id,a.title,a.create_time,b.save_path')
+            ->join('upload b', 'a.thumb = b.id', 'left')
+            ->order('create_time desc')
+            ->where(array('a.delete'=>0))
+            ->limit(50)
+            ->select();
+        if(is_array($hot_site) && count($hot_site)){
+            foreach($hot_site as $key => $value) {
+                $hot_site[$key]['view_url'] = get_view_url($value['save_path']);
+            }
+        }
+
         $data['channel_id']     = 0;
         $data['current_date']   = $date;
+        $data['hot_site']       = $hot_site;
+
         return view('index/index',$data);
     }
 

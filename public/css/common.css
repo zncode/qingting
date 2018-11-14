@@ -55,9 +55,12 @@ ul.pagination a:hover{font-weight: bold; text-decoration-line: underline}
     padding: 5px;
 }
 .part_content ul{
+    margin-left:10px;
 }
 .part_content li {
     float: left;
-    width: 50%;
-    margin: 3px 0 3px 0;
+    height: 30px;
+    line-height: 30px;
+    width: 100px;
+    margin: 5px 0 5px 0;
 }
