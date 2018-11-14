@@ -4,14 +4,23 @@
             <a href="{:url('/')}"><img src="{$Think.BASE_PATH}image/logo.png"></a>
         </div>
         <div class="top_menu_wrapper">
-            <ul>
-                <li class="top_menu {php}if($channel_id == 0) echo 'active'; {/php}"><a href="{:url('/')}">首页</a></li>
-                <li class="top_menu {php}if($channel_id == 1) echo 'active'; {/php}"><a href="{:url('/channel/id/1')}">自然景区</a></li>
-                <li class="top_menu {php}if($channel_id == 2) echo 'active'; {/php}"><a href="{:url('/channel/id/2')}">农家自种</a></li>
-                <li class="top_menu {php}if($channel_id == 3) echo 'active'; {/php}"><a href="{:url('/channel/id/3')}">采摘果园</a></li>
-                <li class="top_menu {php}if($channel_id == 4) echo 'active'; {/php}"><a href="{:url('/channel/id/4')}">海滨沙滩</a></li>
-                <li class="top_menu {php}if($channel_id == 5) echo 'active'; {/php}"><a href="{:url('/channel/id/5')}">绿色氧吧</a></li>
-            </ul>
+            <form class="search_box" action="">
+                <i class="layui-icon layui-icon-search caller-seach-icon caller-icon"></i>
+                <input type="text" name="title" required="" lay-verify="required" placeholder="请输入关键字" autocomplete="off" class="layui-input ">
+                <button class="layui-btn " lay-submit="" lay-filter="search">搜索</button>
+            </form>
+            <div class="weather_box">
+                <div>
+                    <iframe name="weather_inc" src="http://i.tianqi.com/index.php?c=code&id=52&icon=1&num=3" width="200" height="25" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+                </div>
+                <div>
+                    &nbsp;{$current_date}
+                </div>
+            </div>
+            <div class="site_button">
+                <!--<button class="layui-btn layui-btn-lg layui-btn-primary">站点发布</button>-->
+                <!--<button class="layui-btn layui-btn-lg layui-btn-primary">用户登录</button>-->
+            </div>
         </div>
     </div>
 </div>

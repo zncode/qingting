@@ -10,7 +10,35 @@ class IndexController extends BaseController
 
     public function index()
     {
-        $data['channel_id']   = 0;
+        $date = date('Y年m月d日', time());
+
+        switch (date('N', time())){
+            case 1:
+                $week = '周一';
+                break;
+            case 2:
+                $week = '周二';
+                break;
+            case 3:
+                $week = '周三';
+                break;
+            case 4:
+                $week = '周四';
+                break;
+            case 5:
+                $week = '周五';
+                break;
+            case 6:
+                $week = '周六';
+                break;
+            case 7:
+                $week = '周日';
+                break;
+        }
+        $date = $date.'&nbsp;&nbsp;'.$week;
+
+        $data['channel_id']     = 0;
+        $data['current_date']   = $date;
         return view('index/index',$data);
     }
 
