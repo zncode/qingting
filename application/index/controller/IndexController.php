@@ -56,7 +56,7 @@ class IndexController extends BaseController
         $left_menu   = Db::name('channel')->where(array('delete'=>0))->select();
         if(is_array($left_menu) && count($left_menu)){
             foreach($left_menu as $key => $value){
-                $category = Db::name('category')->where(array('parent_id'=>$value['id']))->select();
+                $category = Db::name('category')->where(array('parent_id'=>$value['id'], 'delete'=>0))->select();
                 if(is_array($category) && count($category)){
                     $left_menu[$key]['child'] = $category;
                 }
