@@ -8,7 +8,11 @@
     </dt>
     <dd>
       {volist name="v.child" id="vo"}
-      <a class="" href="{:url('category1/id/'.$vo.id)}">{$vo.name}</a>
+        {if condition="$category.id == $vo.id"}
+          <a class="active" href="{:url('category1/id/'.$vo.id)}">{$vo.name}</a>
+        {else/}
+          <a class="" href="{:url('category1/id/'.$vo.id)}">{$vo.name}</a>
+        {/if}
       {/volist}
     </dd>
   </dl>

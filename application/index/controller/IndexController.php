@@ -136,12 +136,22 @@ class IndexController extends BaseController
         }
 
         //左侧菜单
-        $left_menu   = Db::name('category')->where(array('parent_id'=>$channel['id']))->select();
+//        $left_menu   = Db::name('category')->where(array('parent_id'=>$channel['id']))->select();
+//        if(is_array($left_menu) && count($left_menu)){
+//            foreach($left_menu as $key => $value){
+//                $category_2 = Db::name('category_2')->where(array('parent_id'=>$value['id']))->select();
+//                if(is_array($category_2) && count($category_2)){
+//                    $left_menu[$key]['child'] = $category_2;
+//                }
+//            }
+//        }
+
+        $left_menu   = Db::name('channel')->where(array('delete'=>0))->select();
         if(is_array($left_menu) && count($left_menu)){
             foreach($left_menu as $key => $value){
-                $category_2 = Db::name('category_2')->where(array('parent_id'=>$value['id']))->select();
-                if(is_array($category_2) && count($category_2)){
-                    $left_menu[$key]['child'] = $category_2;
+                $category = Db::name('category')->where(array('parent_id'=>$value['id'], 'delete'=>0))->select();
+                if(is_array($category) && count($category)){
+                    $left_menu[$key]['child'] = $category;
                 }
             }
         }
