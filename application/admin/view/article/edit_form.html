@@ -52,7 +52,7 @@
                                             </select>
                                         </div>
                                         {if condition="$info.category_1 neq ''"}
-                                            <div class="layui-input-inline cetegory_1" style="" >
+                                            <div class="layui-input-inline category_1" style="" >
                                                 <select name="category_1" class="layui-select" lay-filter="category_1" id="category_1" >
                                                     {volist name="category_1" id="vo"}
                                                         {if condition="$info.category_1 eq $vo.id"}
@@ -335,14 +335,19 @@
                     if(code==0){
                         $("#category_1").html("");
                         $("#category_2").html("");
+                        $(".category_1").hide();
                         $(".category_2").hide();
-                        $.each(data.category, function(key, val) {
-                            var option1 = $("<option>").val(val.id).text(val.name);
-                            $("#category_1").append(option1);
-                            form.render('select');
-                        });
-                        $("#category_1").get(0).selectedIndex=0;
-                        $(".category_1").show();
+                        if(data.category.length != 0){
+                            var option0 = $("<option>").val(0).text(' - 选择 - ');
+                            $("#category_1").append(option0);
+                            $.each(data.category, function(key, val) {
+                                var option1 = $("<option>").val(val.id).text(val.name);
+                                $("#category_1").append(option1);
+                                form.render('select');
+                            });
+                            $("#category_1").get(0).selectedIndex=0;
+                            $(".category_1").show();
+                        }
                     }else{
                         layer.msg(msg);
                     }
@@ -367,15 +372,20 @@
                     var code = result.code;
                     var msg  = result.msg;
                     var data = result.data;
-                    if(code==0 && data.category != false){
+                    if(code==0){
                         $("#category_2").html("");
-                        $.each(data.category, function(key, val) {
-                            var option1 = $("<option>").val(val.id).text(val.name);
-                            $("#category_2").append(option1);
-                            form.render('select');
-                        });
-                        $("#category_2").get(0).selectedIndex=0;
-                        $(".category_2").show();
+                        $(".category_2").hide();
+                        if(data.category.length != 0){
+                            var option0 = $("<option>").val(0).text(' - 选择 - ');
+                            $("#category_2").append(option0);
+                            $.each(data.category, function(key, val) {
+                                var option1 = $("<option>").val(val.id).text(val.name);
+                                $("#category_2").append(option1);
+                                form.render('select');
+                            });
+                            $("#category_2").get(0).selectedIndex=0;
+                            $(".category_2").show();
+                        }
                     }
                 }
             })
