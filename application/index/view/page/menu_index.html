@@ -3,11 +3,12 @@
   {if condition="isset($v.child) neq '' "}
   <dl>
     <dt>
-      <a class="" href="{:url('category1/id/'.$v.id)}">{$v.name}</a>
+      <!--<a class="" href="{:url('channel/id/'.$v.id)}">{$v.name}</a>-->
+      <a class="" href="javascript:;">{$v.name}</a>
     </dt>
     <dd>
       {volist name="v.child" id="vo"}
-      <a class="" href="{:url('category2/id/'.$vo.id)}">{$vo.name}</a>
+      <a class="" href="{:url('category1/id/'.$vo.id)}">{$vo.name}</a>
       {/volist}
     </dd>
   </dl>

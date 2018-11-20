@@ -68,3 +68,37 @@ function get_view_url($path){
 function get_province(){
     return array('北京','天津','上海','重庆', '黑龙江','吉林','辽宁','河北','山西','青海','山东','河南','江苏','安徽','浙江','福建','江西','湖南','湖北','广东','台湾','海南','甘肃','陕西','四川','贵州','云南','内蒙古','西藏','宁夏','广西');
 }
+
+/**
+ * 获取当前日期
+ */
+function get_current_date(){
+    $date = date('Y年m月d日', time());
+
+    switch (date('N', time())){
+        case 1:
+            $week = '周一';
+            break;
+        case 2:
+            $week = '周二';
+            break;
+        case 3:
+            $week = '周三';
+            break;
+        case 4:
+            $week = '周四';
+            break;
+        case 5:
+            $week = '周五';
+            break;
+        case 6:
+            $week = '周六';
+            break;
+        case 7:
+            $week = '周日';
+            break;
+    }
+    $date = $date.'&nbsp;&nbsp;'.$week;
+
+    return $date;
+}

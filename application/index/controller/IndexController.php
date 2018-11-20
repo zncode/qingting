@@ -10,32 +10,6 @@ class IndexController extends BaseController
 
     public function index()
     {
-        $date = date('Y年m月d日', time());
-
-        switch (date('N', time())){
-            case 1:
-                $week = '周一';
-                break;
-            case 2:
-                $week = '周二';
-                break;
-            case 3:
-                $week = '周三';
-                break;
-            case 4:
-                $week = '周四';
-                break;
-            case 5:
-                $week = '周五';
-                break;
-            case 6:
-                $week = '周六';
-                break;
-            case 7:
-                $week = '周日';
-                break;
-        }
-        $date = $date.'&nbsp;&nbsp;'.$week;
 
         //热门站点
         $hot_site  = Db::name('article')
@@ -65,7 +39,7 @@ class IndexController extends BaseController
 
         $data['left_menu']      = $left_menu;
         $data['channel_id']     = 0;
-        $data['current_date']   = $date;
+        $data['current_date']   = get_current_date();
         $data['hot_site']       = $hot_site;
 
         return view('index/index',$data);
@@ -133,7 +107,7 @@ class IndexController extends BaseController
 
         $pages  = Db::name('article')
             ->alias('a')
-            ->field('a.id,a.title,a.summary,a.create_time,a.channel_id,b.save_path,c.name as category_name_1, d.name as category_name_2')
+            ->field('a.id,a.title,a.create_time,a.channel_id,a.url,b.save_path,c.name as category_name_1, d.name as category_name_2')
             ->join('upload b', 'a.thumb = b.id', 'left')
             ->join('category c', 'a.category_1 = c.id', 'left')
             ->join('category_2 d', 'a.category_2 = d.id', 'left')
@@ -172,11 +146,13 @@ class IndexController extends BaseController
             }
         }
 
-        $data['breadcrumb']   = $this->get_breadcrumb($breadcrumb);
-        $data['list']         = $lists;
-        $data['page']         = $page;
-        $data['left_menu']    = $left_menu;
-        $data['channel_id']   = $channel['id'];
+        $data['breadcrumb']     = $this->get_breadcrumb($breadcrumb);
+        $data['list']           = $lists;
+        $data['page']           = $page;
+        $data['left_menu']      = $left_menu;
+        $data['channel_id']     = $channel['id'];
+        $data['current_date']   = get_current_date();
+        $data['category']       = $category_1;
         return view('index/category_list', $data);
     }
 
