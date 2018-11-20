@@ -52,6 +52,18 @@ class IndexController extends BaseController
             }
         }
 
+        //左侧菜单
+        $left_menu   = Db::name('channel')->where(array('delete'=>0))->select();
+        if(is_array($left_menu) && count($left_menu)){
+            foreach($left_menu as $key => $value){
+                $category = Db::name('category')->where(array('parent_id'=>$value['id']))->select();
+                if(is_array($category) && count($category)){
+                    $left_menu[$key]['child'] = $category;
+                }
+            }
+        }
+
+        $data['left_menu']      = $left_menu;
         $data['channel_id']     = 0;
         $data['current_date']   = $date;
         $data['hot_site']       = $hot_site;
