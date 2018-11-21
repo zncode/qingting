@@ -24,4 +24,8 @@ class IndexController extends BaseController{
         }
 
     }
+
+    public function phpinfo(){
+        phpinfo();
+    }
 }
