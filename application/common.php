@@ -102,3 +102,83 @@ function get_current_date(){
 
     return $date;
 }
+
+/**
+ * 获取meta信息
+ */
+function get_html_meta($html)
+{
+    if(is_null($html))
+    {
+        return NULL;
+    }
+    if(strlen($html)!=0)
+    {
+        $ret = array();
+
+        $metapattern = '/<meta[^>]*?>/is';
+        $kvpattern = '/([\w\-]+)=[\"\']?([^\s]+)["\']?/is';
+        preg_match_all($metapattern, $html, $matches);
+        if(!empty($matches))
+        {
+            $meta = $matches[0];
+            foreach ($meta as $key => $value) {
+                $value = preg_replace('/<meta\s+/is', "", $value);
+                $value = rtrim($value,'/>');
+                $value =trim($value);
+
+                //替换;+空格
+                $repattern = '/;\s+/is';
+                $value = preg_replace($repattern, ';', $value);
+
+                preg_match_all($kvpattern, $value, $kvmatches);
+                if(!empty($kvmatches))
+                {
+                    $type = (int)count($kvmatches[0]);
+                    switch ($type) {
+                        case 1://meta里面只有一条语句 <meta charset=UTF-8>
+                            $metakey = rtrim($kvmatches[1][0],"\"'");
+                            $metakey    =   ltrim($metakey,"\"'");
+                            $metavalue = rtrim($kvmatches[2][0],"\"'");
+                            $metavalue  =   ltrim($metavalue,"\"'");
+                            $ret[$metakey]  =   $metavalue;
+                            break;
+                        case 2://meta里面是参数名称/参数值的方式
+                            $metakey = rtrim($kvmatches[2][0],"\"'");
+                            $metakey    =   ltrim($metakey,"\"'");
+                            $metavalue = rtrim($kvmatches[2][1],"\"'");
+                            $metavalue  =   ltrim($metavalue,"\"'");
+                            $ret[$metakey]  =   $metavalue;
+                            break;
+                        case 3://meta里面;+空格<meta http-equiv=mobile-agent content="format=wml;url=http://m.qidian.com
+                            $metakey = rtrim($kvmatches[2][0],"\"'");
+                            $metakey    =   ltrim($metakey,"\"'");
+                            $tmp = rtrim($kvmatches[2][1],"\"'");
+                            $tmp = ltrim($tmp,"\"'");
+                            $tmp2 = rtrim($kvmatches[2][2],"\"'");
+                            $tmp2 = ltrim($tmp2,"\"'");
+                            $metavalue  =   $tmp.$tmp2;
+                            $ret[$metakey]  =   $metavalue;
+                            break;
+                    }
+                }
+            }
+            return $ret;
+        }
+        return NULL;
+    }
+}
+
+/**
+ * 获取title信息
+ */
+function get_html_title($html)
+{
+    preg_match('/<title>(?<title>.*?)<\/title>/si', $html, $title); //获取title的正则表达式
+    $encode = mb_detect_encoding($title['title'], array('GB2312','GBK','UTF-8', 'CP936')); //得到字符串编码
+    $file_charset = iconv_get_encoding()['internal_encoding']; //当前文件编码
+    if ( $encode != 'CP936' && $encode != $file_charset ) {
+        return iconv($encode, $file_charset, $title['title']);
+    }
+    return $title['title'];
+}

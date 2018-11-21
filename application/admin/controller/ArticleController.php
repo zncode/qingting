@@ -119,6 +119,7 @@ class ArticleController extends BaseController
         $data['goback']         = url('admin/'.$this->url_path.'/list');
         $data['action']         = url('admin/'.$this->url_path.'/add_submit');
         $data['get_favicon']    = url('admin/'.$this->url_path.'/get_favicon');
+        $data['get_html']       = url('/api/get_html_info');
         $data['url_upload']     = url('/upload/image');
         $data['module_name']    = $this->module_name;
         $data['channel']        =  $channel;
@@ -326,4 +327,5 @@ class ArticleController extends BaseController
 //        print_r(json_decode($result));die;
 //        echo $result;die;
     }
+
 }

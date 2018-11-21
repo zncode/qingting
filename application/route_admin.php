@@ -55,3 +55,4 @@ Route::get('admin/article_type/delete', 		'CategoryController/delete');
 
 
 
+
