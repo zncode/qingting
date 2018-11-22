@@ -42,7 +42,8 @@ Route::get('admin/article/list', 			'admin/ArticleController/index');
 Route::get('admin/article/info', 			'admin/ArticleController/info');
 Route::get('admin/article/delete', 		    'admin/ArticleController/delete');
 Route::get('admin/article/list_data', 		'admin/ArticleController/index_data');
-Route::post('admin/article/get_favicon',     'admin/ArticleController/get_favicon');
+Route::post('admin/article/get_favicon',    'admin/ArticleController/get_favicon');
+Route::get('admin/article/check_url', 		'admin/ArticleController/check_url_exist');
 
 //文章类型
 Route::get('admin/article_type/add', 			'CategoryController/add_form');

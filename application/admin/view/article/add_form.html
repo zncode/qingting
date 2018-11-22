@@ -216,40 +216,11 @@
 
             var  field = {
                 'url': url,
-            };
-
+            }
             if(url.length != "") {
-                //提交
+                //检查是否存在
                 $.ajax({
-                    url: "{$get_favicon}",
-                    type: "post",
-                    data: field,
-                    success:function(result){
-                        var result = JSON.parse(result);
-                        var code = result.code;
-                        var msg  = result.message;
-                        var data = result.data;
-                        if(code==0){
-                            var thumb_image = '<img src="'+data.src+'" width="150px" height="auto" class="thumb_image_picture">';
-                            $('.thumb_image').html(thumb_image);
-                            $("[name='upload_id']").val(data.upload_id);
-
-                            layer.msg(msg, {
-                                time: 2000,
-                                icon: 16,
-                                shade: 0.2
-                            }, function(){
-                                //parent.location.reload();
-                            });
-                        }else{
-                            layer.msg(msg);
-                        }
-                    }
-                })
-
-                //获取网页信息
-                $.ajax({
-                    url: "{$get_html}",
+                    url: "{$check_url}",
                     type: "get",
                     data: field,
                     success:function(result){
@@ -258,20 +229,72 @@
                         var msg  = result.message;
                         var data = result.data;
                         if(code==0){
-
-                            $("[name='title']").val(data.title);
-                            $("[name='meta_keyword']").val(data.keywords);
-                            $("[name='summary']").val(data.description);
-                            $(".ke-content").html(data.description);
                             layer.msg(msg, {
                                 time: 2000,
                                 icon: 16,
                                 shade: 0.2
                             }, function(){
                                 //parent.location.reload();
+                                return false;
                             });
                         }else{
-                            layer.msg(msg);
+                            //获取favicon
+                            $.ajax({
+                                url: "{$get_favicon}",
+                                type: "post",
+                                data: field,
+                                success:function(result){
+                                    var result = JSON.parse(result);
+                                    var code = result.code;
+                                    var msg  = result.message;
+                                    var data = result.data;
+                                    if(code==0){
+                                        var thumb_image = '<img src="'+data.src+'" width="150px" height="auto" class="thumb_image_picture">';
+                                        $('.thumb_image').html(thumb_image);
+                                        $("[name='upload_id']").val(data.upload_id);
+
+                                        layer.msg(msg, {
+                                            time: 2000,
+                                            icon: 16,
+                                            shade: 0.2
+                                        }, function(){
+                                            //parent.location.reload();
+                                        });
+                                    }else{
+                                        layer.msg(msg);
+                                    }
+                                }
+                            })
+
+                            //获取网页信息
+                            $.ajax({
+                                url: "{$get_html}",
+                                type: "get",
+                                data: field,
+                                success:function(result){
+                                    var result = JSON.parse(result);
+                                    var code = result.code;
+                                    var msg  = result.message;
+                                    var data = result.data;
+                                    if(code==0){
+
+                                        $("[name='title']").val(data.title);
+                                        $("[name='meta_keyword']").val(data.keywords);
+                                        $("[name='summary']").val(data.description);
+                                        $(".ke-content").html(data.description);
+//                                        layer.msg(msg, {
+//                                            time: 2000,
+//                                            icon: 16,
+//                                            shade: 0.2
+//                                        }, function(){
+//                                            //parent.location.reload();
+//                                        });
+                                    }else{
+                                        layer.msg(msg);
+                                    }
+                                }
+                            })
+
                         }
                     }
                 })

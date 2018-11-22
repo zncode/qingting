@@ -121,6 +121,7 @@ class ArticleController extends BaseController
         $data['get_favicon']    = url('admin/'.$this->url_path.'/get_favicon');
         $data['get_html']       = url('/api/get_html_info');
         $data['url_upload']     = url('/upload/image');
+        $data['check_url']      = url('admin/'.$this->url_path.'/check_url');
         $data['module_name']    = $this->module_name;
         $data['channel']        =  $channel;
         $data['url_upload_editor']     = url('/upload/image_editor',array('category'=>'article'));
@@ -326,6 +327,18 @@ class ArticleController extends BaseController
 //        var_dump($result);die;
 //        print_r(json_decode($result));die;
 //        echo $result;die;
+    }
+
+    /**
+     * 检查url是否存在
+     */
+    public function check_url_exist($url){
+        $result = Db::name('article')->where(array('url'=>$url))->find();
+        if($result){
+            $this->json(array('code'=>0, 'message'=>'url已经存在！', 'data'=>[]));
+        }else{
+            $this->json(array('code'=>1, 'message'=>'url不存在！', 'data'=>[]));
+        }
     }
 
 }
