@@ -11,15 +11,15 @@ class IndexController extends BaseController{
      */
     public function get_html_info(){
         $url    = input('url');
-//        $html   = file_get_contents($url); //https不支持
+        $html   = file_get_contents($url);
 
-        $fp= fopen($url,'r');
+//        $fp= fopen($url,'r');
 //        $header= stream_get_meta_data($fp);//获取报头信息
-        $html = '';
-        while(!feof($fp)) {
-            $html.= fgets($fp, 1024);
-        }
-        fclose($fp);
+//        $html = '';
+//        while(!feof($fp)) {
+//            $html.= fgets($fp, 1024);
+//        }
+//        fclose($fp);
         $meta   = get_html_meta($html);
 
         if(isset($meta['keywords']) && !empty($meta['keywords'])){
