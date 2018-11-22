@@ -11,18 +11,34 @@ class IndexController extends BaseController{
      */
     public function get_html_info(){
         $url    = input('url');
-        $html   = file_get_contents($url);
+//        $html   = file_get_contents($url); //https不支持
+
+        $fp= fopen($url,'r');
+//        $header= stream_get_meta_data($fp);//获取报头信息
+        $html = '';
+        while(!feof($fp)) {
+            $html.= fgets($fp, 1024);
+        }
+        fclose($fp);
         $meta   = get_html_meta($html);
 
         if(isset($meta['keywords']) && !empty($meta['keywords'])){
             $data['keywords'] = $meta['keywords'];
-            $data['description'] = $meta['description'];
-            $data['title']  = get_html_title($html);
-            echo json_encode(array('code'=>0,'message'=>'获取成功!', 'data'=>$data)); die;
         }else{
-            echo json_encode(array('code'=>0,'message'=>'获取失败!', 'data'=>[])); die;
+            $data['keywords'] = '';
+        }
+        if(isset($meta['description']) && !empty($meta['description'])){
+            $data['description'] = $meta['description'];
+        }else{
+            $data['description'] = '';
+        }
+        if($title = get_html_title($html)){
+            $data['title'] = $title;
+        }else{
+            $data['title'] = '';
         }
 
+        echo json_encode(array('code'=>0,'message'=>'获取完成!', 'data'=>$data)); die;
     }
 
     public function phpinfo(){
