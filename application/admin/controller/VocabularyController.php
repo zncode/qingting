@@ -4,12 +4,12 @@ namespace app\admin\controller;
 use app\admin\controller\BaseController;
 use think\Db;
 
-class ChannelController extends BaseController
+class VocabularyController extends BaseController
 {
     public $pager = 20;
-    public $table = 'channel';
-    public $url_path = 'channel';
-    public $module_name = '频道';
+    public $table = 'vocabulary';
+    public $url_path = 'vocabulary';
+    public $module_name = '容器类型';
 
     /**
      * 列表

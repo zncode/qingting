@@ -33,6 +33,28 @@ Route::get('admin/category/json_data', 		'admin/CategoryController/json_data');
 Route::get('admin/category/list_data', 		'admin/CategoryController/index_data');
 Route::post('admin/category/get_category',   'admin/CategoryController/get_category');
 
+//容器类型
+Route::get('admin/vocabulary/add', 			    'admin/VocabularyController/add_form');
+Route::post('admin/vocabulary/add_submit', 	    'admin/VocabularyController/add_form_submit');
+Route::get('admin/vocabulary/edit', 			'admin/VocabularyController/edit_form');
+Route::post('admin/vocabulary/edit_submit', 	'admin/VocabularyController/edit_form_submit');
+Route::get('admin/vocabulary/list', 			'admin/VocabularyController/index');
+Route::get('admin/vocabulary/info', 			'admin/VocabularyController/info');
+Route::get('admin/vocabulary/delete', 		    'admin/VocabularyController/delete');
+Route::get('admin/vocabulary/list_data', 		'admin/VocabularyController/index_data');
+
+//分类
+Route::get('admin/taxonomy/add', 			    'admin/TaxonomyController/add_form');
+Route::post('admin/taxonomy/add_submit', 	    'admin/TaxonomyController/add_form_submit');
+Route::get('admin/taxonomy/edit', 			    'admin/TaxonomyController/edit_form');
+Route::post('admin/taxonomy/edit_submit', 	    'admin/TaxonomyController/edit_form_submit');
+Route::get('admin/taxonomy/list', 			    'admin/TaxonomyController/index');
+Route::get('admin/taxonomy/info', 			    'admin/TaxonomyController/info');
+Route::get('admin/taxonomy/delete', 		    'admin/TaxonomyController/delete');
+Route::get('admin/taxonomy/json_data', 		    'admin/TaxonomyController/json_data');
+Route::get('admin/taxonomy/list_data', 		    'admin/TaxonomyController/index_data');
+Route::post('admin/taxonomy/get_taxonomy',      'admin/TaxonomyController/get_taxonomy');
+
 //内容
 Route::get('admin/article/add', 			'admin/ArticleController/add_form');
 Route::post('admin/article/add_submit', 	'admin/ArticleController/add_form_submit');
