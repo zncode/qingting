@@ -1,0 +1,153 @@
+{include file="page/header" /}
+<div class="layui-layout layui-layout-admin">
+    {include file="page/body_top" /}
+    {include file="page/menu" /}
+
+    <div class="layui-body">
+
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
+                            <a lay-href="">主页</a><span lay-separator="">/</span>
+                            <a><cite>频道管理</cite></a><span lay-separator="">/</span>
+                            <a><cite>频道详情</cite></a><span lay-separator=""></span>
+                        </div>
+                        <div class="go_back">
+                            <a href="{:url('admin/taxonomy/add')}" class="layui-btn layui-btn-sm">添加</a>
+                            <button class="layui-btn layui-btn-primary up-all">全部收起</button>
+                            <button class="layui-btn layui-btn-primary down-all">全部展开</button>
+                            <button class="layui-btn layui-btn-primary get-checked">获取选中</button>
+
+                        </div>
+                        <div class="layui-card-body">
+                            <table class="layui-table layui-form" id="test-tree-table"></table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    {include file="page/body_bottom" /}
+
+</div>
+
+{include file="page/footer" /}
+
+<script type="text/javascript">
+    layui.config({
+        base: '{$Think.BASE_PATH}layui/js/',
+    })
+    layui.use(['treetable','form'],function(){
+        $ = layui.jquery;
+        $.ajax({
+            url: "{$Think.BASE_PATH}admin/taxonomy/list_data",
+            type: "get",
+            success:function(result){
+                var result = JSON.parse(result);
+                var code = result.code;
+                var msg  = result.message;
+                if(code==0){
+                    var data = result.data;
+//                    console.log(data);
+                    var o = layui.$,treetable = layui.treetable;
+                    var form = layui.form,layer = layui.layer;
+                    treetable.render({
+                        elem: '#test-tree-table',
+                        data: data,
+                        field: 'title',
+                        is_checkbox: true,
+                        cols: [
+                            {
+                                field: 'title',
+                                title: '名称',
+                                width: '50%',
+                            },
+//                            {
+//                                field: 'id',
+//                                title: 'ID',
+//                                width: '20%'
+//                            },
+                            {
+                                title: '状态',
+                                width: '20%',
+                                template: function(item){
+                                    return '<input type="checkbox" lay-skin="switch" lay-filter="status" lay-text="开启|关闭">';
+                                }
+                            },
+                            {
+                                title: '排序',
+                                width: '5%',
+                                template: function(item){
+                                    return '<input type="textfield" lay-filter="edit" value="'+item.weight+'" class="layui-input">';
+                                }
+                            },
+//                            {
+//                                field: 'pid',
+//                                title: '父ID',
+//                                width: '20%',
+//                            },
+                            {
+                                field: 'actions',
+                                title: '操作',
+                                width: '40%',
+                                template: function(item){
+                                    var tem = [];
+                                    var id=item.id;
+//                                    tem.push('<a lay-filter="edit">编辑</a>');
+                                    var edit_url = "{:url('admin/taxonomy/edit?id=')}";
+                                    var info_url = "{:url('admin/taxonomy/info?id=')}";
+                                    tem.push('<a href="'+info_url+id+'">详情</a>');
+                                    tem.push('<a href="'+edit_url+id+'">编辑</a>');
+                                    if(item.pid == 0){
+                                        tem.push('<a class="add-child" lay-filter="add">添加子级</a>');
+                                    }
+                                    if(item.pid > 0){
+                                        tem.push('<a class="set-attr">设置属性</a>');
+                                    }
+                                    return tem.join(' <font>|</font> ')
+                                },
+                            },
+                        ]
+                    });
+
+                    treetable.on('treetable(add)',function(data){
+                        layer.msg('添加操作');
+                        console.dir(data);
+                    })
+
+                    treetable.on('treetable(edit)',function(obj){
+
+                        layer.msg('编辑操作');
+//                        var value = obj.value //得到修改后的值
+//                            ,data = obj.data //得到所在行所有键值
+//                            ,field = obj.field; //得到字段
+//                        layer.msg('[ID: '+ obj.id +'] ' + field + ' 字段更改为：'+ value);
+                        console.dir(obj.item);
+                    })
+
+                    o('.up-all').click(function(){
+                        treetable.all('up');
+                    })
+
+                    o('.down-all').click(function(){
+                        treetable.all('down');
+                    })
+
+                    o('.get-checked').click(function(){
+                        console.dir(treetable.all('checked'));
+                    })
+
+                    form.on('switch(status)',function(data){
+                        layer.msg('监听状态操作');
+                        console.dir(data);
+                    })
+                }
+            }
+        })
+    })
+</script>

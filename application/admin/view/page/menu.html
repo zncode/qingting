@@ -10,10 +10,14 @@
         </dl>
       </li>
       <li class="layui-nav-item layui-nav-itemed">
-        <a href="javascript:;">频道管理</a>
+        <a href="javascript:;">分类管理</a>
         <dl class="layui-nav-child">
           <dd><a href="{:url('@admin/channel/list')}">频道列表</a></dd>
           <dd><a href="{:url('@admin/channel/add')}">频道添加</a></dd>
+          <dd><a href="{:url('@admin/vocabulary/list')}">类型列表</a></dd>
+          <dd><a href="{:url('@admin/vocabulary/add')}">类型添加</a></dd>
+          <dd><a href="{:url('@admin/taxonomy/list')}">分类列表</a></dd>
+          <dd><a href="{:url('@admin/taxonomy/add')}">分类添加</a></dd>
           <dd><a href="{:url('@admin/category/list',array('level'=>1))}">一级栏目列表</a></dd>
           <dd><a href="{:url('@admin/category/add',array('level'=>1))}">一级栏目添加</a></dd>
           <dd><a href="{:url('@admin/category/list',array('level'=>2))}">二级栏目列表</a></dd>

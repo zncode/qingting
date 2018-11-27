@@ -1,0 +1,122 @@
+{include file="page/header" /}
+<div class="layui-layout layui-layout-admin">
+    {include file="page/body_top" /}
+    {include file="page/menu" /}
+
+    <div class="layui-body">
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+
+                        <div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
+                            <a lay-href="">主页</a><span lay-separator="">/</span>
+                            <a><cite>栏目管理</cite></a><span lay-separator="">/</span>
+                            <a><cite>栏目编辑</cite></a><span lay-separator=""></span>
+                        </div>
+
+                        <div class="go_back"><a href="{$goback}" class="layui-btn layui-btn-sm">返回</a></div>
+
+                        <div class="layui-card-body">
+                            <form id="add_form" action="{$action}" method="post" class="layui-form">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$module_name}名称</label>
+                                    <div class="layui-input-block">
+                                        <input type="input" name="name" placeholder="" class="layui-input" value="{$info.name}">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">频道</label>
+                                    <div class="layui-input-block">
+                                        <select name="parent_id" class="layui-select">
+                                            <option value=""> - 选择 - </option>{
+                                            {volist name="parent" id="vo"}
+                                                {if condition="$info.parent_id eq $vo.id"}
+                                                    <option value="{$vo.id}" selected="selected">{$vo.name}</option>
+                                                {else /}
+                                                    <option value="{$vo.id}">{$vo.name}</option>
+                                                {/if}
+                                            {/volist}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">路径</label>
+                                    <div class="layui-input-block">
+                                        <input type="input" name="path"  placeholder="" class="layui-input" value="{$info.path}">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" >排序</label>
+                                    <div class="layui-input-block">
+                                        <input type="input" name="weight" class="layui-input"  placeholder="0" value="{$info.weight}">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" >关键字</label>
+                                    <div class="layui-input-block">
+                                        <input type="input" name="keyword" name="" class="layui-input"  placeholder="keyword1, keyword2, keyword3" value="{$info.keyword}">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" >描述</label>
+                                    <div class="layui-input-block">
+                                        <textarea class="layui-textarea" name="description" rows="10" placeholder="Enter ..." >{$info.description}</textarea>
+                                    </div>
+                                </div>
+
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <input type="hidden" name="id" name="id" value="{$info.id}">
+                                        <button class="layui-btn" lay-submit lay-filter="update">提交</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    {include file="page/body_bottom" /}
+
+</div>
+
+{include file="page/footer" /}
+
+<script>
+
+    layui.use('form', function(){
+        var form = layui.form;
+        $ = layui.jquery;
+
+        form.on('submit(update)', function(data){
+            //提交
+            $.ajax({
+                url: "{$action}",
+                type: "post",
+                data: data.field,
+                success:function(result){
+                    var result = JSON.parse(result);
+                    var code = result.code;
+                    var msg  = result.msg;
+                    var data = result.data;
+                    if(code==0){
+                        layer.msg(msg, {
+                            time: 2000,
+                            icon: 16,
+                            shade: 0.2
+                        }, function(){
+                            parent.location.reload();
+                        });
+                    }else{
+                        layer.msg(msg);
+                    }
+                }
+            })
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+    });
+</script>
