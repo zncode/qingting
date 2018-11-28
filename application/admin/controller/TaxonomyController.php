@@ -36,10 +36,7 @@ class TaxonomyController extends BaseController
      */
     public function index_data()
     {
-        $lists  = Db::name($this->table)->field('id,name as title,weight')->where(array('delete'=>0))->order('create_time desc')->select();
-        foreach($lists as $key => $value){
-            $lists[$key]['pid'] = 0;
-        }
+        $lists  = Db::name($this->table)->field('id,name as title,weight, parent_id as pid')->where(array('delete'=>0))->order('create_time desc')->select();
 
         $data = [
             'code'  => 0,
@@ -56,10 +53,10 @@ class TaxonomyController extends BaseController
     {
         $id                     = input('get.id');
         $info                   = Db::name($this->table)->where(array('id'=>$id))->find();
-        $parent                 = Db::name($this->parent)->where(array('id'=>$info['parent_id']))->find();
+        $parent                 = Db::name($this->table)->where(array('id'=>$info['parent_id']))->find();
         $info['parent_name']    = $parent['name'];
         $data['info']           = $info;
-        $data['goback']         = url('admin/'.$this->url_path.'/list',array('level'=>$this->level));
+        $data['goback']         = url('admin/'.$this->url_path.'/list');
         $data['module_name']    = $this->module_name;
         return view($this->url_path.'/info', $data);
     }
@@ -69,11 +66,14 @@ class TaxonomyController extends BaseController
      */
     public function add_form()
     {
-        $parents = Db::name($this->table)->where(array('delete'=>0))->select();
-        $data['goback'] = url('admin/'.$this->url_path.'/list');
-        $data['action'] = url('admin/'.$this->url_path.'/add_submit');
+        $parent_id           = input('get.parent_id') ? input('get.parent_id') : '';
+        $taxonomy            = Db::name($this->table)->where(array('delete'=>0))->select();
+        $tree                = $this->get_taxonomy_tree_wrapper($this->get_taxonomy_tree($taxonomy));
+        $data['tree']        = $tree;
+        $data['goback']      = url('admin/'.$this->url_path.'/list');
+        $data['action']      = url('admin/'.$this->url_path.'/add_submit');
         $data['module_name'] = $this->module_name;
-        $data['parent'] =  $parents;
+        $data['parent_id']   =  $parent_id;
         return view($this->url_path.'/add_form', $data);
     }
 
@@ -85,16 +85,17 @@ class TaxonomyController extends BaseController
         $formData = input('request.');
         $data = [
             'name'          => $formData['name'],
+            'parent_id'     => $formData['parent_id'],
             'weight'        => $formData['weight'],
             'status'        => 1,
             'keyword'       => $formData['keyword'],
             'description'   => $formData['description'],
+            'level'         => $this->get_level_by_parent($formData['parent_id']),
             'create_time'   => date("Y-m-d H:i:s", time()),
         ];
         $result = Db::name($this->table)->insert($data);
-        $id     = Db::name($this->table)->getLastInsID();
-
-        Db::name('taxonomy_relate')->insert(array('parent_id'=>$formData['parent_id'],'taxonomy_id'=>$id));
+//        $id     = Db::name($this->table)->getLastInsID();
+//        Db::name('taxonomy_relate')->insert(array('parent_id'=>$formData['parent_id'],'taxonomy_id'=>$id));
         if($result){
             $this->json(array('code'=>0, 'msg'=>'添加成功', 'data'=>array()));
         }else{
@@ -109,12 +110,14 @@ class TaxonomyController extends BaseController
     {
         $id                     = input('get.id');
         $info                   = Db::name($this->table)->where(array('id'=>$id))->find();
-        $parent                 = Db::name($this->parent)->where(array('delete'=>0))->select();
-        $data['parent']         = $parent;
+        $taxonomy               = Db::name($this->table)->where(array('delete'=>0))->select();
+        $tree                   = $this->get_taxonomy_tree_wrapper($this->get_taxonomy_tree($taxonomy));
+        $data['tree']           = $tree;
         $data['info']           = $info;
         $data['goback']         = url('admin/'.$this->url_path.'/list');
         $data['action']         = url('admin/'.$this->url_path.'/edit_submit');
         $data['module_name']    = $this->module_name;
+        $data['self']           = $id;
         return view($this->url_path.'/edit_form', $data);
     }
 
@@ -131,7 +134,8 @@ class TaxonomyController extends BaseController
             'weight'        => $formData['weight'],
             'keyword'       => $formData['keyword'],
             'description'   => $formData['description'],
-            'update_time'       => date("Y-m-d H:i:s", time()),
+            'level'         => $this->get_level_by_parent($formData['parent_id']),
+            'update_time'   => date("Y-m-d H:i:s", time()),
         ];
         $result = Db::name($this->table)->where(array('id'=>$id))->update($data);
         if($result){
@@ -184,34 +188,56 @@ class TaxonomyController extends BaseController
     }
 
     /**
-     * 获取分类所有层级
+     * 递归实现无限极分类
+     * @param $array 分类数据
+     * @param $pid 父ID
+     * @param $level 分类级别
+     * @return $list 分好类的数组 直接遍历即可 $level可以用来遍历缩进
      */
-    public function get_taxonomy_relate($taxonomys=NULL){
-        if($taxonomys){
-            if(is_array($taxonomys) && count($taxonomys)){
-                foreach ($taxonomys as $key => $taxonomy) {
-                    $childs = Db::name('taxonomy_relate')
-                        ->alias('a')
-                        ->field('b.*,a.parent_id')
-                        ->join('qt_taxonomy b','a.taxonomy_id = b.id', 'left')
-                        ->where(array('a.parent_id'=>$taxonomy['id'],'b.delete'=>0,'b.status'=>1))
-                        ->select();
-                }
-            }
-            return Db::name('taxonomy_relate')
-                ->alias('a')
-                ->field('b.*,a.parent_id')
-                ->join('qt_taxonomy b','a.taxonomy_id = b.id', 'left')
-                ->where(array('a.parent_id'=>$parent_id,'b.delete'=>0,'b.status'=>1))
-                ->select();
-        }else{
-            $taxonomys  = Db::name($this->table)
-                ->alias('a')
-                ->join('qt_taxonomy_relate b','b.taxonomy_id = a.id', 'left')
-                ->where(array('a.delete'=>0,'a.status'=>1, 'b'))
-                ->select();
-            get_taxonomy_relate($taxonomys);
+    function get_taxonomy_tree($array, $pid =0, $level = 0){
+        //声明静态数组,避免递归调用时,多次声明导致数组覆盖
+        static $list = [];
+        foreach ($array as $key => $value){
+            //第一次遍历,找到父节点为根节点的节点 也就是pid=0的节点
+            if ($value['parent_id'] == $pid){
+                //父节点为根节点的节点,级别为0，也就是第一级
+                $value['level'] = $level;
+                //把数组放到list中
+                $list[] = $value;
+                //把这个节点从数组中移除,减少后续递归消耗
+                unset($array[$key]);
+                //开始递归,查找父ID为该节点ID的节点,级别则为原级别+1
+                $this->get_taxonomy_tree($array, $value['id'], $level+1);
 
+            }
         }
+        return $list;
+    }
+
+    /**
+     * 添加样式
+     * @param $tree
+     */
+    function get_taxonomy_tree_wrapper($tree){
+        if(is_array($tree) && count($tree)){
+            foreach($tree as $key => $value ){
+                $tree[$key]['name'] = str_repeat('--', $value['level']). $value['name'];
+            }
+        }
+        return $tree;
+    }
+
+    /**
+     * 获取分类层级
+     * @param $parent_id
+     */
+    public function get_level_by_parent($parent_id = NULL){
+        if($parent_id){
+            $parent_level = Db::name('taxonomy')->where(array('id'=>$parent_id))->find();
+            $level = $parent_level['level'] + 1;
+        }else{
+            $level = 0;
+        }
+        return $level;
     }
 }

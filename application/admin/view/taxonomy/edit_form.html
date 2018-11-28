@@ -26,24 +26,22 @@
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">频道</label>
+                                    <label class="layui-form-label">上级</label>
                                     <div class="layui-input-block">
                                         <select name="parent_id" class="layui-select">
                                             <option value=""> - 选择 - </option>{
-                                            {volist name="parent" id="vo"}
+                                            {volist name="tree" id="vo"}
                                                 {if condition="$info.parent_id eq $vo.id"}
                                                     <option value="{$vo.id}" selected="selected">{$vo.name}</option>
                                                 {else /}
-                                                    <option value="{$vo.id}">{$vo.name}</option>
+                                                    {if condition="$self eq $vo.id"}
+                                                        <option value="{$vo.id}" disabled="disabled">{$vo.name}</option>
+                                                    {else /}
+                                                        <option value="{$vo.id}">{$vo.name}</option>
+                                                    {/if}
                                                 {/if}
                                             {/volist}
                                         </select>
-                                    </div>
-                                </div>
-                                <div class="layui-form-item">
-                                    <label class="layui-form-label">路径</label>
-                                    <div class="layui-input-block">
-                                        <input type="input" name="path"  placeholder="" class="layui-input" value="{$info.path}">
                                     </div>
                                 </div>
                                 <div class="layui-form-item">

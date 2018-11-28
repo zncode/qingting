@@ -18,7 +18,7 @@
                             <a href="{:url('admin/taxonomy/add')}" class="layui-btn layui-btn-sm">添加</a>
                             <button class="layui-btn layui-btn-primary up-all">全部收起</button>
                             <button class="layui-btn layui-btn-primary down-all">全部展开</button>
-                            <button class="layui-btn layui-btn-primary get-checked">获取选中</button>
+                            <!--<button class="layui-btn layui-btn-primary get-checked">获取选中</button>-->
 
                         </div>
                         <div class="layui-card-body">
@@ -98,16 +98,20 @@
                                 template: function(item){
                                     var tem = [];
                                     var id=item.id;
+                                    var parent_id=item.pid;
 //                                    tem.push('<a lay-filter="edit">编辑</a>');
                                     var edit_url = "{:url('admin/taxonomy/edit?id=')}";
                                     var info_url = "{:url('admin/taxonomy/info?id=')}";
+                                    var add_url = "{:url('admin/taxonomy/add?parent_id=')}";
                                     tem.push('<a href="'+info_url+id+'">详情</a>');
                                     tem.push('<a href="'+edit_url+id+'">编辑</a>');
                                     if(item.pid == 0){
-                                        tem.push('<a class="add-child" lay-filter="add">添加子级</a>');
+//                                        tem.push('<a class="add-child" lay-filter="add">添加子级</a>');
+                                        tem.push('<a href="'+add_url+parent_id+'">添加子级</a>');
                                     }
                                     if(item.pid > 0){
-                                        tem.push('<a class="set-attr">设置属性</a>');
+//                                        tem.push('<a class="set-attr">设置属性</a>');
+                                        tem.push('<a href="'+add_url+id+'">添加子级</a>');
                                     }
                                     return tem.join(' <font>|</font> ')
                                 },
