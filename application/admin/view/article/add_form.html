@@ -29,7 +29,7 @@
                                     <label class="layui-form-label">频道</label>
                                     <div class="layui-input-block">
                                         <div class="layui-input-inline">
-                                            <select name="taxonomy_id" class="layui-select"  lay-filter="taxonomy">
+                                            <select name="taxonomy_id" class="layui-select"  placeholder=" - 选择 - " lay-filter="taxonomy" lay-search>
                                                 <option value=""> - 选择 - </option>
                                                 {volist name="tree" id="vo"}
                                                     <option value="{$vo.id}">{$vo.name}</option>
