@@ -29,21 +29,11 @@
                                     <label class="layui-form-label">频道</label>
                                     <div class="layui-input-block">
                                         <div class="layui-input-inline">
-                                            <select name="channel_id" class="layui-select"  lay-filter="channel">
+                                            <select name="taxonomy_id" class="layui-select"  lay-filter="taxonomy">
                                                 <option value=""> - 选择 - </option>
-                                                {volist name="channel" id="vo"}
+                                                {volist name="tree" id="vo"}
                                                     <option value="{$vo.id}">{$vo.name}</option>
                                                 {/volist}
-                                            </select>
-                                        </div>
-                                        <div class="layui-input-inline category_1" style="display: none" >
-                                            <select name="category_1" class="layui-select" lay-filter="category_1" id="category_1" >
-                                                <option value=""> - 一级栏目选择 - </option>
-                                            </select>
-                                        </div>
-                                        <div class="layui-input-inline category_2" style="display: none" >
-                                            <select name="category_2" class="layui-select" lay-filter="category_2" id="category_2" >
-                                                <option value=""> - 二级栏目选择 - </option>
                                             </select>
                                         </div>
                                     </div>
@@ -316,88 +306,88 @@
         });
 
         //一级栏目选择
-        form.on('select(channel)', function(data){
-            var id = data.value;
-            var data = {
-                'level': 1,
-                'id': id,
-            };
-            //提交
-            $.ajax({
-                url: "{:url('admin/category/get_category')}",
-                type: "post",
-                data: data,
-                success:function(result){
-                    var result = JSON.parse(result);
-                    var code = result.code;
-                    var msg  = result.msg;
-                    var data = result.data;
-                    if(code==0){
-//                        layer.msg(msg, {
-//                            time: 2000,
-//                            icon: 16,
-//                            shade: 0.2
-//                        }, function(){
-//                            layer.msg(data.category);
-//                        });
-
-                        $("#category_1").html("");
-                        $("#category_2").html("");
-                        $(".category_1").hide();
-                        $(".category_2").hide();
-                        if(data.category.length != 0){
-                            var option0 = $("<option>").val(0).text(' - 选择 - ');
-                            $("#category_1").append(option0);
-                            $.each(data.category, function(key, val) {
-                                var option1 = $("<option>").val(val.id).text(val.name);
-                                $("#category_1").append(option1);
-                                form.render('select');
-                            });
-                            $("#category_1").get(0).selectedIndex=0;
-                            $(".category_1").show();
-                        }
-                    }else{
-                        layer.msg(msg);
-                    }
-                }
-            })
-        });
+//        form.on('select(channel)', function(data){
+//            var id = data.value;
+//            var data = {
+//                'level': 1,
+//                'id': id,
+//            };
+//            //提交
+//            $.ajax({
+//                url: "{:url('admin/category/get_category')}",
+//                type: "post",
+//                data: data,
+//                success:function(result){
+//                    var result = JSON.parse(result);
+//                    var code = result.code;
+//                    var msg  = result.msg;
+//                    var data = result.data;
+//                    if(code==0){
+////                        layer.msg(msg, {
+////                            time: 2000,
+////                            icon: 16,
+////                            shade: 0.2
+////                        }, function(){
+////                            layer.msg(data.category);
+////                        });
+//
+//                        $("#category_1").html("");
+//                        $("#category_2").html("");
+//                        $(".category_1").hide();
+//                        $(".category_2").hide();
+//                        if(data.category.length != 0){
+//                            var option0 = $("<option>").val(0).text(' - 选择 - ');
+//                            $("#category_1").append(option0);
+//                            $.each(data.category, function(key, val) {
+//                                var option1 = $("<option>").val(val.id).text(val.name);
+//                                $("#category_1").append(option1);
+//                                form.render('select');
+//                            });
+//                            $("#category_1").get(0).selectedIndex=0;
+//                            $(".category_1").show();
+//                        }
+//                    }else{
+//                        layer.msg(msg);
+//                    }
+//                }
+//            })
+//        });
 
         //二级栏目选择
-        form.on('select(category_1)', function(data){
-            var id = data.value;
-            var data = {
-                'level': 2,
-                'id': id,
-            };
-            //提交
-            $.ajax({
-                url: "{:url('admin/category/get_category')}",
-                type: "post",
-                data: data,
-                success:function(result){
-                    var result = JSON.parse(result);
-                    var code = result.code;
-                    var msg  = result.msg;
-                    var data = result.data;
-                    if(code==0){
-                        $("#category_2").html("");
-                        $(".category_2").hide();
-                        if(data.category.length != 0){
-                            var option0 = $("<option>").val(0).text(' - 选择 - ');
-                            $("#category_2").append(option0);
-                            $.each(data.category, function(key, val) {
-                                var option1 = $("<option>").val(val.id).text(val.name);
-                                $("#category_2").append(option1);
-                                form.render('select');
-                            });
-                            $("#category_2").get(0).selectedIndex=0;
-                            $(".category_2").show();
-                        }
-                    }
-                }
-            })
-        });
+//        form.on('select(category_1)', function(data){
+//            var id = data.value;
+//            var data = {
+//                'level': 2,
+//                'id': id,
+//            };
+//            //提交
+//            $.ajax({
+//                url: "{:url('admin/category/get_category')}",
+//                type: "post",
+//                data: data,
+//                success:function(result){
+//                    var result = JSON.parse(result);
+//                    var code = result.code;
+//                    var msg  = result.msg;
+//                    var data = result.data;
+//                    if(code==0){
+//                        $("#category_2").html("");
+//                        $(".category_2").hide();
+//                        if(data.category.length != 0){
+//                            var option0 = $("<option>").val(0).text(' - 选择 - ');
+//                            $("#category_2").append(option0);
+//                            $.each(data.category, function(key, val) {
+//                                var option1 = $("<option>").val(val.id).text(val.name);
+//                                $("#category_2").append(option1);
+//                                form.render('select');
+//                            });
+//                            $("#category_2").get(0).selectedIndex=0;
+//                            $(".category_2").show();
+//                        }
+//                    }
+//                }
+//            })
+//        });
 
 
     });

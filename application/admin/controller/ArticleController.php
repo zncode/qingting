@@ -37,23 +37,11 @@ class ArticleController extends BaseController
             $url_edit   = url('admin/'.$this->url_path.'/edit', ['id'=>$value['id']]);
             $url_delete = url('admin/'.$this->url_path.'/delete', ['id'=>$value['id']]);
 
-            $channel = Db::name('channel')->where(array('id'=>$value['channel_id']))->find();
-            if($channel){
-                $lists[$key]['channel_name'] = $channel['name'];
+            $taxonomy = Db::name('taxonomy')->where(array('id'=>$value['taxonomy_id']))->find();
+            if($taxonomy){
+                $lists[$key]['taxonomy_name'] = $taxonomy['name'];
             }else{
-                $lists[$key]['channel_name'] = '';
-            }
-            $category_1 = Db::name('category')->where(array('id'=>$value['category_1']))->find();
-            if($category_1){
-                $lists[$key]['category_1'] = $category_1['name'];
-            }else{
-                $lists[$key]['category_1'] = '';
-            }
-            $category_2 = Db::name('category_2')->where(array('id'=>$value['category_2']))->find();
-            if($category_2){
-                $lists[$key]['category_2'] = $category_2['name'];
-            }else{
-                $lists[$key]['category_2'] = '';
+                $lists[$key]['taxonomy_name'] = '';
             }
         }
         $data = [
@@ -85,23 +73,11 @@ class ArticleController extends BaseController
             }
         }
 
-        $channel = db('channel')->where(array('id'=>$info['channel_id']))->find();
-        if($channel){
-            $info['channel_name'] = $channel['name'];
+        $taxonomy = db('taxonomy')->where(array('id'=>$info['taxonomy_id']))->find();
+        if($taxonomy){
+            $info['taxonomy_name'] = $taxonomy['name'];
         }else{
-            $info['channel_name'] = '';
-        }
-        $category_1 = db('category')->where(array('id'=>$info['category_1']))->find();
-        if($category_1){
-            $info['category_1'] = $category_1['name'];
-        }else{
-            $info['category_1'] = '';
-        }
-        $category_2 = db('category_2')->where(array('id'=>$info['category_2']))->find();
-        if($category_2){
-            $info['category_2'] = $category_2['name'];
-        }else{
-            $info['category_2'] = '';
+            $info['taxonomy_name'] = '';
         }
 
         $data['info'] = $info;
@@ -115,7 +91,10 @@ class ArticleController extends BaseController
      */
     public function add_form()
     {
-        $channel              = Db::name('channel')->where(array('delete'=>0))->select();
+        $taxonomyClass          = new TaxonomyController();
+        $taxonomy               = $taxonomyClass->get_taxonomy();
+        $tree                   = $taxonomyClass->get_taxonomy_tree_wrapper($taxonomyClass->get_taxonomy_tree($taxonomy));
+        $data['tree']           = $tree;
         $data['goback']         = url('admin/'.$this->url_path.'/list');
         $data['action']         = url('admin/'.$this->url_path.'/add_submit');
         $data['get_favicon']    = url('admin/'.$this->url_path.'/get_favicon');
@@ -123,7 +102,6 @@ class ArticleController extends BaseController
         $data['url_upload']     = url('/upload/image');
         $data['check_url']      = url('admin/'.$this->url_path.'/check_url');
         $data['module_name']    = $this->module_name;
-        $data['channel']        =  $channel;
         $data['url_upload_editor']     = url('/upload/image_editor',array('category'=>'article'));
         $data['kindeditor_file_manager']    = url('/upload/kindeditor_file_manager');
         $data['province']       = get_province();
@@ -140,9 +118,7 @@ class ArticleController extends BaseController
         $data = [
             'title'             => $formData['title'],
             'url'               => $formData['url'],
-            'channel_id'        => $formData['channel_id'],
-            'category_1'        => $formData['category_1'],
-            'category_2'        => $formData['category_2'],
+            'taxonomy_id'        => $formData['taxonomy_id'],
             'meta_keyword'      => $formData['meta_keyword'],
             'meta_description'  => $formData['summary'],
             'summary'           => $formData['summary'],
@@ -195,29 +171,10 @@ class ArticleController extends BaseController
                 $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].$info['save_path'];
             }
         }
-
-        if($info['channel_id']){
-            $channel = Db::name('channel')->where(array('delete'=>0))->select();
-            $data['channel'] = $channel;
-        }else{
-            $channel = Db::name('channel')->where(array('delete'=>0))->select();
-            $data['channel'] = $channel;
-        }
-
-        if($info['category_1']){
-            $category_1 = Db::name('category')->where(array('delete'=>0))->select();
-            $data['category_1'] = $category_1;
-        }else{
-            $data['category_1'] = '';
-        }
-
-        if($info['category_2']){
-            $category_2 = Db::name('category_2')->where(array('parent_id'=>$info['category_1'], 'delete'=>0))->select();
-            $data['category_2'] = $category_2;
-        }else{
-            $data['category_2'] = '';
-        }
-
+        $taxonomyClass          = new TaxonomyController();
+        $taxonomy               = $taxonomyClass->get_taxonomy();
+        $tree                   = $taxonomyClass->get_taxonomy_tree_wrapper($taxonomyClass->get_taxonomy_tree($taxonomy));
+        $data['tree']           = $tree;
         $data['info']           = $info;
         $data['goback']         = url('admin/'.$this->url_path.'/list');
         $data['action']         = url('admin/'.$this->url_path.'/edit_submit');
@@ -243,9 +200,7 @@ class ArticleController extends BaseController
         $data = [
             'title'             => $formData['title'],
             'url'               => $formData['url'],
-            'channel_id'        => $formData['channel_id'],
-            'category_1'        => $formData['category_1'],
-            'category_2'        => $formData['category_2'],
+            'taxonomy_id'       => $formData['taxonomy_id'],
             'meta_keyword'      => $formData['meta_keyword'],
             'meta_description'  => $formData['summary'],
             'summary'           => $formData['summary'],

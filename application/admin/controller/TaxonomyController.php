@@ -218,10 +218,21 @@ class TaxonomyController extends BaseController
      * 添加样式
      * @param $tree
      */
+    function get_taxonomy(){
+        $taxonomy = Db::name($this->table)->where(array('delete'=>0))->order('weight asc, id desc')->select();
+        return $taxonomy;
+    }
+
+    /**
+     * 添加样式
+     * @param $tree
+     */
     function get_taxonomy_tree_wrapper($tree){
         if(is_array($tree) && count($tree)){
+            $i = 1;
             foreach($tree as $key => $value ){
-                $tree[$key]['name'] = str_repeat('--', $value['level']). $value['name'];
+                $tree[$key]['name'] = $i.') '.str_repeat('--', $value['level']). $value['name'];
+                $i++;
             }
         }
         return $tree;

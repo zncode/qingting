@@ -86,9 +86,10 @@
                             {
                                 title: '排序',
                                 width: '5%',
-                                template: function(item){
-                                    return '<input type="textfield" lay-filter="edit" value="'+item.weight+'" class="layui-input">';
-                                }
+                                field: 'weight',
+//                                template: function(item){
+//                                    return '<input type="textfield" lay-filter="edit" value="'+item.weight+'" class="layui-input">';
+//                                }
                             },
 //                            {
 //                                field: 'pid',
@@ -111,7 +112,7 @@
                                     tem.push('<a href="'+edit_url+id+'">编辑</a>');
                                     if(item.pid == 0){
 //                                        tem.push('<a class="add-child" lay-filter="add">添加子级</a>');
-                                        tem.push('<a href="'+add_url+parent_id+'">添加子级</a>');
+                                        tem.push('<a href="'+add_url+id+'">添加子级</a>');
                                     }
                                     if(item.pid > 0){
 //                                        tem.push('<a class="set-attr">设置属性</a>');
@@ -128,14 +129,14 @@
                         console.dir(data);
                     })
 
-                    treetable.on('treetable(edit)',function(obj){
+                    treetable.on('treetable(test-tree-table)',function(obj){
 
-                        layer.msg('编辑操作');
+//                        layer.msg('编辑操作');
 //                        var value = obj.value //得到修改后的值
 //                            ,data = obj.data //得到所在行所有键值
 //                            ,field = obj.field; //得到字段
 //                        layer.msg('[ID: '+ obj.id +'] ' + field + ' 字段更改为：'+ value);
-                        console.dir(obj.item);
+                        console.log(obj.value);
                     })
 
                     o('.up-all').click(function(){
@@ -173,4 +174,16 @@
             }
         })
     })
+
+//    layui.use('table', function(){
+//        var table = layui.table;
+//
+//        //监听单元格编辑
+//        table.on('edit(test-tree-table)', function(obj){
+//            var value = obj.value //得到修改后的值
+//                ,data = obj.data //得到所在行所有键值
+//                ,field = obj.field; //得到字段
+//            layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+//        });
+//    });
 </script>
