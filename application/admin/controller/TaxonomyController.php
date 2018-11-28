@@ -36,7 +36,7 @@ class TaxonomyController extends BaseController
      */
     public function index_data()
     {
-        $lists  = Db::name($this->table)->field('id,name as title,weight, parent_id as pid')->where(array('delete'=>0))->order('create_time desc')->select();
+        $lists  = Db::name($this->table)->field('id,name as title,weight, parent_id as pid,status')->where(array('delete'=>0))->order('create_time desc')->select();
 
         $data = [
             'code'  => 0,
@@ -239,5 +239,21 @@ class TaxonomyController extends BaseController
             $level = 0;
         }
         return $level;
+    }
+
+    /**
+     * 更新状态
+     */
+    public function ajax_update_status(){
+        $id = input('id');
+        $status = input('status');
+        if($status){
+            Db::name($this->table)->where(array('id'=>$id))->update(['status'=>0]);
+            $this->json(array('code'=>0, 'msg'=>'关闭完成!', 'data'=>[]));
+        }else{
+            Db::name($this->table)->where(array('id'=>$id))->update(['status'=>1]);
+            $this->json(array('code'=>0, 'msg'=>'开启完成!', 'data'=>[]));
+        }
+
     }
 }

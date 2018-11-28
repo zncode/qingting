@@ -54,6 +54,7 @@ Route::get('admin/taxonomy/delete', 		    'admin/TaxonomyController/delete');
 Route::get('admin/taxonomy/json_data', 		    'admin/TaxonomyController/json_data');
 Route::get('admin/taxonomy/list_data', 		    'admin/TaxonomyController/index_data');
 Route::post('admin/taxonomy/get_taxonomy',      'admin/TaxonomyController/get_taxonomy');
+Route::post('admin/taxonomy/ajax_update_status','admin/TaxonomyController/ajax_update_status');
 
 //内容
 Route::get('admin/article/add', 			'admin/ArticleController/add_form');

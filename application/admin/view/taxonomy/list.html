@@ -76,7 +76,11 @@
                                 title: '状态',
                                 width: '20%',
                                 template: function(item){
-                                    return '<input type="checkbox" lay-skin="switch" lay-filter="status" lay-text="开启|关闭">';
+                                    if(item.status == 1){
+                                        return '<input type="checkbox" value="1" dataid="'+item.id+'" lay-skin="switch" lay-filter="status" lay-text="开启|关闭" checked>';
+                                    }else{
+                                        return '<input type="checkbox"  value="0" dataid="'+item.id+'" lay-skin="switch" lay-filter="status" lay-text="开启|关闭">';
+                                    }
                                 }
                             },
                             {
@@ -147,8 +151,23 @@
                     })
 
                     form.on('switch(status)',function(data){
-                        layer.msg('监听状态操作');
-                        console.dir(data);
+                        var id = data.elem.attributes.dataid.nodeValue;
+                        var data = {
+                            'id':id,
+                            'status': data.value,
+                        };
+                        $.ajax({
+                            url: "{:url('admin/taxonomy/ajax_update_status')}",
+                            type: "post",
+                            data: data,
+                            success:function(result){
+                                var result = JSON.parse(result);
+                                var code = result.code;
+                                var msg  = result.msg;
+                                var data = result.data;
+                                layer.msg(msg);
+                            }
+                        })
                     })
                 }
             }
