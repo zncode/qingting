@@ -9,9 +9,9 @@
     <dd>
       {volist name="v.child" id="vo"}
         {if condition="isset($category) && ($category.id == $vo.id) "}
-          <a class="active" href="{:url('category1/id/'.$vo.id)}">{$vo.name}</a>
+          <a class="active" href="{:url('category/id/'.$vo.id)}">{$vo.name}</a>
         {else/}
-          <a class="" href="{:url('category1/id/'.$vo.id)}">{$vo.name}</a>
+          <a class="" href="{:url('category/id/'.$vo.id)}">{$vo.name}</a>
         {/if}
       {/volist}
     </dd>

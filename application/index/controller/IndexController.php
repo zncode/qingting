@@ -1,6 +1,7 @@
 <?php
 namespace app\index\controller;
 
+use app\admin\controller\TaxonomyController;
 use app\index\controller\BaseController;
 use think\Db;
 
@@ -10,7 +11,6 @@ class IndexController extends BaseController
 
     public function index()
     {
-
         //热门站点
         $hot_site  = Db::name('article')
             ->alias('a')
@@ -27,10 +27,10 @@ class IndexController extends BaseController
         }
 
         //左侧菜单
-        $left_menu   = Db::name('channel')->where(array('delete'=>0))->select();
+        $left_menu   = Db::name('taxonomy')->where(array('delete'=>0,'level'=>0))->order('weight asc, id desc')->select();
         if(is_array($left_menu) && count($left_menu)){
             foreach($left_menu as $key => $value){
-                $category = Db::name('category')->where(array('parent_id'=>$value['id'], 'delete'=>0))->select();
+                $category = Db::name('taxonomy')->where(array('parent_id'=>$value['id'], 'delete'=>0))->select();
                 if(is_array($category) && count($category)){
                     $left_menu[$key]['child'] = $category;
                 }
@@ -43,6 +43,57 @@ class IndexController extends BaseController
         $data['hot_site']       = $hot_site;
 
         return view('index/index',$data);
+    }
+
+    /**
+     * 分类列表
+     */
+    public function taxonomy_list()
+    {
+        $id = input('id');
+
+        $pages  = Db::name('article')
+            ->alias('a')
+            ->field('a.id,a.taxonomy_id, a.title,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
+            ->join('upload b', 'a.thumb = b.id', 'left')
+            ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
+            ->where(array('a.taxonomy_id'=>$id,'a.delete'=>0))
+            ->order('create_time desc')
+            ->paginate(10);
+
+        $page = $pages->render();
+        $lists  = $pages->all();
+        if(is_array($lists) && count($lists)){
+            foreach($lists as $key => $value){
+                $lists[$key]['view_url'] = get_view_url($value['save_path']);
+            }
+        }
+
+        //导航条
+        $breadcrumb[] = array('path'=>url('/'),'title'=>'首页');
+        $taxonomyClass = new TaxonomyController();
+        $parents = $taxonomyClass->get_parent($id);
+        if(count($parents)){
+            foreach($parents as $parent){
+                $breadcrumb[] = array('path'=>url('category/id/'.$parent['id']),'title'=>$parent['name']);
+            }
+        }
+        $taxonomy = $taxonomyClass->get_taxonomy_self($id);
+        $breadcrumb[] = $breadcrumb[] = array('path'=>'','title'=>$taxonomy['name']);
+
+        //左侧菜单
+        $left_menu[0]   = $taxonomy;
+        $childs         = Db::name('taxonomy')->where(array('parent_id'=>$taxonomy['id'], 'delete'=>0))->select();
+        $left_menu[0]['child'] = $childs;
+
+
+        $data['breadcrumb']     = $this->get_breadcrumb($breadcrumb);
+        $data['list']           = $lists;
+        $data['page']           = $page;
+        $data['left_menu']      = $left_menu;
+        $data['current_date']   = get_current_date();
+        $data['category']       = $taxonomy;
+        return view('index/category_list', $data);
     }
 
     /**

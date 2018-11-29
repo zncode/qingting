@@ -253,6 +253,30 @@ class TaxonomyController extends BaseController
     }
 
     /**
+     * 获取分类
+     * @param $id
+     */
+    public function get_taxonomy_self($id){
+        $taxonomy = Db::name('taxonomy')->where(array('id'=>$id))->find();
+        return $taxonomy;
+    }
+
+    /**
+     * 获取父级分类
+     * @param $id
+     */
+    public function get_parent($id){
+        static $parent = [];
+        $taxonomy = Db::name('taxonomy')->where(array('parent_id'=>$id))->find();
+        if($parent){
+            $parent[] = $taxonomy;
+            $this->get_parent($taxonomy['id']);
+        }else{
+            return $parent;
+        }
+    }
+
+    /**
      * 更新状态
      */
     public function ajax_update_status(){
