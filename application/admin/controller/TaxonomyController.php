@@ -36,7 +36,7 @@ class TaxonomyController extends BaseController
      */
     public function index_data()
     {
-        $lists  = Db::name($this->table)->field('id,name as title,weight, parent_id as pid,status')->where(array('delete'=>0))->order('create_time desc')->select();
+        $lists  = Db::name($this->table)->field('id,name as title,weight, parent_id as pid,status')->where(array('delete'=>0))->order('weight asc, id desc')->select();
 
         $data = [
             'code'  => 0,
