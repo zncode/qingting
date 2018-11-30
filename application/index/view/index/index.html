@@ -16,7 +16,7 @@
           <ul>
               {volist name='hot_site' id='v'}
                 <li>
-                    <img src="{$v.view_url}"> {$v.title}
+                    <img src="{$v.view_url}"> <a href="{$v.url}" target="_blank">{$v.title}</a>
                 </li>
               {/volist}
           </ul>
@@ -43,7 +43,7 @@
               {volist name='hot_site' id='v'}
               <li>
                   <!--<img src="{$v.view_url}"> {$v.title}-->
-                  {$v.title}
+                  <a href="{$v.url}" target="_blank">{$v.title}</a>
               </li>
               {/volist}
           </ul>
@@ -62,7 +62,7 @@
               {volist name='hot_site' id='v'}
               <li>
                   <!--<img src="{$v.view_url}"> {$v.title}-->
-                  {$v.title}
+                  <a href="{$v.url}" target="_blank">{$v.title}</a>
               </li>
               {/volist}
           </ul>

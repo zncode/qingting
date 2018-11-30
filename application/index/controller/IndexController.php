@@ -14,7 +14,7 @@ class IndexController extends BaseController
         //热门站点
         $hot_site  = Db::name('article')
             ->alias('a')
-            ->field('a.id,a.title,a.create_time,b.save_path')
+            ->field('a.id,a.url,a.title,a.create_time,b.save_path')
             ->join('upload b', 'a.thumb = b.id', 'left')
             ->order('create_time desc')
             ->where(array('a.delete'=>0))
