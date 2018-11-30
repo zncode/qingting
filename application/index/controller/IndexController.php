@@ -52,17 +52,15 @@ class IndexController extends BaseController
     {
         $id = input('id');
 
-        $pages  = Db::name('article')
+        $lists  = Db::name('article')
             ->alias('a')
             ->field('a.id,a.taxonomy_id, a.title,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
             ->join('upload b', 'a.thumb = b.id', 'left')
             ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
             ->where(array('a.taxonomy_id'=>$id,'a.delete'=>0))
             ->order('create_time desc')
-            ->paginate(10);
+            ->select();
 
-        $page = $pages->render();
-        $lists  = $pages->all();
         if(is_array($lists) && count($lists)){
             foreach($lists as $key => $value){
                 $lists[$key]['view_url'] = get_view_url($value['save_path']);
@@ -89,7 +87,6 @@ class IndexController extends BaseController
 
         $data['breadcrumb']     = $this->get_breadcrumb($breadcrumb);
         $data['list']           = $lists;
-        $data['page']           = $page;
         $data['left_menu']      = $left_menu;
         $data['current_date']   = get_current_date();
         $data['category']       = $taxonomy;
