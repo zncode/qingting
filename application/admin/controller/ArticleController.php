@@ -117,8 +117,9 @@ class ArticleController extends BaseController
         $upload_ids = $formData['upload_ids'];
         $data = [
             'title'             => $formData['title'],
+            'brief'             => $formData['brief'],
             'url'               => $formData['url'],
-            'taxonomy_id'        => $formData['taxonomy_id'],
+            'taxonomy_id'       => $formData['taxonomy_id'],
             'meta_keyword'      => $formData['meta_keyword'],
             'meta_description'  => $formData['summary'],
             'summary'           => $formData['summary'],
@@ -199,6 +200,7 @@ class ArticleController extends BaseController
         //更新内容
         $data = [
             'title'             => $formData['title'],
+            'brief'             => $formData['brief'],
             'url'               => $formData['url'],
             'taxonomy_id'       => $formData['taxonomy_id'],
             'meta_keyword'      => $formData['meta_keyword'],
