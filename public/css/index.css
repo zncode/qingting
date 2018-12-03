@@ -145,6 +145,32 @@
     margin-right: 20px;
     margin-bottom: 10px;
 }
+.part_1_content_category li {
+    float: left;
+    width: 120px;
+    height:30px;
+    line-height: 30px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+.part_1_content_category {
+    width: 860px;
+    margin: 10px 0 0 20px;
+    height: 300px;
+}
+.part_1_content_category ul{
+    width: 100%;
+}
+.part_1_content_category li {
+    float: left;
+    width: 120px;
+    height:30px;
+    line-height: 30px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
 .part_1_content img {
 }
 

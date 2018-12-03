@@ -55,7 +55,7 @@ class IndexController extends BaseController
 
         $lists  = Db::name('article')
             ->alias('a')
-            ->field('a.id,a.taxonomy_id, a.title,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
+            ->field('a.id,a.taxonomy_id,a.title,a.brief,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
             ->join('upload b', 'a.thumb = b.id', 'left')
             ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
             ->where(array('a.taxonomy_id'=>$id,'a.delete'=>0))
@@ -65,6 +65,7 @@ class IndexController extends BaseController
         if(is_array($lists) && count($lists)){
             foreach($lists as $key => $value){
                 $lists[$key]['view_url'] = get_view_url($value['save_path']);
+                $lists[$key]['brief']    = mb_substr($value['brief'],0,14,"UTF-8");
             }
         }
 
