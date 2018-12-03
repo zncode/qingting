@@ -14,7 +14,7 @@ class IndexController extends BaseController
         //热门站点
         $hot_site  = Db::name('article')
             ->alias('a')
-            ->field('a.id,a.url,a.title,a.create_time,b.save_path')
+            ->field('a.id,a.url,a.title,a.brief,a.create_time,b.save_path')
             ->join('upload b', 'a.thumb = b.id', 'left')
             ->order('create_time desc')
             ->where(array('a.delete'=>0))
@@ -22,6 +22,7 @@ class IndexController extends BaseController
             ->select();
         if(is_array($hot_site) && count($hot_site)){
             foreach($hot_site as $key => $value) {
+                $hot_site[$key]['brief']    = mb_substr($value['brief'],0,14,"UTF-8");
                 $hot_site[$key]['view_url'] = get_view_url($value['save_path']);
             }
         }

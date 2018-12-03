@@ -42,8 +42,8 @@
           <ul>
               {volist name='hot_site' id='v'}
               <li>
-                  <!--<img src="{$v.view_url}"> {$v.title}-->
-                  <a href="{$v.url}" target="_blank">{$v.title}</a>
+                  <div style="height: 20px;line-height: 20px;"><a href="{$v.url}" target="_blank">{$v.title}</a></div>
+                  <div style="font-size: 12px;color:#ccc; height: 20px;line-height: 20px;">{$v.brief}</div>
               </li>
               {/volist}
           </ul>
@@ -62,7 +62,8 @@
               {volist name='hot_site' id='v'}
               <li>
                   <!--<img src="{$v.view_url}"> {$v.title}-->
-                  <a href="{$v.url}" target="_blank">{$v.title}</a>
+                  <div style="height: 20px;line-height: 20px;"><a href="{$v.url}" target="_blank">{$v.title}</a></div>
+                  <div style="font-size: 12px;color:#ccc; height: 20px;line-height: 20px;">{$v.brief}</div>
               </li>
               {/volist}
           </ul>
