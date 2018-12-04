@@ -77,6 +77,10 @@ Route::get('admin/article_type/list', 			'CategoryController/index');
 Route::get('admin/article_type/info', 			'CategoryController/info');
 Route::get('admin/article_type/delete', 		'CategoryController/delete');
 
+//系统设置
+Route::get('admin/system/index_setup', 			'admin/SystemController/index_setup');
+Route::post('admin/system/index_setup_submit', 	'admin/SystemController/index_setup_submit');
+
 
 
 

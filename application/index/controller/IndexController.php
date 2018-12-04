@@ -12,20 +12,9 @@ class IndexController extends BaseController
     public function index()
     {
         //热门站点
-        $hot_site  = Db::name('article')
-            ->alias('a')
-            ->field('a.id,a.url,a.title,a.brief,a.create_time,b.save_path')
-            ->join('upload b', 'a.thumb = b.id', 'left')
-            ->order('create_time desc')
-            ->where(array('a.delete'=>0))
-            ->limit(50)
-            ->select();
-        if(is_array($hot_site) && count($hot_site)){
-            foreach($hot_site as $key => $value) {
-                $hot_site[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
-                $hot_site[$key]['view_url'] = get_view_url($value['save_path']);
-            }
-        }
+        $system = new \app\admin\controller\SystemController();
+        $site_popular   = $system->variable_get('site_popular');
+        $site_recommend = $system->variable_get('site_recommend');
 
         //左侧菜单
         $left_menu   = Db::name('taxonomy')->where(array('delete'=>0,'level'=>0))->order('weight asc, id desc')->select();
@@ -41,7 +30,9 @@ class IndexController extends BaseController
         $data['left_menu']      = $left_menu;
         $data['channel_id']     = 0;
         $data['current_date']   = get_current_date();
-        $data['hot_site']       = $hot_site;
+        $data['site_popular']   = $this->get_site_popular($site_popular);
+        $data['site_recommend'] = $this->get_site_recommend($site_recommend);
+        $data['site_news']      = $this->get_site_news();
 
         return view('index/index',$data);
     }
@@ -329,4 +320,98 @@ class IndexController extends BaseController
 //        echo 'test';die;
         return view('index/resource_list');
     }
+
+    /**
+     * 获取热门站点
+     */
+    public function get_site_popular($site_popular=NULL){
+        $site_popular   = explode(',', $site_popular);
+        if(count($site_popular)){
+            foreach($site_popular as $site_name){
+                $hot_site[]  = Db::name('article')
+                    ->alias('a')
+                    ->field('a.id,a.url,a.title,a.brief,a.create_time,b.save_path')
+                    ->join('upload b', 'a.thumb = b.id', 'left')
+                    ->order('create_time desc')
+                    ->where(array('a.delete'=>0,'a.title'=>$site_name))
+                    ->find();
+            }
+        }else{
+            $hot_site  = Db::name('article')
+                ->alias('a')
+                ->field('a.id,a.url,a.title,a.brief,a.create_time,b.save_path')
+                ->join('upload b', 'a.thumb = b.id', 'left')
+                ->order('create_time desc')
+                ->where(array('a.delete'=>0))
+                ->limit(50)
+                ->select();
+        }
+        if(is_array($hot_site) && count($hot_site)){
+            foreach($hot_site as $key => $value) {
+                $hot_site[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
+                $hot_site[$key]['view_url'] = get_view_url($value['save_path']);
+            }
+        }
+
+        return $hot_site;
+    }
+
+    /**
+     * 获取最新加入
+     */
+    public function get_site_news(){
+        $site_news  = Db::name('article')
+        ->alias('a')
+        ->field('a.id,a.url,a.title,a.brief,a.create_time,b.save_path')
+        ->join('upload b', 'a.thumb = b.id', 'left')
+        ->order('create_time desc')
+        ->where(array('a.delete'=>0))
+        ->limit(50)
+        ->select();
+
+        if(is_array($site_news) && count($site_news)){
+            foreach($site_news as $key => $value) {
+                $site_news[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
+                $site_news[$key]['view_url'] = get_view_url($value['save_path']);
+            }
+        }
+
+        return $site_news;
+    }
+
+    /**
+     * 获取精彩推荐
+     */
+    public function get_site_recommend($site_recommend=NULL){
+        $site_recommend   = explode(',', $site_recommend);
+        if(count($site_recommend)){
+            foreach($site_recommend as $site_name){
+                $recommend_site[]  = Db::name('article')
+                    ->alias('a')
+                    ->field('a.id,a.url,a.title,a.brief,a.create_time,b.save_path')
+                    ->join('upload b', 'a.thumb = b.id', 'left')
+                    ->order('create_time desc')
+                    ->where(array('a.delete'=>0,'a.title'=>$site_name))
+                    ->find();
+            }
+        }else{
+            $recommend_site  = Db::name('article')
+                ->alias('a')
+                ->field('a.id,a.url,a.title,a.brief,a.create_time,b.save_path')
+                ->join('upload b', 'a.thumb = b.id', 'left')
+                ->order('create_time desc')
+                ->where(array('a.delete'=>0))
+                ->limit(50)
+                ->select();
+        }
+        if(is_array($recommend_site) && count($recommend_site)){
+            foreach($recommend_site as $key => $value) {
+                $recommend_site[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
+                $recommend_site[$key]['view_url'] = get_view_url($value['save_path']);
+            }
+        }
+
+        return $recommend_site;
+    }
+
 }

@@ -7,14 +7,14 @@
     </div>
     <div class="body-content">
 
-      <!-- 热门开始 -->
+      <!-- 热门站点开始 -->
       <div class="part_1_wrapper">
         <div class="part_1_title">
-          <h2>热门</h2>
+          <h2>热门站点</h2>
         </div>
         <div class="part_1_content">
           <ul>
-              {volist name='hot_site' id='v'}
+              {volist name='site_popular' id='v'}
                 <li>
                     <img src="{$v.view_url}"> <a href="{$v.url}" target="_blank">{$v.title}</a>
                 </li>
@@ -22,7 +22,7 @@
           </ul>
         </div>
       </div>
-      <!-- 热门结束 -->
+      <!-- 热门站点结束 -->
 
       <!-- 广告2开始 -->
       <div class="part_wrapper" style="width: 98%; margin: 10px 0 10px 0;">
@@ -32,15 +32,15 @@
       </div>
       <!-- 广告2结束 -->
 
-      <!-- 最新开始 -->
+      <!-- 最新加入开始 -->
       <div class="part_wrapper" style="width: 420px;">
         <div class="part_title_wrapper">
-          <span class="part_title">最新</span>
+          <span class="part_title">最新加入</span>
           <span class="more"><a href="#">更多</a></span>
         </div>
         <div class="part_content" >
           <ul>
-              {volist name='hot_site' id='v'}
+              {volist name='site_news' id='v'}
               <li>
                   <div style="height: 20px;line-height: 20px;"><a href="{$v.url}" target="_blank">{$v.title}</a></div>
                   <div style="font-size: 12px;color:#ccc; height: 25px;line-height: 25px;">{$v.brief}</div>
@@ -49,17 +49,17 @@
           </ul>
         </div>
       </div>
-      <!-- 最新结束 -->
+      <!-- 最新加入结束 -->
 
-      <!-- 娱乐开始 -->
+      <!-- 精彩推荐开始 -->
       <div class="part_wrapper" style="width: 420px; margin-left:20px;">
         <div class="part_title_wrapper">
-          <span class="part_title">娱乐</span>
+          <span class="part_title">精彩推荐</span>
           <span class="more"><a href="#">更多</a></span>
         </div>
         <div class="part_content" >
           <ul>
-              {volist name='hot_site' id='v'}
+              {volist name='site_recommend' id='v'}
               <li>
                   <!--<img src="{$v.view_url}"> {$v.title}-->
                   <div style="height: 20px;line-height: 20px;"><a href="{$v.url}" target="_blank">{$v.title}</a></div>
@@ -69,103 +69,7 @@
           </ul>
         </div>
       </div>
-      <!-- 娱乐结束 -->
-
-      <!-- 自种美食开始 -->
-      <!--<fieldset class="layui-elem-field layui-field-title site-title">-->
-        <!--<legend><a name="grid">自种美食</a></legend>-->
-      <!--</fieldset>-->
-      <!--<div style="padding: 20px; background-color: #F2F2F2;">-->
-        <!--<div class="layui-row layui-col-space15">-->
-          <!--<div class="layui-col-md6">-->
-            <!--<div class="layui-card">-->
-              <!--<div class="layui-card-header">卡片面板</div>-->
-              <!--<div class="layui-card-body">-->
-                <!--卡片式面板面板通常用于非白色背景色的主体内<br>-->
-                <!--从而映衬出边框投影<br>-->
-                <!--<div class="img-block">-->
-                  <!--<img src="{$Think.BASE_PATH}image/tmp/1.jpg" width="115px" height="90px">-->
-                  <!--<img src="{$Think.BASE_PATH}image/tmp/2.jpg" width="115px" height="90px">-->
-                  <!--<img src="{$Think.BASE_PATH}image/tmp/3.jpg" width="115px" height="90px">-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</div>-->
-          <!--<div class="layui-col-md6">-->
-            <!--<div class="layui-card">-->
-              <!--<div class="layui-card-header">卡片面板</div>-->
-              <!--<div class="layui-card-body">-->
-                <!--结合 layui 的栅格系统<br>-->
-                <!--轻松实现响应式布局<br>-->
-                <!--<div class="img-block">-->
-                  <!--<img src="{$Think.BASE_PATH}image/tmp/1.jpg" width="115px" height="90px">-->
-                  <!--<img src="{$Think.BASE_PATH}image/tmp/2.jpg" width="115px" height="90px">-->
-                  <!--<img src="{$Think.BASE_PATH}image/tmp/3.jpg" width="115px" height="90px">-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</div>-->
-
-          <!--<div class="layui-col-md6">-->
-            <!--<div class="layui-card">-->
-              <!--<div class="layui-card-header">卡片面板</div>-->
-              <!--<div class="layui-card-body">-->
-                <!--卡片式面板面板通常用于非白色背景色的主体内<br>-->
-                <!--从而映衬出边框投影<br>-->
-                <!--<div class="img-block">-->
-                  <!--<img src="{$Think.BASE_PATH}image/tmp/3.jpg" width="115px" height="auto">-->
-                  <!--<img src="{$Think.BASE_PATH}image/tmp/3.jpg" width="115px" height="auto">-->
-                  <!--<img src="{$Think.BASE_PATH}image/tmp/3.jpg" width="115px" height="auto">-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</div>-->
-          <!--<div class="layui-col-md6">-->
-            <!--<div class="layui-card">-->
-              <!--<div class="layui-card-header">卡片面板</div>-->
-              <!--<div class="layui-card-body">-->
-                <!--结合 layui 的栅格系统<br>-->
-                <!--轻松实现响应式布局<br>-->
-                <!--<div class="img-block">-->
-                  <!--<img src="{$Think.BASE_PATH}image/tmp/3.jpg" width="115px" height="auto">-->
-                  <!--<img src="{$Think.BASE_PATH}image/tmp/3.jpg" width="115px" height="auto">-->
-                  <!--<img src="{$Think.BASE_PATH}image/tmp/3.jpg" width="115px" height="auto">-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</div>-->
-
-          <!--<div class="layui-col-md6">-->
-            <!--<div class="layui-card">-->
-              <!--<div class="layui-card-header">卡片面板</div>-->
-              <!--<div class="layui-card-body">-->
-                <!--卡片式面板面板通常用于非白色背景色的主体内<br>-->
-                <!--从而映衬出边框投影<br>-->
-                <!--<div class="img-block">-->
-                  <!--<img src="{$Think.BASE_PATH}image/tmp/3.jpg" width="115px" height="auto">-->
-                  <!--<img src="{$Think.BASE_PATH}image/tmp/3.jpg" width="115px" height="auto">-->
-                  <!--<img src="{$Think.BASE_PATH}image/tmp/3.jpg" width="115px" height="auto">-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</div>-->
-          <!--<div class="layui-col-md6">-->
-            <!--<div class="layui-card">-->
-              <!--<div class="layui-card-header">卡片面板</div>-->
-              <!--<div class="layui-card-body">-->
-                <!--结合 layui 的栅格系统<br>-->
-                <!--轻松实现响应式布局<br>-->
-                <!--<div class="img-block">-->
-                  <!--<img src="{$Think.BASE_PATH}image/tmp/3.jpg" width="115px" height="auto">-->
-                  <!--<img src="{$Think.BASE_PATH}image/tmp/3.jpg" width="115px" height="auto">-->
-                  <!--<img src="{$Think.BASE_PATH}image/tmp/3.jpg" width="115px" height="auto">-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
-      <!-- 自种美食结束 -->
+      <!-- 精彩推荐结束 -->
 
     </div>
 </div>

@@ -1,0 +1,87 @@
+{include file="page/header" /}
+<div class="layui-layout layui-layout-admin">
+    {include file="page/body_top" /}
+    {include file="page/menu" /}
+
+    <div class="layui-body">
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+
+                        <div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
+                            <a lay-href="">主页</a><span lay-separator="">/</span>
+                            <a><cite>系统设置</cite></a><span lay-separator="">/</span>
+                            <a><cite>首页设置</cite></a><span lay-separator=""></span>
+                        </div>
+
+                        <!--<div class="go_back"><a href="#" class="layui-btn layui-btn-sm">首页设置</a></div>-->
+
+                        <div class="layui-card-body">
+                            <form id="add_form" action="{$action}" method="post" class="layui-form">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" >热门站点</label>
+                                    <div class="layui-input-block">
+                                        <textarea class="layui-textarea" name="site_popular" rows="10" placeholder="Enter ..." >{$site_popular}</textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" >精彩推荐</label>
+                                    <div class="layui-input-block">
+                                        <textarea class="layui-textarea" name="site_recommend" rows="10" placeholder="Enter ..." >{$site_recommend}</textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <button class="layui-btn" lay-submit lay-filter="update">提交</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    {include file="page/body_bottom" /}
+
+</div>
+
+{include file="page/footer" /}
+
+<script>
+
+    layui.use('form', function(){
+        var form = layui.form;
+        $ = layui.jquery;
+
+        form.on('submit(update)', function(data){
+            //提交
+            $.ajax({
+                url: "{$action}",
+                type: "post",
+                data: data.field,
+                success:function(result){
+                    var result = JSON.parse(result);
+                    var code = result.code;
+                    var msg  = result.msg;
+                    var data = result.data;
+                    if(code==0){
+                        layer.msg(msg, {
+                            time: 2000,
+                            icon: 16,
+                            shade: 0.2
+                        }, function(){
+                            parent.location.reload();
+                        });
+                    }else{
+                        layer.msg(msg);
+                    }
+                }
+            })
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+    });
+</script>
