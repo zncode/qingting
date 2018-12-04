@@ -22,7 +22,7 @@ class IndexController extends BaseController
             ->select();
         if(is_array($hot_site) && count($hot_site)){
             foreach($hot_site as $key => $value) {
-                $hot_site[$key]['brief']    = mb_substr($value['brief'],0,14,"UTF-8");
+                $hot_site[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
                 $hot_site[$key]['view_url'] = get_view_url($value['save_path']);
             }
         }
@@ -65,7 +65,7 @@ class IndexController extends BaseController
         if(is_array($lists) && count($lists)){
             foreach($lists as $key => $value){
                 $lists[$key]['view_url'] = get_view_url($value['save_path']);
-                $lists[$key]['brief']    = mb_substr($value['brief'],0,14,"UTF-8");
+                $lists[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
             }
         }
 
