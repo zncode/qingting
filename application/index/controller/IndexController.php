@@ -27,12 +27,14 @@ class IndexController extends BaseController
             }
         }
 
-        $data['left_menu']      = $left_menu;
-        $data['channel_id']     = 0;
-        $data['current_date']   = get_current_date();
-        $data['site_popular']   = $this->get_site_popular($site_popular);
-        $data['site_recommend'] = $this->get_site_recommend($site_recommend);
-        $data['site_news']      = $this->get_site_news();
+        $data['left_menu']          = $left_menu;
+        $data['channel_id']         = 0;
+        $data['current_date']       = get_current_date();
+        $data['site_popular']       = $this->get_site_popular($site_popular);
+        $data['site_recommend']     = $this->get_site_recommend($site_recommend);
+        $data['site_news']          = $this->get_site_news();
+        $data['meta_keyword']       = '蜻蜓导航, 网址导航, 网站导航, APP导航, 公众号导航, 小程序导航, 手机网站导航, 好站推荐';
+        $data['meta_description']   = '蜻蜓导航, 一个专业的导航网站，专注于互联网网站和手机网站导航，移动APP、公众号、小程序导航!';
 
         return view('index/index',$data);
     }
@@ -78,11 +80,14 @@ class IndexController extends BaseController
         $left_menu[0]['child'] = $childs;
 
 
-        $data['breadcrumb']     = $this->get_breadcrumb($breadcrumb);
-        $data['list']           = $lists;
-        $data['left_menu']      = $left_menu;
-        $data['current_date']   = get_current_date();
-        $data['category']       = $taxonomy;
+        $data['breadcrumb']         = $this->get_breadcrumb($breadcrumb);
+        $data['list']               = $lists;
+        $data['left_menu']          = $left_menu;
+        $data['current_date']       = get_current_date();
+        $data['category']           = $taxonomy;
+        $data['meta_keyword']       = $taxonomy['keyword'];
+        $data['meta_description']   = $taxonomy['description'];
+
         return view('index/category_list', $data);
     }
 
