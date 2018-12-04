@@ -328,13 +328,16 @@ class IndexController extends BaseController
         $site_popular   = explode(',', $site_popular);
         if(count($site_popular)){
             foreach($site_popular as $site_name){
-                $hot_site[]  = Db::name('article')
+                $site = Db::name('article')
                     ->alias('a')
                     ->field('a.id,a.url,a.title,a.brief,a.create_time,b.save_path')
                     ->join('upload b', 'a.thumb = b.id', 'left')
                     ->order('create_time desc')
                     ->where(array('a.delete'=>0,'a.title'=>$site_name))
                     ->find();
+                if($site){
+                    $hot_site[]  = $site;
+                }
             }
         }else{
             $hot_site  = Db::name('article')
@@ -352,7 +355,6 @@ class IndexController extends BaseController
                 $hot_site[$key]['view_url'] = get_view_url($value['save_path']);
             }
         }
-
         return $hot_site;
     }
 
@@ -386,13 +388,17 @@ class IndexController extends BaseController
         $site_recommend   = explode(',', $site_recommend);
         if(count($site_recommend)){
             foreach($site_recommend as $site_name){
-                $recommend_site[]  = Db::name('article')
+                $site  = Db::name('article')
                     ->alias('a')
                     ->field('a.id,a.url,a.title,a.brief,a.create_time,b.save_path')
                     ->join('upload b', 'a.thumb = b.id', 'left')
                     ->order('create_time desc')
                     ->where(array('a.delete'=>0,'a.title'=>$site_name))
                     ->find();
+
+                if($site){
+                    $recommend_site[]  = $site;
+                }
             }
         }else{
             $recommend_site  = Db::name('article')
