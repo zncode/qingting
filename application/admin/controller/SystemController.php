@@ -9,6 +9,11 @@ class SystemController extends BaseController
     public $url_path = 'system';
     public $module_name = '系统设置';
 
+    public function __construct()
+    {
+
+    }
+
     /**
      * 首页设置
      */

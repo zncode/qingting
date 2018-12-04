@@ -2,6 +2,7 @@
 namespace app\index\controller;
 
 use app\admin\controller\TaxonomyController;
+use app\admin\controller\SystemController;
 use app\index\controller\BaseController;
 use think\Db;
 
@@ -12,7 +13,7 @@ class IndexController extends BaseController
     public function index()
     {
         //热门站点
-        $system = new \app\admin\controller\SystemController();
+        $system = new SystemController();
         $site_popular   = $system->variable_get('site_popular');
         $site_recommend = $system->variable_get('site_recommend');
 
