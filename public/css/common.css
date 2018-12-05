@@ -3,6 +3,10 @@ body{
     background-color: #F2F2F2;
     height: 100%;
 }
+body a:hover {
+    color: #F40;
+    text-decoration: none;
+}
 .footer {
     margin: 50px auto 0 auto;
     width: 100%;
@@ -59,8 +63,8 @@ ul.pagination a:hover{font-weight: bold; text-decoration-line: underline}
 }
 .part_content li {
     float: left;
-    height: 30px;
-    line-height: 30px;
+    height: 40px;
+    line-height: 40px;
     width: 130px;
     margin: 10px 0 10px 0;
 }
