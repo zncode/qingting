@@ -198,3 +198,25 @@ function get_html_title($html)
 //    }
     return $title['title'];
 }
+
+/**
+ * 获取远程图片保存本地
+ * @param $url
+ * @param $save_path
+ */
+function get_remote_picture($url, $save_path){
+
+    $ch=curl_init();
+    $timeout=5;
+    curl_setopt($ch,CURLOPT_URL,$url);
+    curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+    curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,$timeout);
+    $img=curl_exec($ch);
+    curl_close($ch);
+
+    $fp2=@fopen($save_path,'a');
+    fwrite($fp2,$img);
+    fclose($fp2);
+//    unset($img,$url);
+//    return array('file_name'=>$filename,'save_path'=>$save_dir.$filename,'error'=>0);
+}

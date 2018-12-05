@@ -261,6 +261,7 @@ class ArticleController extends BaseController
 //        $new_icon   = "http://api.byi.pw/favicon/?url=".$url;
         $new_icon   = $url.'/favicon.ico';
         copy($new_icon, $save_path);
+//        get_remote_picture($new_icon, $save_path);
 
         $curl = curl_init();
         if (class_exists('\CURLFile')) {
@@ -274,7 +275,7 @@ class ArticleController extends BaseController
         }
 
         $url = 'http://'.$_SERVER['HTTP_HOST'].url('/upload/image');
-//        print_r($url);
+
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_POST, 1);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
