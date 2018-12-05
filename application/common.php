@@ -106,7 +106,16 @@ function get_current_date(){
 /**
  * 获取meta信息
  */
-function get_html_meta($html)
+function get_html_meta($url)
+{
+    header("content-type:text/html; charset=xxx");
+    return get_meta_tags($url);
+}
+
+/**
+ * 获取meta信息
+ */
+function get_html_meta1($html)
 {
     if(is_null($html))
     {
@@ -174,11 +183,18 @@ function get_html_meta($html)
  */
 function get_html_title($html)
 {
+//    $pos = strpos($html,'utf-8');
+//
+//    if($pos===false){$data = iconv("gbk","utf-8",$html);}
+//    print_r($data);die;
+//    preg_match("/<title>(.*)<\/title>/i",$data, $title);
+//    return $title[1];
+
     preg_match('/<title>(?<title>.*?)<\/title>/si', $html, $title); //获取title的正则表达式
     $encode = mb_detect_encoding($title['title'], array('GB2312','GBK','UTF-8', 'CP936')); //得到字符串编码
-    $file_charset = iconv_get_encoding()['internal_encoding']; //当前文件编码
-    if ( $encode != 'CP936' && $encode != $file_charset ) {
-        return iconv($encode, $file_charset, $title['title']);
-    }
+//    $file_charset = iconv_get_encoding()['internal_encoding']; //当前文件编码
+//    if ( $encode != 'CP936' && $encode != $file_charset ) {
+//        return iconv($encode, $file_charset, $title['title']);
+//    }
     return $title['title'];
 }

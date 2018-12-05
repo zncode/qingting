@@ -20,7 +20,7 @@ class IndexController extends BaseController{
 //            $html.= fgets($fp, 1024);
 //        }
 //        fclose($fp);
-        $meta   = get_html_meta($html);
+        $meta   = get_html_meta($url);
 
         if(isset($meta['keywords']) && !empty($meta['keywords'])){
             $data['keywords'] = $meta['keywords'];
@@ -32,12 +32,13 @@ class IndexController extends BaseController{
         }else{
             $data['description'] = '';
         }
+
         if($title = get_html_title($html)){
             $data['title'] = $title;
         }else{
             $data['title'] = '';
         }
-
+//        print_r($data);die;
         echo json_encode(array('code'=>0,'message'=>'获取完成!', 'data'=>$data)); die;
     }
 
