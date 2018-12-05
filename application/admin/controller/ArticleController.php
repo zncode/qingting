@@ -258,8 +258,12 @@ class ArticleController extends BaseController
     function get_favicon(){
         $url        = input('url');
         $save_path  =  ROOT_PATH . 'public' . DS . 'upload' . DS .'favicon.jpg';
+        $default_ico  =  ROOT_PATH . 'public' . DS . 'upload' . DS .'default_favicon.jpg';
 //        $new_icon   = "http://api.byi.pw/favicon/?url=".$url;
         $new_icon   = $url.'/favicon.ico';
+        if(@!file_get_contents($new_icon)){
+            $new_icon = $default_ico;
+        }
         copy($new_icon, $save_path);
 //        get_remote_picture($new_icon, $save_path);
 
