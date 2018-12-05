@@ -57,6 +57,7 @@ class UserController extends BaseController
      * 用户注册提交
      */
     public function register_form_submit(){
+        return json(['code'=>1, 'msg'=>'注册关闭!', 'data'=>[]]);
         $formData = input('request.');
 
         $info = Db::name($this->table)->where(array('username'=>$formData['username']))->find();
