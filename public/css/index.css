@@ -80,6 +80,7 @@
 .body-left .bd dt a{
     padding-left: 10px;
     border-left: 3px #23b991 solid;
+    /*border-left: 3px #1E9FFF solid;*/
 }
 .body-left .bd dd {
     float: left;
@@ -104,7 +105,11 @@
     background-color: #fafafa;
     border-radius: 13px;
 }
-.body-left .bd dd a:hover {background-color: #23b991; color:#fff;}
+.body-left .bd dd a:hover {
+    background-color: #23b991;
+    background-color: #1E9FFF;
+    color:#fff;
+}
 .img-block img {margin-right: 10px;}
 .ad_1{margin-top: 20px;}
 .ad_1 ul {float: left; width: 100%;}
