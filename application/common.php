@@ -108,8 +108,18 @@ function get_current_date(){
  */
 function get_html_meta($url)
 {
-    header("content-type:text/html; charset=xxx");
-    return get_meta_tags($url);
+//    header("content-type:text/html; charset=xxx");
+//    header("content-type:text/html; charset=gb2312");
+    $meta = get_meta_tags($url);
+    if(count($meta)){
+        foreach($meta as $key => $value){
+            if(($key == 'keywords') || ($key == 'description')){
+                $encode = mb_detect_encoding($value, array("ASCII",'UTF-8',"GB2312","GBK",'BIG5'));
+                $meta[$key] = mb_convert_encoding($value, 'UTF-8', $encode);
+            }
+        }
+    }
+    return $meta;
 }
 
 /**
