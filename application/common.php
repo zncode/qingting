@@ -111,6 +111,7 @@ function get_html_meta($url)
 //    header("content-type:text/html; charset=xxx");
 //    header("content-type:text/html; charset=gb2312");
     $meta = get_meta_tags($url);
+
     if(count($meta)){
         foreach($meta as $key => $value){
             if(($key == 'keywords') || ($key == 'description')){
@@ -119,6 +120,7 @@ function get_html_meta($url)
             }
         }
     }
+
     return $meta;
 }
 
@@ -201,7 +203,9 @@ function get_html_title($html)
 //    return $title[1];
 
     preg_match('/<title>(?<title>.*?)<\/title>/si', $html, $title); //获取title的正则表达式
+
     $encode = mb_detect_encoding($title['title'], array('GB2312','GBK','UTF-8', 'CP936')); //得到字符串编码
+    $title['title'] = mb_convert_encoding($title['title'], 'UTF-8', $encode);
 //    $file_charset = iconv_get_encoding()['internal_encoding']; //当前文件编码
 //    if ( $encode != 'CP936' && $encode != $file_charset ) {
 //        return iconv($encode, $file_charset, $title['title']);

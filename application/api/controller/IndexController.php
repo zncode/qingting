@@ -21,7 +21,7 @@ class IndexController extends BaseController{
 //        }
 //        fclose($fp);
         $meta   = get_html_meta($url);
-
+//print_r($meta);die;
         if(isset($meta['keywords']) && !empty($meta['keywords'])){
             $data['keywords'] = $meta['keywords'];
         }else{
