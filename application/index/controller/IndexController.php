@@ -67,19 +67,22 @@ class IndexController extends BaseController
         $breadcrumb[] = array('path'=>url('/'),'title'=>'首页');
         $taxonomyClass = new TaxonomyController();
         $parents = $taxonomyClass->get_parent($id);
+
         if(count($parents)){
             foreach($parents as $parent){
                 $breadcrumb[] = array('path'=>url('category/id/'.$parent['id']),'title'=>$parent['name']);
             }
         }
         $taxonomy = $taxonomyClass->get_taxonomy_self($id);
-        $breadcrumb[] = $breadcrumb[] = array('path'=>'','title'=>$taxonomy['name']);
+
+        $breadcrumb[] = array('path'=>'','title'=>$taxonomy['name']);
 
         //左侧菜单
         $left_menu[0]   = $taxonomy;
         $childs         = Db::name('taxonomy')->where(array('parent_id'=>$taxonomy['id'], 'delete'=>0))->select();
         $left_menu[0]['child'] = $childs;
 
+        //获取子分类内容
         if(is_array($childs) && count($childs)){
             foreach($childs as $child){
                 $sub_list  = Db::name('article')

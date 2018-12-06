@@ -266,14 +266,16 @@ class TaxonomyController extends BaseController
      * @param $id
      */
     public function get_parent($id){
-        static $parent = [];
-        $taxonomy = Db::name('taxonomy')->where(array('parent_id'=>$id))->find();
+        static $parents = [];
+        $self   = Db::name('taxonomy')->where(array('id'=>$id))->find();
+        $parent = Db::name('taxonomy')->where(array('id'=>$self['parent_id']))->find();
+
         if($parent){
-            $parent[] = $taxonomy;
-            $this->get_parent($taxonomy['id']);
-        }else{
-            return $parent;
+            $parents[] = $parent;
+            $this->get_parent($parent['id']);
         }
+        asort($parents);
+        return $parents;
     }
 
     /**
