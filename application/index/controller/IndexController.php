@@ -85,6 +85,7 @@ class IndexController extends BaseController
         //获取子分类内容
         if(is_array($childs) && count($childs)){
             foreach($childs as $child){
+
                 $sub_list  = Db::name('article')
                     ->alias('a')
                     ->field('a.id,a.taxonomy_id,a.title,a.brief,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
@@ -103,8 +104,11 @@ class IndexController extends BaseController
 
                     $sub_lists[$child['id']]['name'] = $child['name'];
                     $sub_lists[$child['id']]['list'] = $sub_list;
+                }else{
+                    $sub_lists = false;
                 }
             }
+
         }else{
             $sub_lists = false;
         }
