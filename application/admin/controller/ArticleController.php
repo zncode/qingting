@@ -28,8 +28,14 @@ class ArticleController extends BaseController
      */
     public function index_data()
     {
-        $count  = Db::name($this->table)->where(array('delete'=>0))->count();
-        $pages  = Db::name($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
+        $keyword = input('keyword') ? input('keyword') : '';
+        if(!empty($keyword)){
+            $count  = Db::name($this->table)->where(array('delete'=>0, 'title'=>['like', '%'.$keyword.'%']))->count();
+            $pages  = Db::name($this->table)->where(array('delete'=>0, 'title'=>['like', '%'.$keyword.'%']))->order('create_time desc')->paginate($this->pager);
+        }else{
+            $count  = Db::name($this->table)->where(array('delete'=>0))->count();
+            $pages  = Db::name($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
+        }
 
         $lists  = $pages->all();
         foreach($lists as $key => $value){
