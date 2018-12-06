@@ -1,0 +1,55 @@
+{include file="page/header" /}
+{include file="page/body_top" /}
+<div style="clear: both;"></div>
+<div class="body">
+    <div class="body-left">
+      {include file="page/menu_index" /}
+    </div>
+    <div class="body-content">
+
+      <!-- 搜索结果开始 -->
+      <div class="part_1_wrapper">
+        <div class="part_1_title">
+          <h2>搜索结果</h2>
+        </div>
+        <div class="part_1_content">
+            {if condition="$search_result neq '' " }
+                <ul>
+                    {volist name='search_result' id='v'}
+                    <li>
+                        <div style="height: 20px;line-height: 20px;"><img src="{$v.view_url}" width="16px" height="16px"> &nbsp;<a href="{$v.url}" target="_blank">{$v.title}</a></div>
+                        <div style="font-size: 12px;color:#ccc; height: 25px;line-height: 25px;">{$v.brief}</div>
+                    </li>
+                    {/volist}
+                </ul>
+            {else /}
+                <br>
+                <p>没有找到内容~</p>
+            {/if}
+
+        </div>
+      </div>
+      <!-- 热门站点结束 -->
+
+      <!-- 广告2开始 -->
+      <div class="part_wrapper" style="width: 98%; margin: 10px 0 10px 0;">
+          <img src="{$Think.BASE_PATH}image/tmp/ad.jpg" width="280px">&nbsp;&nbsp;&nbsp;
+          <img src="{$Think.BASE_PATH}image/tmp/ad.jpg" width="280px">&nbsp;&nbsp;&nbsp;
+          <img src="{$Think.BASE_PATH}image/tmp/ad.jpg" width="280px">
+      </div>
+      <!-- 广告2结束 -->
+
+    </div>
+</div>
+
+
+<script>
+    layui.use('element', function(){
+        var $ = layui.$;
+        $('.top_menu').mouseover(function(){
+            $('.top_menu').removeClass('active');
+            $(this).addClass('active');
+        })
+    });
+</script>
+{include file="page/footer" /}

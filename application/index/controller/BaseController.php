@@ -5,6 +5,14 @@ use think\Controller;
 
 class BaseController extends Controller
 {
+    public $search_action;
+
+    public function __construct()
+    {
+        $this->search_action = url('/search');
+        \think\View::share(['search_action'=>url('/search')]);
+    }
+
     public function get_document_root_dir(){
         $document_root = NULL;
         $system = php_uname('s');
