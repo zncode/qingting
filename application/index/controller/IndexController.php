@@ -80,12 +80,38 @@ class IndexController extends BaseController
         $childs         = Db::name('taxonomy')->where(array('parent_id'=>$taxonomy['id'], 'delete'=>0))->select();
         $left_menu[0]['child'] = $childs;
 
+        if(is_array($childs) && count($childs)){
+            foreach($childs as $child){
+                $sub_list  = Db::name('article')
+                    ->alias('a')
+                    ->field('a.id,a.taxonomy_id,a.title,a.brief,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
+                    ->join('upload b', 'a.thumb = b.id', 'left')
+                    ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
+                    ->where(array('a.taxonomy_id'=>$child['id'],'a.delete'=>0))
+                    ->order('create_time desc')
+                    ->limit(20)
+                    ->select();
+
+                if(is_array($sub_list) && count($sub_list)){
+                    foreach($sub_list as $key => $value){
+                        $sub_list[$key]['view_url'] = get_view_url($value['save_path']);
+                        $sub_list[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
+                    }
+
+                    $sub_lists[$child['id']]['name'] = $child['name'];
+                    $sub_lists[$child['id']]['list'] = $sub_list;
+                }
+            }
+        }else{
+            $sub_lists = false;
+        }
 
         $data['breadcrumb']         = $this->get_breadcrumb($breadcrumb);
         $data['list']               = $lists;
         $data['left_menu']          = $left_menu;
         $data['current_date']       = get_current_date();
         $data['category']           = $taxonomy;
+        $data['sub_lists']          = $sub_lists;
         $data['meta_keyword']       = $taxonomy['keyword'];
         $data['meta_description']   = $taxonomy['description'];
 
