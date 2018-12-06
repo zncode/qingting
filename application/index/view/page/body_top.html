@@ -4,9 +4,9 @@
             <a href="{:url('/')}"><img src="{$Think.BASE_PATH}image/logo.png" width="250px" height="auto"></a>
         </div>
         <div class="top_menu_wrapper">
-            <form class="search_box" action="">
+            <form class="search_box" action="{$search_action}">
                 <i class="layui-icon layui-icon-search caller-seach-icon caller-icon"></i>
-                <input type="text" name="title" required="" lay-verify="required" placeholder="请输入关键字" autocomplete="off" class="layui-input ">
+                <input type="text" name="keyword" required="" lay-verify="required" placeholder="请输入关键字" autocomplete="off" class="layui-input ">
                 <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="search">搜索</button>
             </form>
             <div class="weather_box">
