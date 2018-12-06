@@ -22,6 +22,24 @@
                     {/volist}
                 </ul>
             </div>
+            {if condition="$sub_lists neq '' " }
+                {volist name='sub_lists' id='v' key="k"}
+                    <div class="part_1_title">
+                        <h2>{$v.name}</h2>
+                        <span style="float: right; margin-right: 50px;">>><a href="{:url('category/id/'.$key)}">更多</a></span>
+                    </div>
+                    <div class="part_1_content_category">
+                        <ul>
+                            {volist name="v['list']" id='vo'}
+                            <li>
+                                <div style="height: 20px;line-height: 20px;"><img src="{$vo.view_url}"> &nbsp;<a href="{$vo.url}" target="_blank">{$vo.title}</a></div>
+                                <div style="font-size: 12px;color:#ccc; height: 30px;line-height: 30px;padding:0 2px 0 2px;">{$vo.brief}</div>
+                            </li>
+                            {/volist}
+                        </ul>
+                    </div>
+                {/volist}
+            {/if}
         </div>
         <!-- 热门结束 -->
 
