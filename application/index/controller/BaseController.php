@@ -21,8 +21,15 @@ class BaseController extends Controller
      * 处理导航条
      */
     public function get_breadcrumb($breadcrumb){
+        $i = 1;
         foreach($breadcrumb as $key => $value){
-            $breads[] = '<a href="'.$value['path'].'">'.$value['title'].'</a>';
+            if($i == 1){
+                $breads[] = '<a href="'.$value['path'].'" class="homepage" >'.$value['title'].'</a>';
+            }else{
+                $breads[] = '<a href="'.$value['path'].'">'.$value['title'].'</a>';
+            }
+
+            $i++;
         }
         $breads = implode('<span> > </span>', $breads);
         return $breads;
