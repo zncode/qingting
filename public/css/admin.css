@@ -62,7 +62,7 @@ div.layui-layout-admin div.layui-logo{background-color: #20222A !important;}
     padding-bottom: 20px;
 }
 .go_back{
-    margin-top:20px;
+    /*margin-top:20px;*/
     margin-left:15px;
 }
 .layui-form{margin-top:10px;}

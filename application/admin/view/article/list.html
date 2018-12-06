@@ -13,9 +13,15 @@
                             <a lay-href="">主页</a><span lay-separator="">/</span>
                             <a><cite>{$module_name}列表</cite></a><span lay-separator="">/</span>
                         </div>
-                        <div class="go_back"><a href="{:url('admin/'.$path.'/add')}" class="layui-btn layui-btn-sm">添加</a></div>
+                        <div class="go_back layui-inline"><a href="{:url('admin/'.$path.'/add')}" class="layui-btn ">添加</a></div>
+                        <div class="demoTable layui-inline" style="margin-left: 10px;">
+                            <div class="layui-inline">
+                                <input class="layui-input" name="keyword" id="demoReload" autocomplete="off">
+                            </div>
+                            <button class="layui-btn" data-type="reload">搜索</button>
+                        </div>
                         <div class="layui-card-body">
-                            <table class="layui-table" lay-data="{height:900, url:'{$Think.BASE_PATH}admin/{$path}/list_data', page:true, id:'idTest', limit:20}" lay-filter="demo">
+                            <table class="layui-table" lay-data="{height:900, url:'{$Think.BASE_PATH}admin/{$path}/list_data', page:true, id:'demo', limit:20}" lay-filter="demo" >
                                 <thead>
                                 <tr>
                                     <th lay-data="{type:'checkbox', fixed: 'left'}"></th>
@@ -113,10 +119,20 @@
             }
         };
 
+        //搜索
         $('.demoTable .layui-btn').on('click', function(){
-            var type = $(this).data('type');
-            active[type] ? active[type].call(this) : '';
+            var demoReload = $('#demoReload');
+            //执行重载
+            table.reload('demo', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+                ,where: {
+                    keyword: demoReload.val()
+                }
+            });
         });
+
 
     });
 </script>
