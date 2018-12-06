@@ -1,3 +1,2 @@
 User-agent: *
-Disallow: /qingting360
 Sitemap: http://www.qingting360.com/sitemap.xml
