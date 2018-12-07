@@ -195,22 +195,25 @@ function get_html_meta1($html)
  */
 function get_html_title($html)
 {
-//    $pos = strpos($html,'utf-8');
-//
-//    if($pos===false){$data = iconv("gbk","utf-8",$html);}
-//    print_r($data);die;
-//    preg_match("/<title>(.*)<\/title>/i",$data, $title);
-//    return $title[1];
+    $pos = strpos($html,'utf-8');
+    if($pos===false){
+        $html = iconv("gbk","utf-8",$html);
+    }
+    preg_match("/<title>(.*)<\/title>/i",$html, $title);
+    return $title[1];
 
-    preg_match('/<title>(?<title>.*?)<\/title>/si', $html, $title); //获取title的正则表达式
-
-    $encode = mb_detect_encoding($title['title'], array('GB2312','GBK','UTF-8', 'CP936')); //得到字符串编码
-    $title['title'] = mb_convert_encoding($title['title'], 'UTF-8', $encode);
+//    preg_match('/<title>(?<title>.*?)<\/title>/si', $html, $title); //获取title的正则表达式
+//    $encode = mb_detect_encoding($title['title'], array('GB2312','GBK','UTF-8', 'CP936')); //得到字符串编码
+//    $encode = mb_detect_encoding($title['title']); //得到字符串编码
+//    print_r($encode);
+//    $title['title'] = mb_convert_encoding($title['title'], 'UTF-8', 'auto');
+//    $title['title'] = mb_convert_encoding($title['title'], 'UTF-8', $encode);
+//    print_r($title['title']);die;
 //    $file_charset = iconv_get_encoding()['internal_encoding']; //当前文件编码
 //    if ( $encode != 'CP936' && $encode != $file_charset ) {
 //        return iconv($encode, $file_charset, $title['title']);
 //    }
-    return $title['title'];
+//    return $title['title'];
 }
 
 /**
