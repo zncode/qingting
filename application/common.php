@@ -204,8 +204,11 @@ function get_html_title($html)
 
     preg_match('/<title>(?<title>.*?)<\/title>/si', $html, $title); //获取title的正则表达式
 
-    $encode = mb_detect_encoding($title['title'], array('GB2312','GBK','UTF-8', 'CP936')); //得到字符串编码
-    $title['title'] = mb_convert_encoding($title['title'], 'UTF-8', $encode);
+//    $encode = mb_detect_encoding($title['title'], array('GB2312','GBK','UTF-8', 'CP936')); //得到字符串编码
+    $encode = mb_detect_encoding($title['title']); //得到字符串编码
+
+    $title['title'] = mb_convert_encoding($title['title'], 'UTF-8', 'auto');
+    print_r($title['title']);die;
 //    $file_charset = iconv_get_encoding()['internal_encoding']; //当前文件编码
 //    if ( $encode != 'CP936' && $encode != $file_charset ) {
 //        return iconv($encode, $file_charset, $title['title']);
