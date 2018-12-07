@@ -16,7 +16,7 @@
                 <ul>
                     {volist name='list' id='v'}
                     <li>
-                        <div style="height: 20px;line-height: 20px;"><img src="{$v.view_url}"> &nbsp;<a href="{$v.url}" target="_blank">{$v.title}</a></div>
+                        <div style="height: 20px;line-height: 20px;"><img src="{$v.view_url}" width="16px" height="16px" > &nbsp;<a href="{$v.url}" target="_blank">{$v.title}</a></div>
                         <div style="font-size: 12px;color:#ccc; height: 30px;line-height: 30px;padding:0 2px 0 2px;">{$v.brief}</div>
                     </li>
                     {/volist}
@@ -32,7 +32,7 @@
                         <ul>
                             {volist name="v['list']" id='vo'}
                             <li>
-                                <div style="height: 20px;line-height: 20px;"><img src="{$vo.view_url}"> &nbsp;<a href="{$vo.url}" target="_blank">{$vo.title}</a></div>
+                                <div style="height: 20px;line-height: 20px;"><img src="{$vo.view_url}" width="16px" height="16px" > &nbsp;<a href="{$vo.url}" target="_blank">{$vo.title}</a></div>
                                 <div style="font-size: 12px;color:#ccc; height: 30px;line-height: 30px;padding:0 2px 0 2px;">{$vo.brief}</div>
                             </li>
                             {/volist}
