@@ -46,6 +46,7 @@ class IndexController extends BaseController
     public function taxonomy_list()
     {
         $id = input('id');
+        $sub_lists = false;
 
         $lists  = Db::name('article')
             ->alias('a')
@@ -104,11 +105,8 @@ class IndexController extends BaseController
 
                     $sub_lists[$child['id']]['name'] = $child['name'];
                     $sub_lists[$child['id']]['list'] = $sub_list;
-                }else{
-                    $sub_lists = false;
                 }
             }
-
         }else{
             $sub_lists = false;
         }
