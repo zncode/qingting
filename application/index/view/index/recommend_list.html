@@ -1,0 +1,95 @@
+{include file="page/header" /}
+{include file="page/body_top" /}
+<div style="clear: both;"></div>
+<div class="body">
+    <div class="body-left">
+      {include file="page/menu_recommend" /}
+    </div>
+    <div class="part_wrapper" style="width: 900px;margin-left: 20px;" >
+        <div class="body-center">
+              <div class="breadcrumb">
+                  <div class="breadcrumb_left">&nbsp;</div>
+                  {$breadcrumb}
+              </div>
+              {if condition="isset($list)"}
+                {volist name="list" id="v"}
+                    <div class="line_wrapper">
+                        <div class="line_picture">
+                            <a href="{:url('/page',array('id'=>$v.id))}"><img src="{$v.view_url}" width="180px" height="120px"></a>
+                        </div>
+                        <div class="line_content">
+                            <div class="line_content_title"><a href="{:url('/page',array('id'=>$v.id))}">{$v.title}</a></div>
+                            <div class="line_content_body">{$v.summary}</div>
+                            <div class="line_content_bottom">&nbsp;&nbsp;1216浏览</div>
+                        </div>
+                    </div>
+                {/volist}
+              {else /}
+                {for start="1" end="10"}
+                <!-- 行 -->
+                <div class="line_wrapper">
+                    <div class="line_picture">
+                        <img src="{$Think.BASE_PATH}image/tmp/list_1.jpg" width="180px" height="120px">
+                    </div>
+                    <div class="line_content">
+                        <div class="line_content_title"><a href="{:url('/page')}">普吉岛｜这些拥有私密沙滩的酒店让你再也不人挤人！</a></div>
+                        <div class="line_content_body">蜂蜂们的困扰我们都听到了！为你看过了千百个普吉酒店，精挑细选了9家可享私密沙滩的五星酒店，分分钟甩开拥挤人潮、冲入碧海蓝天，让人恨不得现在就想把机票买下去啊。</div>
+                        <div class="line_content_bottom">1216浏览</div>
+                    </div>
+                </div>
+                <!-- 行 -->
+                {/for}
+              {/if}
+          <div id="page">{$page}</div>
+        </div>
+
+        <div class="body-right">
+          <div class="body_right_block"><img src="{$Think.BASE_PATH}image/tmp/right_1.png" width="200px" height="auto"></div>
+          <div class="body_right_block"><img src="{$Think.BASE_PATH}image/tmp/right_2.png" width="200px" height="auto"></div>
+          <div class="body_right_block"><img src="{$Think.BASE_PATH}image/tmp/right_3.png" width="200px" height="auto"></div>
+        </div>
+    </div>
+  <div style="clear: both"></div>
+</div>
+
+
+<script>
+    layui.use(['element', 'laypage'], function(){
+        var $ = layui.$;
+        var laypage = layui.laypage;
+
+        $('.line_wrapper').mouseover(function(){
+            $(this).css('background-color','#F2F2F2');
+        })
+        $('.line_wrapper').mouseout(function(){
+            $(this).css('background-color','#ffffff');
+        })
+
+        laypage.render({
+            elem: 'page1'
+            ,count: '100'
+            ,limit: 2
+            ,theme: '#1E9FFF'
+            ,layout: ['count', 'prev', 'page', 'next', 'skip']
+            ,curr: location.hash.replace('#!fenye=', '')
+            ,hash: 'fenye'
+            ,jump: function(obj, first){
+                //obj包含了当前分页的所有参数，比如：
+                console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                console.log(obj.limit); //得到每页显示的条数
+
+                //首次不执行
+                if(!first){
+                    //do something
+                    var domain = window.location.host;
+                    console.log(window.location.href);
+//                    var current_url = window.location.href;
+                    var current_url = window.location.href.replace('&*', '');
+                    var jump_url= current_url+'&page='+obj.curr+'#!fenye='+obj.curr;
+                    window.location.href = jump_url;
+                }
+            }
+        });
+    });
+</script>
+{include file="page/footer" /}
