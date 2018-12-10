@@ -27,7 +27,7 @@ class UploadController extends BaseController
         $info = $file->move($upload_save_path);
         if($info) {
             if ($_SERVER['HTTP_HOST'] == 'localhost') {
-                $view_url = 'http://' . $_SERVER['HTTP_HOST'] . '/nongjia/public/upload/kindeditor/' . $category . '/' . $date_dir . '/' . $info->getFilename();
+                $view_url = 'http://' . $_SERVER['HTTP_HOST'] . '/qingting/public/upload/kindeditor/' . $category . '/' . $date_dir . '/' . $info->getFilename();
             } else {
                 $view_url = 'http://' . $_SERVER['HTTP_HOST'] . '/upload/kindeditor/' . $category . '/' . $date_dir . '/' . $info->getFilename();
             }

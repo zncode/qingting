@@ -1,0 +1,105 @@
+{include file="page/header" /}
+<div class="layui-layout layui-layout-admin">
+  {include file="page/body_top" /}
+  {include file="page/menu" /}
+
+  <div class="layui-body">
+    <div class="layui-fluid">
+      <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+          <div class="layui-card">
+
+            <div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
+              <a lay-href="">主页</a><span lay-separator="">/</span>
+              <a href="{:url('article/list')}"><cite>{$module_name}列表</cite></a><span lay-separator="">/</span>
+              <a><cite>{$module_name}详情</cite></a><span lay-separator=""></span>
+            </div>
+
+            <div class="go_back"><a href="{$goback}" class="layui-btn layui-btn-sm">返回</a></div>
+            <div class="layui-card-body">
+              <table class="layui-table" >
+                <colgroup>
+                  <col width="200" >
+                  <col width="">
+                </colgroup>
+                <thead>
+                <tr>
+                  <td align="center">名称</td>
+                  <td align="center">内容</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td align="right" >ID</td>
+                  <td>{$info.id}</td>
+                </tr>
+                <tr>
+                  <td align="right" >名称</td>
+                  <td>{$info.title}</td>
+                </tr>
+                <tr>
+                  <td align="right" >频道</td>
+                  <td>{$info.taxonomy_name}</td>
+                </tr>
+                {if condition="isset($info.thumb_image)"}
+                  <tr>
+                    <td align="right" >列表图</td>
+                    <td><img src="{$info.thumb_image}" class="thumb_image_picture" style="cursor:pointer;"></td>
+                  </tr>
+                {/if}
+                <tr>
+                  <td align="right" >关键字</td>
+                  <td>{$info.meta_keyword}</td>
+                </tr>
+                <tr>
+                  <td align="right" >摘要</td>
+                  <td>{$info.summary}</td>
+                </tr>
+                <tr>
+                  <td align="right" >内容</td>
+                  <td>{$info.content}</td>
+                </tr>
+                <tr>
+                  <td align="right" >创建时间</td>
+                  <td>{$info.create_time}</td>
+                </tr>
+                <tr>
+                  <td align="right" >更新时间</td>
+                  <td>{$info.update_time}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+
+  {include file="page/body_bottom" /}
+
+</div>
+
+{include file="page/footer" /}
+
+<script>
+
+    layui.use('layer', function(){
+        $ = layui.jquery;
+
+        //看大图
+        $('.thumb_image_picture').click(function(){
+            var thumb_image_src = $('.thumb_image_picture').attr('src');
+            layer.open({
+                type: 1,
+                title: false,
+                area: ['auto', 'auto'],
+                content: '<img src="'+thumb_image_src+'">',
+            });
+        });
+
+    });
+</script>
