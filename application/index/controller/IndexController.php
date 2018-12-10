@@ -451,7 +451,7 @@ class IndexController extends BaseController
         ->join('upload b', 'a.thumb = b.id', 'left')
         ->order('create_time desc')
         ->where(array('a.delete'=>0))
-        ->limit(50)
+        ->limit(40)
         ->select();
 
         if(is_array($site_news) && count($site_news)){
@@ -465,9 +465,35 @@ class IndexController extends BaseController
     }
 
     /**
-     * 获取精彩推荐
+     * 获取好站推荐
      */
     public function get_site_recommend($site_recommend=NULL){
+        $lists  = Db::name('recommend')
+            ->alias('a')
+            ->field('a.id,a.title,a.summary,a.create_time,a.taxonomy_id,b.save_path')
+            ->join('upload b', 'a.thumb = b.id', 'left')
+            ->where(array('a.delete'=>0))
+            ->order('create_time desc')
+            ->limit(10)
+            ->select();
+        if(is_array($lists) && count($lists)){
+            foreach($lists as $key => $value){
+                $create_time = $value['create_time'];
+                $create_time = explode(' ', $value['create_time']);
+                $create_time = $create_time[0];
+
+                $lists[$key]['view_url'] = get_view_url($value['save_path']);
+                $lists[$key]['create_time'] = $create_time;
+            }
+        }
+
+        return $lists;
+    }
+
+    /**
+     * 获取精彩推荐
+     */
+    public function get_site_recommend1($site_recommend=NULL){
         $site_recommend   = explode(',', $site_recommend);
         if(count($site_recommend)){
             foreach($site_recommend as $site_name){

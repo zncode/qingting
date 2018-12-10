@@ -33,7 +33,30 @@
       <!-- 广告2结束 -->
 
       <!-- 最新加入开始 -->
-      <div class="part_wrapper" style="width: 420px;">
+      <div class="part_wrapper" style="width: 560px;">
+        <div class="part_title_wrapper">
+          <span class="part_title">好站推荐</span>
+          <span class="more"><a href="{:url('/recommend')}">更多</a></span>
+        </div>
+        <div class="part_content" >
+          {volist name='site_recommend' id='v'}
+              <div class="line_wrapper" style="height: 180px">
+                  <div class="line_picture" style="width: 180px">
+                      <a href="{:url('/page',array('id'=>$v.id))}"><img src="{$v.view_url}" width="150px" height="100px"></a>
+                  </div>
+                  <div class="line_content" style="width: 370px;">
+                      <div class="line_content_title"><a href="{:url('/page',array('id'=>$v.id))}">{$v.title}</a></div>
+                      <div class="line_content_body" style="height: 80px;">{$v.summary}</div>
+                      <div class="line_content_bottom">&nbsp;&nbsp;{$v.create_time}</div>
+                  </div>
+              </div>
+          {/volist}
+        </div>
+      </div>
+      <!-- 最新加入结束 -->
+
+      <!-- 精彩推荐开始 -->
+      <div class="part_wrapper" style="width: 280px; margin-left:20px;">
         <div class="part_title_wrapper">
           <span class="part_title">最新加入</span>
           <span class="more"><a href="#">更多</a></span>
@@ -41,25 +64,6 @@
         <div class="part_content" >
           <ul>
               {volist name='site_news' id='v'}
-              <li>
-                  <div style="height: 20px;line-height: 20px;"><a href="{$v.url}" target="_blank">{$v.title}</a></div>
-                  <div style="font-size: 12px;color:#ccc; height: 25px;line-height: 25px;">{$v.brief}</div>
-              </li>
-              {/volist}
-          </ul>
-        </div>
-      </div>
-      <!-- 最新加入结束 -->
-
-      <!-- 精彩推荐开始 -->
-      <div class="part_wrapper" style="width: 420px; margin-left:20px;">
-        <div class="part_title_wrapper">
-          <span class="part_title">精彩推荐</span>
-          <span class="more"><a href="#">更多</a></span>
-        </div>
-        <div class="part_content" >
-          <ul>
-              {volist name='site_recommend' id='v'}
               <li>
                   <!--<img src="{$v.view_url}"> {$v.title}-->
                   <div style="height: 20px;line-height: 20px;"><a href="{$v.url}" target="_blank">{$v.title}</a></div>
