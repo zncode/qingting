@@ -264,6 +264,7 @@ class IndexController extends BaseController
         $data['info']               = $info;
         $data['left_menu']          = $left_menu;
         $data['taxonomy_id']        = $id;
+        $data['reads']              = 100+rand(50,100);
         $data['meta_keyword']       = $info['meta_keyword'];
         $data['meta_description']   = $info['meta_description'];
         $data['current_date']       = get_current_date();
