@@ -78,6 +78,13 @@ class SystemController extends BaseController
             'lastmod'=>$current_time,
             'changefreq'=>'always'
         );
+        //好站推荐
+        $sitemap_data[]['recommend']=array(
+            'loc'=>$base_url.url('/recommend'),
+            'priority'=>'0.8',
+            'lastmod'=>$current_time,
+            'changefreq'=>'daily'
+        );
 
         //更新目录
         $taxonomyParent = Db::name('taxonomy')->where(array('delete'=>0))->select();
@@ -92,6 +99,7 @@ class SystemController extends BaseController
                 'changefreq'=>'daily'
             );
         }
+
 
         foreach($sitemap_data as $datas){
             foreach($datas AS $type => $data){
