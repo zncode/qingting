@@ -9,4 +9,6 @@ Route::get('category2',     'index/IndexController/category2_list');
 Route::get('category',      'index/IndexController/taxonomy_list');
 Route::get('page',          'index/IndexController/page_info');
 Route::get('search',        'index/SearchController/search_submit');
+Route::get('recommend',     'index/IndexController/recommend_list');
+Route::get('page',          'index/IndexController/page_info');
 

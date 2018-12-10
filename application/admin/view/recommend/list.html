@@ -1,0 +1,138 @@
+{include file="page/header" /}
+<div class="layui-layout layui-layout-admin">
+    {include file="page/body_top" /}
+    {include file="page/menu" /}
+
+    <div class="layui-body">
+
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
+                            <a lay-href="">主页</a><span lay-separator="">/</span>
+                            <a><cite>{$module_name}列表</cite></a><span lay-separator="">/</span>
+                        </div>
+                        <div class="go_back layui-inline"><a href="{:url('admin/'.$path.'/add')}" class="layui-btn ">添加</a></div>
+                        <div class="demoTable layui-inline" style="margin-left: 10px;">
+                            <div class="layui-inline">
+                                <input class="layui-input" name="keyword" id="demoReload" autocomplete="off">
+                            </div>
+                            <button class="layui-btn" data-type="reload">搜索</button>
+                        </div>
+                        <div class="layui-card-body">
+                            <table class="layui-table" lay-data="{height:900, url:'{$Think.BASE_PATH}admin/{$path}/list_data', page:true, id:'demo', limit:20}" lay-filter="demo" >
+                                <thead>
+                                <tr>
+                                    <th lay-data="{type:'checkbox', fixed: 'left'}"></th>
+                                    <th lay-data="{field:'id', width:80, sort: true, fixed: true}">ID</th>
+                                    <th lay-data="{field:'title', width:100}">{$module_name}名称</th>
+                                    <th lay-data="{field:'taxonomy_name', width:100}">分类</th>
+                                    <th lay-data="{field:'create_time', width:200}">创建时间</th>
+                                    <th lay-data="{fixed: 'right', toolbar: '#barDemo'}">操作</th>
+                                </tr>
+                                </thead>
+                            </table>
+
+                            <script type="text/html" id="barDemo">
+                                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+                                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
+                                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="del">删除</a>
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    {include file="page/body_bottom" /}
+
+</div>
+
+{include file="page/footer" /}
+
+<script>
+    layui.use(['table','jquery'], function(){
+        var table = layui.table;
+        var $ = layui.$;
+
+        table.on('checkbox(demo)', function(obj){
+//            console.log(obj)
+        });
+
+        //监听工具条
+        table.on('tool(demo)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'detail'){
+//                layer.msg('ID：'+ data.id + ' 的查看操作');
+                window.location.href = '{$Think.BASE_PATH}admin/{$path}/info?id=' + data.id;
+            } else if(obj.event === 'del'){
+                layer.confirm('真的删除行么', function(index){
+                    //提交
+                    $.ajax({
+                        url: "{$Think.BASE_PATH}admin/{$path}/delete?id=" + data.id,
+                        type: "get",
+                        success:function(result){
+                            var result = JSON.parse(result);
+                            var code = result.code;
+                            var msg  = result.msg;
+                            var data = result.data;
+                            if(code==0){
+                                layer.msg(msg, {
+                                    time: 2000,
+                                    icon: 16,
+                                    shade: 0.2
+                                }, function(){
+                                    obj.del();
+//                                    parent.location.reload();
+                                });
+                            }else{
+                                layer.msg(msg);
+                            }
+                            layer.close(index);
+                        }
+                    })
+
+                });
+            } else if(obj.event === 'edit'){
+//                layer.alert('编辑行：<br>'+ JSON.stringify(data))
+                window.location.href = '{$Think.BASE_PATH}admin/{$path}/edit?id=' + data.id;
+            }
+        });
+
+        var active = {
+            getCheckData: function(){ //获取选中数据
+                var checkStatus = table.checkStatus('idTest')
+                    ,data = checkStatus.data;
+                layer.alert(JSON.stringify(data));
+            }
+            ,getCheckLength: function(){ //获取选中数目
+                var checkStatus = table.checkStatus('idTest')
+                    ,data = checkStatus.data;
+                layer.msg('选中了：'+ data.length + ' 个');
+            }
+            ,isAll: function(){ //验证是否全选
+                var checkStatus = table.checkStatus('idTest');
+                layer.msg(checkStatus.isAll ? '全选': '未全选')
+            }
+        };
+
+        //搜索
+        $('.demoTable .layui-btn').on('click', function(){
+            var demoReload = $('#demoReload');
+            //执行重载
+            table.reload('demo', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+                ,where: {
+                    keyword: demoReload.val()
+                }
+            });
+        });
+
+
+    });
+</script>

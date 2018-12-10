@@ -1,0 +1,270 @@
+{include file="page/header" /}
+<div class="layui-layout layui-layout-admin">
+    {include file="page/body_top" /}
+    {include file="page/menu" /}
+
+    <div class="layui-body">
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+
+                        <div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
+                            <a lay-href="">主页</a><span lay-separator="">/</span>
+                            <a href="{:url('article/list')}" ><cite>{$module_name}列表</cite></a><span lay-separator="">/</span>
+                            <a><cite>{$module_name}添加</cite></a><span lay-separator=""></span>
+                        </div>
+
+                        <div class="go_back"><a href="{$goback}" class="layui-btn layui-btn-sm">返回</a></div>
+
+                        <div class="layui-card-body">
+                            <form id="add_form" action="{$action}" method="post" class="layui-form" enctype="multipart/form-data" >
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">标题</label>
+                                    <div class="layui-input-block">
+                                        <input type="input" name="title" placeholder="" class="layui-input" style="width: 30%">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">频道</label>
+                                    <div class="layui-input-block">
+                                        <div class="layui-input-inline">
+                                            <select name="taxonomy_id" class="layui-select"  placeholder=" - 选择 - " lay-filter="taxonomy" lay-search>
+                                                <option value=""> - 选择 - </option>
+                                                {volist name="tree" id="vo"}
+                                                    <option value="{$vo.id}">{$vo.name}</option>
+                                                {/volist}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">列表图</label>
+                                    <div class="layui-input-block">
+                                        <div style="margin-bottom: 5px;cursor:pointer;" class="thumb_image" ></div>
+                                        <div>
+                                            <button type="button" class="layui-btn" id="image_upload" >
+                                                <i class="layui-icon">&#xe67c;</i>上传图片
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" >关键字</label>
+                                    <div class="layui-input-block">
+                                        <input type="input" name="meta_keyword" name="" class="layui-input"  placeholder="keyword1, keyword2, keyword3">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" >摘要</label>
+                                    <div class="layui-input-block">
+                                        <textarea class="layui-textarea" name="summary" rows="2" placeholder="Enter ..." ></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" >内容</label>
+                                    <div class="layui-input-block">
+                                        <textarea class="layui-textarea content" name="content" rows="20" placeholder="Enter ..." ></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <input type="hidden" value="0" name="upload_id" >
+                                        <input type="hidden" value="" name="upload_ids" >
+                                        <button type="submit" class="layui-btn" lay-submit lay-filter="add" id="submit">提交</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {include file="page/body_bottom" /}
+</div>
+
+{include file="page/footer" /}
+<script charset="utf-8" type="text/javascript" src='__ROOT__/kindeditor/kindeditor-all.js'></script>
+<script charset="utf-8" type="text/javascript" src="__ROOT__/kindeditor/lang/zh-CN.js"></script>
+
+<script>
+    layui.use(['upload','form'], function(){
+        var form = layui.form;
+        var upload = layui.upload;
+        $ = layui.jquery;
+
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#image_upload'
+            ,url: '{$url_upload}'
+            ,data: {'category':'article'}
+            ,size: 2048
+            ,auto: false
+            ,bindAction: '#submit'
+            ,choose: function(obj){
+                obj.preview(function(index, file, result){
+                    var thumb_image = '<img src="'+result+'" width="150px" height="auto" class="thumb_image_picture">';
+                    $('.thumb_image').html(thumb_image);
+                });
+            }
+            ,done: function(res){
+                var code    = res.code;
+                var msg     = res.message;
+                var data    = res.data;
+                if(code == 0){
+                    $('#upload_id').attr('value', data.upload_id);
+                }
+
+                var  field = {
+                    'title': $("[name='title']").val(),
+                    'taxonomy_id': $("[name='taxonomy_id']").val(),
+                    'meta_keyword': $("[name='meta_keyword']").val(),
+                    'summary': $("[name='summary']").val(),
+                    'content': $("[name='content']").val(),
+                    'upload_id': data.upload_id,
+                    'upload_ids': $("[name='upload_ids']").val(),
+//                    'province': $("[name='province']").val(),
+//                    'city': $("[name='city']").val(),
+//                    'dist': $("[name='dist']").val(),
+                };
+
+                //提交
+                $.ajax({
+                    url: "{$action}",
+                    type: "post",
+                    data: field,
+                    success:function(result){
+                        var result = JSON.parse(result);
+                        var code = result.code;
+                        var msg  = result.msg;
+                        var data = result.data;
+                        if(code==0){
+                            layer.msg(msg, {
+                                time: 2000,
+                                icon: 16,
+                                shade: 0.2
+                            }, function(){
+                                parent.location.reload();
+                            });
+                        }else{
+                            layer.msg(msg);
+                        }
+                    }
+                })
+            }
+        });
+
+        //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        form.on('submit(add)', function(data){
+            var objFile = $("[name='file']").val();
+            if(objFile.length == "") {
+                //提交
+                $.ajax({
+                    url: "{$action}",
+                    type: "post",
+                    data: data.field,
+                    success:function(result){
+                        var result = JSON.parse(result);
+                        var code = result.code;
+                        var msg  = result.msg;
+                        var data = result.data;
+                        if(code==0){
+                            layer.msg(msg, {
+                                time: 2000,
+                                icon: 16,
+                                shade: 0.2
+                            }, function(){
+                                parent.location.reload();
+                            });
+                        }else{
+                            layer.msg(msg);
+                        }
+                    }
+                })
+            }
+            return false;
+        });
+
+        //看大图
+        $('.thumb_image').click(function(){
+            var thumb_image_src = $('.thumb_image_picture').attr('src');
+            layer.open({
+                type: 1,
+                title: false,
+                area: ['auto', 'auto'],
+                content: '<img src="'+thumb_image_src+'">',
+            });
+        });
+
+    });
+
+    //编辑器的调用对象
+    var editor;
+    KindEditor.ready(function(e){
+        editor=e.create(".content",{
+            "width":"100%",
+            "height":"500px",
+            "wellFormatMode": true,
+            "newlineTag": 'br',
+            "items":[
+                'source', '|', 'undo', 'redo', '|', 'preview', 'justifyleft', 'justifycenter', 'justifyright',
+                'justifyfull',  'indent', 'outdent',  'clearhtml', 'selectall', '|',
+                'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+                'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|','image',
+                'hr', 'emoticons',
+                'anchor', 'link', 'unlink','|','baidumap','media','source'
+            ],
+            "htmlTags": {
+                font : ['color', 'size', 'face', '.background-color'],
+                span : [
+                    '.color', '.background-color', '.font-size', '.font-family', '.background',
+                    '.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.line-height'
+                ],
+                div : [
+                    'align', '.border', '.margin', '.padding', '.text-align', '.color',
+                    '.background-color', '.font-size', '.font-family', '.font-weight', '.background',
+                    '.font-style', '.text-decoration', '.vertical-align', '.margin-left'
+                ],
+                table: [
+                    'border', 'cellspacing', 'cellpadding', 'width', 'height', 'align', 'bordercolor',
+                    '.padding', '.margin', '.border', 'bgcolor', '.text-align', '.color', '.background-color',
+                    '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.background',
+                    '.width', '.height', '.border-collapse'
+                ],
+                'td,th': [
+                    'align', 'valign', 'width', 'height', 'colspan', 'rowspan', 'bgcolor',
+                    '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight',
+                    '.font-style', '.text-decoration', '.vertical-align', '.background', '.border'
+                ],
+                a : ['href', 'target', 'name'],
+                embed : ['src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess'],
+                img : ['src', 'width', 'height', 'border', 'alt', 'title', 'align', '.width', '.height', '.border'],
+                'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6' : [
+                    'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.background',
+                    '.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.text-indent', '.margin-left'
+                ],
+                pre : ['class'],
+                hr : ['class', '.page-break-after'],
+                'br,tbody,tr,strong,b,sub,sup,em,i,u,strike,s,del' : []
+            },
+            "urlType":'domain',
+            "uploadJson" : '{$url_upload_editor}',
+            "fileManagerJson" : '{$kindeditor_file_manager}',
+            "allowFileManager" : true,
+            "afterBlur": function(){this.sync();},
+            "afterUpload" : function(url,result) {
+                var data = result.data;
+                var upload_id = data.upload_id;
+                var upload_ids = $("[name='upload_ids']").val();
+                if(upload_ids){
+                    upload_ids = upload_ids + ',' + upload_id;
+                    $("[name='upload_ids']").val(upload_ids);
+                }else{
+                    $("[name='upload_ids']").val(upload_id);
+                }
+            }
+        });
+    });
+</script>

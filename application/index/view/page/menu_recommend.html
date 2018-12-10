@@ -1,0 +1,21 @@
+<div class="bd">
+  {volist name="left_menu" id="v"}
+  {if condition="isset($v.child) neq '' "}
+  <dl>
+    <dt>
+      <!--<a class="" href="{:url('channel/id/'.$v.id)}">{$v.name}</a>-->
+      <a class="" href="javascript:;">{$v.name}</a>
+    </dt>
+    <dd>
+      {volist name="v.child" id="vo"}
+        {if condition="isset($category) && ($category.id == $vo.id) "}
+          <a class="active" href="{:url('category/id/'.$vo.id)}">{$vo.name}</a>
+        {else/}
+          <a class="" href="{:url('category/id/'.$vo.id)}">{$vo.name}</a>
+        {/if}
+      {/volist}
+    </dd>
+  </dl>
+  {/if}
+  {/volist}
+</div>
