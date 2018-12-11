@@ -68,6 +68,11 @@ Route::get('admin/article/list_data', 		'admin/ArticleController/index_data');
 Route::post('admin/article/get_favicon',    'admin/ArticleController/get_favicon');
 Route::get('admin/article/check_url', 		'admin/ArticleController/check_url_exist');
 
+//网站申请
+Route::get('admin/site_apply/list', 			'admin/SiteApplyController/index');
+Route::get('admin/site_apply/info', 			'admin/SiteApplyController/info');
+Route::get('admin/site_apply/delete', 		    'admin/SiteApplyController/delete');
+Route::get('admin/site_apply/list_data', 		'admin/SiteApplyController/index_data');
 
 //好站推荐
 Route::get('admin/recommend/add', 			    'admin/RecommendController/add_form');
