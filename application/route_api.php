@@ -6,4 +6,6 @@ Route::post('upload/image_editor',              'api/UploadController/image_edit
 Route::get('upload/kindeditor_file_manager',    'api/UploadController/kindeditor_file_manager');
 Route::get('api/get_html_info',                 'api/IndexController/get_html_info');
 Route::get('api/phpinfo',                       'api/IndexController/phpinfo');
+Route::get('api/create_capcha',                 'api/IndexController/create_capcha');
+Route::get('api/get_token',                     'api/IndexController/get_token');
 

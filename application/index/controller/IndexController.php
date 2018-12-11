@@ -406,6 +406,83 @@ class IndexController extends BaseController
     }
 
     /**
+     * 网站收录申请
+     */
+    public function site_application_form()
+    {
+        $taxonomyClass          = new TaxonomyController();
+        $taxonomy               = $taxonomyClass->get_taxonomy();
+        $tree                   = $taxonomyClass->get_taxonomy_tree_wrapper($taxonomyClass->get_taxonomy_tree($taxonomy));
+
+        //左侧菜单
+        $left_menu   = Db::name('taxonomy')->where(array('delete'=>0,'level'=>0))->order('weight asc, id desc')->select();
+        if(is_array($left_menu) && count($left_menu)){
+            foreach($left_menu as $key => $value){
+                $category = Db::name('taxonomy')->where(array('parent_id'=>$value['id'], 'delete'=>0))->order('weight asc, id desc')->select();
+                if(is_array($category) && count($category)){
+                    $left_menu[$key]['child'] = $category;
+                }
+            }
+        }
+
+        //导航条
+        $breadcrumb[] = array('path'=>url('/'),'title'=>'首页');
+        $breadcrumb[] = array('path'=>url(''),'title'=>'网站收录');
+
+        $data['left_menu']          = $left_menu;
+        $data['breadcrumb']         = $this->get_breadcrumb($breadcrumb);
+        $data['tree']               = $tree;
+        $data['action']             = url('/site_application_submit');
+        $data['module_name']        = '网站提交';
+        $data['meta_keyword']       = '蜻蜓导航网站提交, 免费收录网站,蜻蜓360, 蜻蜓导航, 网址导航, 网站导航, 好站推荐';
+        $data['meta_description']   = '蜻蜓导航网站提交, 免费收录网站, 一键提交快速审核通过!';
+        $data['current_date']       = get_current_date();
+        return view('index/site_application', $data);
+    }
+
+    /**
+     * 网站收录申请提交
+     */
+    public function site_application_form_submit()
+    {
+        $formData   = input('request.');
+
+        $result = $this->validate($formData,[
+            'taxonomy_id|分类'     => 'require|token',
+            'captcha|验证码'       => 'require|captcha',
+            'name|网站名称'        => 'require|max:30',
+            'url'                  => 'require|url',
+            'icp|备案号'           => 'require|max:100',
+            'email'                => 'email',
+            'keyword|关键字'       => 'max:150',
+            'description|描述'     => 'max:255',
+        ]);
+
+        if($result !== true){
+            echo json_encode(array('code'=>1, 'msg'=>$result, 'data'=>array()));die;
+        }
+
+        $data = [
+            'name'             => $formData['name'],
+            'url'               => $formData['url'],
+            'taxonomy_id'       => $formData['taxonomy_id'],
+            'status'            => 0,
+            'email'             => $formData['email'],
+            'icp'               => $formData['icp'],
+            'keyword'           => $formData['keyword'],
+            'description'       => $formData['description'],
+            'create_time'       => date("Y-m-d H:i:s", time()),
+        ];
+        $result     = Db::name('application')->insert($data);
+
+        if($result){
+            echo json_encode(array('code'=>0, 'msg'=>'网站提交成功,审核通过后会邮件通知!', 'data'=>array()));die;
+        }else{
+            echo json_encode(array('code'=>0, 'msg'=>'网络忙,请稍后再试!', 'data'=>array()));die;
+        }
+    }
+
+    /**
      * 获取热门站点
      */
     public function get_site_popular($site_popular=NULL){
