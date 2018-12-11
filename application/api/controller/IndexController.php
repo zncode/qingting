@@ -45,4 +45,29 @@ class IndexController extends BaseController{
     public function phpinfo(){
         phpinfo();
     }
+
+    /**
+     * 生成验证码
+     */
+    public function create_capcha()
+    {
+        $config =    [
+            // 验证码字体大小
+            'fontSize'    =>    15,
+            // 验证码位数
+            'length'      =>    4,
+            // 关闭验证码杂点
+            'useNoise'    =>    false,
+        ];
+        $captcha = new \think\captcha\Captcha($config);
+        return $captcha->entry();
+    }
+
+    /**
+     * 生成表单令牌
+     */
+    public function get_token(){
+        $request = \think\Request::instance();
+        echo  $request->token();die;
+    }
 }
