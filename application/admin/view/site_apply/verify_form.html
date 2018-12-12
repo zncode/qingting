@@ -1,0 +1,228 @@
+{include file="page/header" /}
+<!--<script charset="utf-8" type="text/javascript" src="__ROOT__/js/jquery-3.3.1.js"></script>-->
+<!--<script charset="utf-8" type="text/javascript" src="__ROOT__/js/city/jquery.cityselect.js"></script>-->
+<!--<script type="text/javascript">-->
+    <!--$(function(){-->
+        <!--$(".city").citySelect({-->
+            <!--prov:"{111}",-->
+            <!--city:"{222}",-->
+            <!--dist:"{333}",-->
+        <!--});-->
+    <!--});-->
+<!--</script>-->
+<div class="layui-layout layui-layout-admin">
+    {include file="page/body_top" /}
+    {include file="page/menu" /}
+
+    <div class="layui-body">
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+
+                        <div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
+                            <a lay-href="">主页</a><span lay-separator="">/</span>
+                            <a href="{:url('article/list')}" ><cite>{$module_name}列表</cite></a><span lay-separator="">/</span>
+                            <a><cite>{$module_name}编辑 </cite></a><span lay-separator=""></span>
+                        </div>
+
+                        <div class="go_back"><a href="{$goback}" class="layui-btn layui-btn-sm">返回</a></div>
+
+                        <div class="layui-card-body">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">信息</label>
+                                <div class="layui-input-block">
+                                    <table class="layui-table" >
+                                        <colgroup>
+                                            <col width="200" >
+                                            <col width="">
+                                        </colgroup>
+                                        <thead>
+                                        <tr>
+                                            <td align="center">名称</td>
+                                            <td align="center">内容</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td align="right" >ID</td>
+                                            <td>{$info.id}</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" >网站名称</td>
+                                            <td>{$info.name}</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" >URL</td>
+                                            <td>{$info.url}</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" >频道</td>
+                                            <td>{$taxonomy_name}</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" >E-mail</td>
+                                            <td>{$info.email}</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" >关键字</td>
+                                            <td>{$info.keyword}</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" >摘要</td>
+                                            <td>{$info.description}</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" >创建时间</td>
+                                            <td>{$info.create_time}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <form id="add_form" action="{$action}" method="post" class="layui-form">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">审核</label>
+                                    <div class="layui-input-block">
+                                        <div class="layui-input-inline">
+                                            <select name="status" class="layui-select"  lay-filter="taxonomy" placeholder=" - 选择 - " lay-search >
+                                                <option value="1">通过</option>
+                                                <option value="2">拒绝</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" >评论</label>
+                                    <div class="layui-input-block">
+                                        <textarea class="layui-textarea" name="comments" rows="10" placeholder="Enter ..." ></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <input type="hidden" name="id" name="id" value="{$info.id}">
+                                        <button class="layui-btn" lay-submit lay-filter="update" id="submit">提交</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    {include file="page/body_bottom" /}
+
+</div>
+
+{include file="page/footer" /}
+<script charset="utf-8" type="text/javascript" src='__ROOT__/kindeditor/kindeditor-all.js'></script>
+<script charset="utf-8" type="text/javascript" src="__ROOT__/kindeditor/lang/zh-CN.js"></script>
+
+<script>
+
+    layui.use(['form'], function(){
+        var form = layui.form;
+        $ = layui.jquery;
+
+        form.on('submit(update)', function(data){
+            //提交
+            $.ajax({
+                url: "{$action}",
+                type: "post",
+                data: data.field,
+                success:function(result){
+                    var result = JSON.parse(result);
+                    var code = result.code;
+                    var msg  = result.msg;
+                    var data = result.data;
+                    if(code==0){
+                        layer.msg(msg, {
+                            time: 2000,
+                            icon: 16,
+                            shade: 0.2
+                        }, function(){
+                            parent.location.reload();
+                        });
+                    }else{
+                        layer.msg(msg);
+                    }
+                }
+            })
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+    });
+
+    //编辑器的调用对象
+    var editor;
+    KindEditor.ready(function(e){
+        editor = e.create(".content",{
+            "width":"100%",
+            "height":"500px",
+            "wellFormatMode": true,
+            "newlineTag": 'br',
+            "items":[
+                'source', '|', 'undo', 'redo', '|', 'preview', 'justifyleft', 'justifycenter', 'justifyright',
+                'justifyfull',  'indent', 'outdent',  'clearhtml', 'selectall', '|',
+                'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+                'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|','image',
+                'hr', 'emoticons',
+                'anchor', 'link', 'unlink','|','baidumap','media','source'
+            ],
+            "htmlTags": {
+                font : ['color', 'size', 'face', '.background-color'],
+                span : [
+                    '.color', '.background-color', '.font-size', '.font-family', '.background',
+                    '.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.line-height'
+                ],
+                div : [
+                    'align', '.border', '.margin', '.padding', '.text-align', '.color',
+                    '.background-color', '.font-size', '.font-family', '.font-weight', '.background',
+                    '.font-style', '.text-decoration', '.vertical-align', '.margin-left'
+                ],
+                table: [
+                    'border', 'cellspacing', 'cellpadding', 'width', 'height', 'align', 'bordercolor',
+                    '.padding', '.margin', '.border', 'bgcolor', '.text-align', '.color', '.background-color',
+                    '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.background',
+                    '.width', '.height', '.border-collapse'
+                ],
+                'td,th': [
+                    'align', 'valign', 'width', 'height', 'colspan', 'rowspan', 'bgcolor',
+                    '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight',
+                    '.font-style', '.text-decoration', '.vertical-align', '.background', '.border'
+                ],
+                a : ['href', 'target', 'name'],
+                embed : ['src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess'],
+                img : ['src', 'width', 'height', 'border', 'alt', 'title', 'align', '.width', '.height', '.border'],
+                'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6' : [
+                    'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.background',
+                    '.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.text-indent', '.margin-left'
+                ],
+                pre : ['class'],
+                hr : ['class', '.page-break-after'],
+                'br,tbody,tr,strong,b,sub,sup,em,i,u,strike,s,del' : []
+            },
+            "urlType":'domain',
+            "uploadJson" : '{$url_upload_editor}',
+            "fileManagerJson" : '{$kindeditor_file_manager}',
+            "allowFileManager" : true,
+            "afterBlur": function(){this.sync();},
+            "afterUpload" : function(url,result) {
+                var data = result.data;
+                var upload_id = data.upload_id;
+                var upload_ids = $("[name='upload_ids']").val();
+                if(upload_ids){
+                    upload_ids = upload_ids + ',' + upload_id;
+                    $("[name='upload_ids']").val(upload_ids);
+                }else{
+                    $("[name='upload_ids']").val(upload_id);
+                }
+            }
+        });
+    });
+
+</script>
