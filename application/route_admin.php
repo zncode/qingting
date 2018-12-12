@@ -73,6 +73,8 @@ Route::get('admin/site_apply/list', 			'admin/SiteApplyController/index');
 Route::get('admin/site_apply/info', 			'admin/SiteApplyController/info');
 Route::get('admin/site_apply/delete', 		    'admin/SiteApplyController/delete');
 Route::get('admin/site_apply/list_data', 		'admin/SiteApplyController/index_data');
+Route::get('admin/site_apply/verify', 			    'admin/SiteApplyController/verify_form');
+Route::post('admin/site_apply/verify_submit', 	    'admin/SiteApplyController/verify_form_submit');
 
 //好站推荐
 Route::get('admin/recommend/add', 			    'admin/RecommendController/add_form');
