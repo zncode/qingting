@@ -272,7 +272,7 @@ class File extends SplFileObject
 
         // 如果上传的不是图片，或者是图片而且后缀确实符合图片类型则返回 true
 //        return !in_array($extension, ['gif', 'jpg', 'jpeg', 'bmp', 'png', 'swf']) || in_array($this->getImageType($this->filename), [1, 2, 3, 4, 6, 13]);
-        return !in_array($extension, ['gif', 'jpg', 'jpeg', 'bmp', 'png', 'swf','ico']);
+        return in_array($extension, ['gif', 'jpg', 'jpeg', 'bmp', 'png', 'swf','ico']);
     }
 
     /**
