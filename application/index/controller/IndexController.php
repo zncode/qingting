@@ -196,6 +196,7 @@ class IndexController extends BaseController
         if(is_array($lists) && count($lists)){
             foreach($lists as $key => $value){
                 $lists[$key]['view_url'] = get_view_url($value['save_path']);
+                $lists[$key]['reads']    = 100+rand(50,100);
             }
         }
 
