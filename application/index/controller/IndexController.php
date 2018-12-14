@@ -189,7 +189,7 @@ class IndexController extends BaseController
             ->join('upload b', 'a.thumb = b.id', 'left')
             ->where(array('a.delete'=>0))
             ->order('create_time desc')
-            ->paginate(6);
+            ->paginate(10);
 
         $page = $pages->render();
         $lists  = $pages->all();
@@ -553,7 +553,7 @@ class IndexController extends BaseController
             ->join('upload b', 'a.thumb = b.id', 'left')
             ->where(array('a.delete'=>0))
             ->order('create_time desc')
-            ->limit(10)
+            ->limit(6)
             ->select();
         if(is_array($lists) && count($lists)){
             foreach($lists as $key => $value){
