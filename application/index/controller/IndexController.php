@@ -55,7 +55,7 @@ class IndexController extends BaseController
             ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
             ->where(array('a.taxonomy_id'=>$id,'a.delete'=>0))
             ->order('create_time desc')
-            ->select();
+            ->select(10);
 
         if(is_array($lists) && count($lists)){
             foreach($lists as $key => $value){
@@ -197,6 +197,12 @@ class IndexController extends BaseController
             foreach($lists as $key => $value){
                 $lists[$key]['view_url'] = get_view_url($value['save_path']);
                 $lists[$key]['reads']    = 100+rand(50,100);
+
+                $create_time = $value['create_time'];
+                $create_time = explode(' ', $value['create_time']);
+                $create_time = $create_time[0];
+
+                $lists[$key]['create_time'] = $create_time;
             }
         }
 
