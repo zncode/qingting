@@ -189,7 +189,7 @@ class IndexController extends BaseController
             ->join('upload b', 'a.thumb = b.id', 'left')
             ->where(array('a.delete'=>0))
             ->order('create_time desc')
-            ->paginate(10);
+            ->paginate(6);
 
         $page = $pages->render();
         $lists  = $pages->all();
