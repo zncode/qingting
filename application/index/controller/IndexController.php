@@ -55,7 +55,7 @@ class IndexController extends BaseController
             ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
             ->where(array('a.taxonomy_id'=>$id,'a.delete'=>0))
             ->order('create_time desc')
-            ->select(10);
+            ->select();
 
         if(is_array($lists) && count($lists)){
             foreach($lists as $key => $value){
