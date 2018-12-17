@@ -26,6 +26,21 @@
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
+                                    <label class="layui-form-label">Logo</label>
+                                    <div class="layui-input-block">
+                                        <div style="margin-bottom: 5px;cursor:pointer;" class="thumb_image" >
+                                            {if condition="isset($site_logo)"}
+                                                <img src="{$site_logo}" width="150px" height="auto" class="thumb_image_picture" >
+                                            {/if}
+                                        </div>
+                                        <div>
+                                            <button type="button" class="layui-btn" id="image_upload" >
+                                                <i class="layui-icon">&#xe67c;</i>上传图片
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
                                     <label class="layui-form-label" >关键字</label>
                                     <div class="layui-input-block">
                                         <textarea class="layui-textarea" name="site_keyword" rows="1" placeholder="Enter ..." >{$site_keyword}</textarea>
@@ -39,7 +54,8 @@
                                 </div>
                                 <div class="layui-form-item">
                                     <div class="layui-input-block">
-                                        <button class="layui-btn" lay-submit lay-filter="update">提交</button>
+                                        <input type="hidden" value="{$site_logo}" name="site_logo" id="site_logo">
+                                        <button class="layui-btn" lay-submit lay-filter="update" id="submit" >提交</button>
                                     </div>
                                 </div>
                             </form>
@@ -59,34 +75,95 @@
 
 <script>
 
-    layui.use('form', function(){
+    layui.use(['form','upload'], function(){
         var form = layui.form;
+        var upload = layui.upload;
         $ = layui.jquery;
 
-        form.on('submit(update)', function(data){
-            //提交
-            $.ajax({
-                url: "{$action}",
-                type: "post",
-                data: data.field,
-                success:function(result){
-                    var result = JSON.parse(result);
-                    var code = result.code;
-                    var msg  = result.msg;
-                    var data = result.data;
-                    if(code==0){
-                        layer.msg(msg, {
-                            time: 2000,
-                            icon: 16,
-                            shade: 0.2
-                        }, function(){
-                            parent.location.reload();
-                        });
-                    }else{
-                        layer.msg(msg);
-                    }
+        //图片上传
+        var uploadInst = upload.render({
+            elem: '#image_upload'
+            ,url: "{:url('/upload/image_normal')}"
+            ,data: {'category':'site','filename':'logo.jpg'}
+            ,size: 2048
+            ,auto: false
+            ,bindAction: '#submit'
+            ,choose: function(obj){
+                obj.preview(function(index, file, result){
+                    var thumb_image = '<img src="'+result+'" width="150px" height="auto" class="thumb_image_picture">';
+                    $('.thumb_image').html(thumb_image);
+                });
+            }
+            ,done: function(res){
+                var code    = res.code;
+                var msg     = res.message;
+                var data    = res.data;
+                if(code == 0){
+                    $('#site_logo').attr('value', data.src);
+
+                    var  field = {
+                        'site_title': $("[name='site_title']").val(),
+                        'site_keyword': $("[name='site_keyword']").val(),
+                        'site_description': $("[name='site_description']").val(),
+                        'site_logo': $("[name='site_logo']").val(),
+                    };
+
+                    $.ajax({
+                        url: "{$action}",
+                        type: "post",
+                        data: field,
+                        success:function(result){
+                            var result = JSON.parse(result);
+                            var code = result.code;
+                            var msg  = result.msg;
+                            var data = result.data;
+                            if(code==0){
+                                layer.msg(msg, {
+                                    time: 2000,
+                                    icon: 16,
+                                    shade: 0.2
+                                }, function(){
+//                                    parent.location.reload();
+                                });
+                            }else{
+                                layer.msg(msg);
+                            }
+                        }
+                    });
+                    return false;
+                }else{
+                    layer.msg(msg);
                 }
-            })
+            }
+        });
+
+        form.on('submit(update)', function(data){
+            var objFile = $("[name='file']").val();
+            if(objFile.length == "") {
+                //提交
+                $.ajax({
+                    url: "{$action}",
+                    type: "post",
+                    data: data.field,
+                    success:function(result){
+                        var result = JSON.parse(result);
+                        var code = result.code;
+                        var msg  = result.msg;
+                        var data = result.data;
+                        if(code==0){
+                            layer.msg(msg, {
+                                time: 2000,
+                                icon: 16,
+                                shade: 0.2
+                            }, function(){
+                                parent.location.reload();
+                            });
+                        }else{
+                            layer.msg(msg);
+                        }
+                    }
+                })
+            }
             return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
         });
     });

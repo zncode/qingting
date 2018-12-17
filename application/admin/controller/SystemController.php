@@ -50,6 +50,7 @@ class SystemController extends BaseController
         $data['site_title']         = $this->variable_get('site_title');
         $data['site_keyword']       = $this->variable_get('site_keyword');
         $data['site_description']   = $this->variable_get('site_description');
+        $data['site_logo']           = $this->variable_get('site_logo');
         return view($this->url_path.'/site_setup', $data);
     }
 
@@ -62,6 +63,7 @@ class SystemController extends BaseController
         $this->variable_set('site_title',   $formData['site_title']);
         $this->variable_set('site_keyword', $formData['site_keyword']);
         $this->variable_set('site_description', $formData['site_description']);
+        $this->variable_set('site_logo', $formData['site_logo']);
 
         $this->json(array('code'=>0, 'msg'=>'编辑成功', 'data'=>[]));
     }
