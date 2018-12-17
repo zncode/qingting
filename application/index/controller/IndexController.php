@@ -46,9 +46,9 @@ class IndexController extends BaseController
      */
     public function taxonomy_list()
     {
-        $id = input('id');
-        $sub_lists = false;
-
+        $id         = input('id');
+        $sub_lists  = false;
+        $system     = new SystemController();
         $lists  = Db::name('article')
             ->alias('a')
             ->field('a.id,a.taxonomy_id,a.title,a.brief,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
