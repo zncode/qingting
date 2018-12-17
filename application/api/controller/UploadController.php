@@ -142,6 +142,57 @@ class UploadController extends BaseController
     }
 
     /**
+     * 上传图片不保存数据库
+     */
+    public function image_no_db()
+    {
+        $category       = input('post.category') ? input('post.category') : 'article';
+        $filename       = input('post.filename') ? input('post.filename') : null;
+        $file = request()->file();
+        if(is_array($file)){
+            $file = $file['file'];
+        }
+
+        if($file){
+            $date_dir           = date('Ymd', time());
+            $upload_save_path   = ROOT_PATH . 'public' . DS . 'upload' . DS . $category;
+
+            $info = $file->move($upload_save_path, $filename);
+
+            if($info){
+                $picture['extension'] = $info->getExtension();
+                $picture['save_path'] = $info->getSaveName();
+                $picture['filename']  = $info->getFilename();
+                $picture['size']      = $info->getSize();
+                if($_SERVER['HTTP_HOST'] == 'localhost'){
+                    if($filename){
+                        $src = 'http://'.$_SERVER['HTTP_HOST'].'/'.Config::get('project_dirname').'/public/upload/'.$category.'/'.$picture['filename'];
+                    }else{
+                        $src = 'http://'.$_SERVER['HTTP_HOST'].'/'.Config::get('project_dirname').'/public/upload/'.$category.'/'.$date_dir.'/'.$picture['filename'];
+                    }
+
+                }else{
+                    if($filename){
+                        $src = 'http://'.$_SERVER['HTTP_HOST'].'/upload/'.$category.'/'.$picture['filename'];
+                    }else{
+                        $src = 'http://'.$_SERVER['HTTP_HOST'].'/upload/'.$category.'/'.$date_dir.'/'.$picture['filename'];
+                    }
+                }
+                $picture['src']  = $src;
+
+                $data = ['code'=>0, 'message'=>'上传图片成功', 'data'=>$picture];
+            }else{
+                // 上传失败获取错误信息
+                $data = ['code'=>1, 'message'=>$file->getError(), 'data'=>array()];
+            }
+
+            echo json_encode($data);die;
+        }else{
+            echo json_encode(['code'=>1, 'message'=>$file->getError(), 'data'=>array()]);die;
+        }
+    }
+
+    /**
      * 保存数据库
      * @param $image
      */

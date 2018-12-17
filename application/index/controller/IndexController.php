@@ -34,9 +34,6 @@ class IndexController extends BaseController
         $data['site_popular']       = $this->get_site_popular($site_popular);
         $data['site_recommend']     = $this->get_site_recommend($site_recommend);
         $data['site_news']          = $this->get_site_news();
-        $data['meta_keyword']       = $system->variable_get('site_keyword');
-        $data['meta_description']   = $system->variable_get('site_description');
-        $data['site_title']         = $system->variable_get('site_title');
 
         return view('index/index',$data);
     }
@@ -118,10 +115,8 @@ class IndexController extends BaseController
         $data['current_date']       = get_current_date();
         $data['category']           = $taxonomy;
         $data['sub_lists']          = $sub_lists;
-        $data['meta_keyword']       = $system->variable_get('site_keyword');
-        $data['meta_description']   = $system->variable_get('site_description');
-        $data['site_title']         = $system->variable_get('site_title');
-
+        $data['meta_keyword']       = $taxonomy['keyword'];
+        $data['meta_description']   = $taxonomy['description'];
         return view('index/category_list', $data);
     }
 
@@ -230,9 +225,6 @@ class IndexController extends BaseController
         $data['page']               = $page;
         $data['left_menu']          = $left_menu;
         $data['taxonomy_id']        = $taxonomy_id;
-        $data['meta_keyword']       = $system->variable_get('site_keyword');
-        $data['meta_description']   = $system->variable_get('site_description');
-        $data['site_title']         = $system->variable_get('site_title');
 
         return view('index/recommend_list', $data);
     }

@@ -2,15 +2,24 @@
 namespace app\index\controller;
 
 use think\Controller;
+use app\admin\controller\SystemController;
 
 class BaseController extends Controller
 {
     public $search_action;
+    public $site_logo;
 
     public function __construct()
     {
+        $system = new SystemController();
+        $this->site_logo = $system->variable_get('site_logo');
         $this->search_action = url('/search');
-        \think\View::share(['search_action'=>url('/search')]);
+
+        \think\View::share(['search_action'     => url('/search')]);
+        \think\View::share(['site_logo'         => $this->site_logo]);
+        \think\View::share(['meta_keyword'      => $system->variable_get('site_keyword')]);
+        \think\View::share(['meta_description'  => $system->variable_get('site_description')]);
+        \think\View::share(['site_title'        => $system->variable_get('site_title')]);
     }
 
     public function get_document_root_dir(){
