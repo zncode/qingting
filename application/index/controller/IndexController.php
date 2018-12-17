@@ -118,8 +118,9 @@ class IndexController extends BaseController
         $data['current_date']       = get_current_date();
         $data['category']           = $taxonomy;
         $data['sub_lists']          = $sub_lists;
-        $data['meta_keyword']       = $taxonomy['keyword'];
-        $data['meta_description']   = $taxonomy['description'];
+        $data['meta_keyword']       = $system->variable_get('site_keyword');
+        $data['meta_description']   = $system->variable_get('site_description');
+        $data['site_title']         = $system->variable_get('site_title');
 
         return view('index/category_list', $data);
     }
@@ -182,8 +183,8 @@ class IndexController extends BaseController
      */
     public function recommend_list()
     {
-        $taxonomy_id = input('id');
-
+        $system         = new SystemController();
+        $taxonomy_id    = input('id');
         $pages  = Db::name('recommend')
             ->alias('a')
             ->field('a.id,a.title,a.summary,a.create_time,a.taxonomy_id,b.save_path')
@@ -229,8 +230,10 @@ class IndexController extends BaseController
         $data['page']               = $page;
         $data['left_menu']          = $left_menu;
         $data['taxonomy_id']        = $taxonomy_id;
-        $data['meta_keyword']       = '好站推荐,精彩推荐';
-        $data['meta_description']   = '推荐内容丰富的,有趣的网站！';
+        $data['meta_keyword']       = $system->variable_get('site_keyword');
+        $data['meta_description']   = $system->variable_get('site_description');
+        $data['site_title']         = $system->variable_get('site_title');
+
         return view('index/recommend_list', $data);
     }
 
@@ -240,7 +243,8 @@ class IndexController extends BaseController
      */
     public function page_info()
     {
-        $id = input('id');
+        $system = new SystemController();
+        $id     = input('id');
         $info  = Db::name('recommend')
             ->alias('a')
             ->field('a.id,a.title,a.content,a.create_time,a.taxonomy_id,a.meta_keyword,a.meta_description,b.save_path')
@@ -275,6 +279,7 @@ class IndexController extends BaseController
         $data['reads']              = 100+rand(50,100);
         $data['meta_keyword']       = $info['meta_keyword'];
         $data['meta_description']   = $info['meta_description'];
+        $data['site_title']         = $system->variable_get('site_title');
         $data['current_date']       = get_current_date();
         return view('index/page_info', $data);
     }
