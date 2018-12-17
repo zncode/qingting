@@ -96,11 +96,12 @@ Route::get('admin/article_type/info', 			'CategoryController/info');
 Route::get('admin/article_type/delete', 		'CategoryController/delete');
 
 //系统设置
-Route::get('admin/system/index_setup', 			'admin/SystemController/index_setup');
-Route::post('admin/system/index_setup_submit', 	'admin/SystemController/index_setup_submit');
+Route::get('admin/system/index_setup', 			    'admin/SystemController/index_setup');
+Route::post('admin/system/index_setup_submit', 	    'admin/SystemController/index_setup_submit');
 Route::get('admin/system/sitemap_setup', 			'admin/SystemController/sitemap_setup');
 Route::post('admin/system/sitemap_setup_submit', 	'admin/SystemController/sitemap_setup_submit');
-
+Route::get('admin/system/site_setup', 			    'admin/SystemController/site_setup');
+Route::post('admin/system/site_setup_submit', 	    'admin/SystemController/site_setup_submit');
 
 
 
