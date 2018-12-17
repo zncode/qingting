@@ -40,6 +40,34 @@ class SystemController extends BaseController
     }
 
     /**
+     * 网站信息设置
+     */
+    public function site_setup()
+    {
+        $data['action']             = url('admin/'.$this->url_path.'/site_setup_submit');
+        $data['module_name']        = $this->module_name;
+        $data['path']               = $this->url_path;
+        $data['site_title']         = $this->variable_get('site_title');
+        $data['site_keyword']       = $this->variable_get('site_keyword');
+        $data['site_description']   = $this->variable_get('site_description');
+        return view($this->url_path.'/site_setup', $data);
+    }
+
+    /**
+     * 网站信息设置提交
+     */
+    public function site_setup_submit()
+    {
+        $formData   = input('request.');
+        $this->variable_set('site_title',   $formData['site_title']);
+        $this->variable_set('site_keyword', $formData['site_keyword']);
+        $this->variable_set('site_description', $formData['site_description']);
+
+        $this->json(array('code'=>0, 'msg'=>'编辑成功', 'data'=>[]));
+    }
+
+
+    /**
      * Sitemap设置
      */
     public function sitemap_setup()

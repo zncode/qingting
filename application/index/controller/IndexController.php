@@ -34,8 +34,9 @@ class IndexController extends BaseController
         $data['site_popular']       = $this->get_site_popular($site_popular);
         $data['site_recommend']     = $this->get_site_recommend($site_recommend);
         $data['site_news']          = $this->get_site_news();
-        $data['meta_keyword']       = '蜻蜓好站, 蜻蜓360, 蜻蜓导航, 网址导航, 网站导航, APP导航, 公众号导航, 小程序导航, 手机网站导航, 好站推荐,qingting360';
-        $data['meta_description']   = '蜻蜓好站让你上网更轻松！推荐好网站，查找好网站，移动APP、公众号、小程序导航!';
+        $data['meta_keyword']       = $system->variable_get('site_keyword');
+        $data['meta_description']   = $system->variable_get('site_desciption');
+        $data['site_title']         = $system->variable_get('site_title');
 
         return view('index/index',$data);
     }
