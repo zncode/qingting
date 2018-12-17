@@ -35,7 +35,7 @@ class IndexController extends BaseController
         $data['site_recommend']     = $this->get_site_recommend($site_recommend);
         $data['site_news']          = $this->get_site_news();
         $data['meta_keyword']       = $system->variable_get('site_keyword');
-        $data['site_description']   = $system->variable_get('site_description');
+        $data['meta_description']   = $system->variable_get('site_description');
         $data['site_title']         = $system->variable_get('site_title');
 
         return view('index/index',$data);
