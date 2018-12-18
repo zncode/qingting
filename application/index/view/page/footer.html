@@ -5,7 +5,27 @@
     layui.use('element', function(){
         var element = layui.element;
         var $ = layui.$;
+
+        $('.counter').click(function(){
+            var type = $(this).attr('data-type');
+            var id   = $(this).attr('data-id');
+
+            var  field = {
+                'type': type,
+                'id': id,
+            };
+
+            $.ajax({
+                url: "{:url('/api/counter')}",
+                type: "post",
+                data: field,
+                success:function(result){
+                }
+            })
+        });
+
     });
 </script>
+
 </body>
 </html>

@@ -36,6 +36,19 @@
 <script>
     layui.use(['element', 'laypage'], function(){
         var $ = layui.$;
+
+        var  field = {
+            'type': 2,
+            'id': "{$info.id}",
+        };
+
+        $.ajax({
+            url: "{:url('/api/counter')}",
+            type: "post",
+            data: field,
+            success:function(result){
+            }
+        })
     });
 </script>
 {include file="page/footer" /}
