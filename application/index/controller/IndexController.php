@@ -193,7 +193,12 @@ class IndexController extends BaseController
         if(is_array($lists) && count($lists)){
             foreach($lists as $key => $value){
                 $lists[$key]['view_url'] = get_view_url($value['save_path']);
-                $lists[$key]['reads']    = 100+rand(50,100);
+                $counter = Db::name('counter')->where(['type'=>2, 'type_id'=>$value['id']])->find();
+                if($counter){
+                    $lists[$key]['reads']    = $counter['count']+50;
+                }else{
+                    $lists[$key]['reads']    = 50;
+                }
 
                 $create_time = $value['create_time'];
                 $create_time = explode(' ', $value['create_time']);
@@ -246,6 +251,12 @@ class IndexController extends BaseController
         $info['create_time'] = explode(' ',  $info['create_time']);
         $info['create_time'] = $info['create_time'][0];
 
+        $counter = Db::name('counter')->where(['type'=>2, 'type_id'=>$info['id']])->find();
+        if($counter){
+            $info['reads']    = $counter['count']+50;
+        }else{
+            $info['reads']    = 50;
+        }
 
         //导航条
         $breadcrumb[] = array('path'=>url('/'),'title'=>'首页');
@@ -268,7 +279,6 @@ class IndexController extends BaseController
         $data['info']               = $info;
         $data['left_menu']          = $left_menu;
         $data['taxonomy_id']        = $id;
-        $data['reads']              = 100+rand(50,100);
         $data['meta_keyword']       = $info['meta_keyword'];
         $data['meta_description']   = $info['meta_description'];
         $data['site_title']         = $system->variable_get('site_title');
