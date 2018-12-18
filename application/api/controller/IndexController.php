@@ -70,4 +70,19 @@ class IndexController extends BaseController{
         $request = \think\Request::instance();
         echo  $request->token();die;
     }
+
+    /**
+     * 计数器
+     */
+    public function counter(){
+        $type = input('type');
+        $id   = input('id');
+        $counter = Db::name('counter')->where(['type_id'=>$id, 'type'=>$type])->find();
+        if($counter){
+            Db::name('counter')->where(['type_id'=>$id, 'type'=>$type])->setInc('count');
+        }else{
+            Db::name('counter')->insert(['type'=>$type,'type_id'=>$id, 'count'=>1]);
+        }
+
+    }
 }

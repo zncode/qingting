@@ -9,4 +9,5 @@ Route::get('api/get_html_info',                 'api/IndexController/get_html_in
 Route::get('api/phpinfo',                       'api/IndexController/phpinfo');
 Route::get('api/create_capcha',                 'api/IndexController/create_capcha');
 Route::get('api/get_token',                     'api/IndexController/get_token');
+Route::post('api/counter',                       'api/IndexController/counter');
 
