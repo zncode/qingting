@@ -1,0 +1,16 @@
+<div class="bd">
+  {volist name="left_menu" id="v"}
+    {if condition="isset($v.child) neq '' "}
+      <dl>
+          <dt>
+              {$breadcrumb}
+          </dt>
+          <dd>
+            {volist name="v.child" id="vo"}
+               <a class="" href="{:url('category/id/'.$vo.id)}">{$vo.name}</a>
+            {/volist}
+          </dd>
+      </dl>
+    {/if}
+  {/volist}
+</div>

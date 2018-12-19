@@ -1,0 +1,27 @@
+<div class="top">
+    <div class="top_wrapper">
+        <div class="logo">
+            <!--<a href="{:url('/')}"><img src="{$Think.BASE_PATH}image/logo.png" width="250px" height="auto"></a>-->
+            <a href="{:url('/')}"><img src="{$site_logo}" width="250px" height="auto"></a>
+        </div>
+        <div class="top_menu_wrapper">
+            <form class="search_box" action="{$search_action}">
+                <i class="layui-icon layui-icon-search caller-seach-icon caller-icon"></i>
+                <input type="text" name="keyword" required="" lay-verify="required" placeholder="请输入关键字" autocomplete="off" class="layui-input ">
+                <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="search">搜索</button>
+            </form>
+            <div class="weather_box">
+                <div>
+                    <iframe name="weather_inc" src="http://i.tianqi.com/index.php?c=code&id=52&icon=1&num=3" width="200" height="25" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+                </div>
+                <div style="font-size: 11px;">
+                    &nbsp;{$current_date}
+                </div>
+            </div>
+            <div class="site_button">
+                <!--<button class="layui-btn layui-btn-lg layui-btn-primary">站点发布</button>-->
+                <!--<button class="layui-btn layui-btn-lg layui-btn-primary">用户登录</button>-->
+            </div>
+        </div>
+    </div>
+</div>
