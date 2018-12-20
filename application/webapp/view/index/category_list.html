@@ -1,0 +1,23 @@
+{include file="page/header" /}
+<br><br>
+<header class="demos-header">
+    <h1 class="demos-title">Panel</h1>
+</header>
+<br><br>
+<style>
+    #iframeLeft{
+        width: 15%;
+        height: 700px;
+        float: left;
+    }
+    #iframeContent{
+        width: 84%;
+        height: 700px;
+    }
+</style>
+
+<div>
+    <iframe id="iframeLeft" name="iframeLeft" frameborder="0" src="{:url('/app/category_left')}" ></iframe>
+    <iframe id="iframeContent" name="iframeContent" frameborder="0" src="{:url('/app/category_right')}"  ></iframe>
+</div>
+{include file="page/footer" /}

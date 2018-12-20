@@ -1,0 +1,54 @@
+{include file="page/header" /}
+{include file="page/body_top" /}
+<div style="clear: both;"></div>
+<div class="body">
+    <div class="body-left">
+      {include file="page/menu_recommend" /}
+    </div>
+    <div class="page_center">
+        <div class="part_wrapper" style="" >
+            <div class="breadcrumb">
+                <div class="breadcrumb_left">&nbsp;</div>
+                {$breadcrumb}
+            </div>
+            <div class="page_content">
+                <div class="page_content_title">
+                    {$info.title}
+                </div>
+                <div class="page_content_subtitle">
+                    <span class="date">{$info.create_time}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="read">阅读 {$info.reads}</span>
+                </div>
+                <div class="page_content_body">
+                    {$info.content}
+                </div>
+                <div style="margin-top: 50px; margin-bottom: 20px; color: #ccc; text-align: center;">
+                    【转载声明】本文内容来源互联网转载，如有侵权内容，请发送邮件至 qingting360@163.com，本站将会删除相关内容。
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <div style="clear: both"></div>
+</div>
+
+
+<script>
+    layui.use(['element', 'laypage'], function(){
+        var $ = layui.$;
+
+        var  field = {
+            'type': 2,
+            'id': "{$info.id}",
+        };
+
+        $.ajax({
+            url: "{:url('/api/counter')}",
+            type: "post",
+            data: field,
+            success:function(result){
+            }
+        })
+    });
+</script>
+{include file="page/footer" /}
