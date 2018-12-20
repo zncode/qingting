@@ -1,95 +1,36 @@
 {include file="page/header" /}
-{include file="page/body_top" /}
-<div style="clear: both;"></div>
-<div class="body">
-    <div class="body-left">
-      {include file="page/menu_recommend" /}
+<br><br>
+<header class="demos-header">
+    <h1 class="demos-title">Panel</h1>
+</header>
+<br><br>
+<div class="weui-panel weui-panel_access">
+    <div class="weui-panel__hd">图文组合列表</div>
+    <div class="weui-panel__bd">
+        <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+            <div class="weui-media-box__hd">
+                <img class="weui-media-box__thumb" src="">
+            </div>
+            <div class="weui-media-box__bd">
+                <h4 class="weui-media-box__title">标题一</h4>
+                <p class="weui-media-box__desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
+            </div>
+        </a>
+        <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+            <div class="weui-media-box__hd">
+                <img class="weui-media-box__thumb" src="">
+            </div>
+            <div class="weui-media-box__bd">
+                <h4 class="weui-media-box__title">标题二</h4>
+                <p class="weui-media-box__desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
+            </div>
+        </a>
     </div>
-    <div class="part_wrapper" style="width: 900px;margin-left: 20px;" >
-        <div class="body-center">
-              <div class="breadcrumb">
-                  <div class="breadcrumb_left">&nbsp;</div>
-                  {$breadcrumb}
-              </div>
-              {if condition="isset($list)"}
-                {volist name="list" id="v"}
-                    <div class="line_wrapper">
-                        <div class="line_picture">
-                            <a href="{:url('/page',array('id'=>$v.id))}" ><img src="{$v.view_url}" width="180px" height="120px"></a>
-                        </div>
-                        <div class="line_content">
-                            <div class="line_content_title"><a href="{:url('/page',array('id'=>$v.id))}">{$v.title}</a></div>
-                            <div class="line_content_body">{$v.summary}</div>
-                            <div class="line_content_bottom">{$v.create_time}&nbsp;&nbsp;&nbsp;&nbsp;{$v.reads}浏览</div>
-                        </div>
-                    </div>
-                {/volist}
-              {else /}
-                {for start="1" end="10"}
-                <!-- 行 -->
-                <div class="line_wrapper">
-                    <div class="line_picture">
-                        <img src="{$Think.BASE_PATH}image/tmp/list_1.jpg" width="180px" height="120px">
-                    </div>
-                    <div class="line_content">
-                        <div class="line_content_title"><a href="{:url('/page')}">普吉岛｜这些拥有私密沙滩的酒店让你再也不人挤人！</a></div>
-                        <div class="line_content_body">蜂蜂们的困扰我们都听到了！为你看过了千百个普吉酒店，精挑细选了9家可享私密沙滩的五星酒店，分分钟甩开拥挤人潮、冲入碧海蓝天，让人恨不得现在就想把机票买下去啊。</div>
-                        <div class="line_content_bottom">1216浏览</div>
-                    </div>
-                </div>
-                <!-- 行 -->
-                {/for}
-              {/if}
-          <div id="page">{$page}</div>
-        </div>
-
-        <div class="body-right">
-          <div class="body_right_block"><a href="https://s.weibo.com/weibo?q=%23%E6%8C%91%E6%88%98PADMAN%23" target="_blank"><img src="{$Think.BASE_PATH}image/ad/ad_1.jpg" width="200px" height="auto"></a></div>
-          <div class="body_right_block"><a href="http://edu.sina.com.cn/zt_d/edugongyi/" target="_blank"><img src="{$Think.BASE_PATH}image/ad/ad_2.jpg" width="200px" height="auto"></a></div>
-          <div class="body_right_block"><a href="https://s.weibo.com/weibo?q=%23%E6%8C%91%E6%88%98PADMAN%23" target="_blank"><img src="{$Think.BASE_PATH}image/ad/ad_3.jpg" width="200px" height="auto"></a></div>
-        </div>
+    <div class="weui-panel__ft">
+        <a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link">
+            <div class="weui-cell__bd">查看更多</div>
+            <span class="weui-cell__ft"></span>
+        </a>
     </div>
-  <div style="clear: both"></div>
 </div>
-
-
-<script>
-    layui.use(['element', 'laypage'], function(){
-        var $ = layui.$;
-        var laypage = layui.laypage;
-
-        $('.line_wrapper').mouseover(function(){
-            $(this).css('background-color','#F2F2F2');
-        })
-        $('.line_wrapper').mouseout(function(){
-            $(this).css('background-color','#ffffff');
-        })
-
-        laypage.render({
-            elem: 'page1'
-            ,count: '100'
-            ,limit: 2
-            ,theme: '#1E9FFF'
-            ,layout: ['count', 'prev', 'page', 'next', 'skip']
-            ,curr: location.hash.replace('#!fenye=', '')
-            ,hash: 'fenye'
-            ,jump: function(obj, first){
-                //obj包含了当前分页的所有参数，比如：
-                console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
-                console.log(obj.limit); //得到每页显示的条数
-
-                //首次不执行
-                if(!first){
-                    //do something
-                    var domain = window.location.host;
-                    console.log(window.location.href);
-//                    var current_url = window.location.href;
-                    var current_url = window.location.href.replace('&*', '');
-                    var jump_url= current_url+'&page='+obj.curr+'#!fenye='+obj.curr;
-                    window.location.href = jump_url;
-                }
-            }
-        });
-    });
-</script>
 {include file="page/footer" /}

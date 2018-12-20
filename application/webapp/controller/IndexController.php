@@ -122,6 +122,26 @@ class IndexController extends BaseController
         return view('index/category_list', $data);
     }
 
+    public function taxonomy_menu_left(){
+        $menu = '';
+        for($i=1;$i<100;$i++){
+            $menu .= '<div>';
+            $menu .= '<a href="'.url('/app/category_right', ['id'=>$i]).'" target="iframeContent">menu'.$i.'</a>';
+            $menu .= '</div>';
+        }
+
+        echo $menu;die;
+    }
+    public function taxonomy_menu_right(){
+        $id = input('id');
+        $content = '';
+        for($i=1;$i<100;$i++){
+            $content .= $id.'<br>';
+        }
+        echo $content;die;
+
+    }
+
     /**
      * 频道列表
      */

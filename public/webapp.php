@@ -16,8 +16,12 @@ define('APP_PATH', __DIR__ . '/../application/');
 define('BIND_MODULE','webapp');
 
 //模板变量
-$php_self = str_replace('webapp.php', '', $_SERVER['PHP_SELF']);
-define('BASE_PATH', 'http://'.$_SERVER['HTTP_HOST'].$php_self);
+if($_SERVER['HTTP_HOST'] != 'localhost'){
+    define('BASE_PATH', 'http://'.$_SERVER['HTTP_HOST']);
+}else{
+    define('BASE_PATH', 'http://'.$_SERVER['HTTP_HOST'].'/qingting/public/');
+}
+
 
 // 加载框架引导文件
 require __DIR__ . '/../thinkphp/start.php';
