@@ -1,11 +1,13 @@
 <?php
 
 if(is_mobile()){
-    $url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+//    $url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+    $url = 'http://'.$_SERVER['HTTP_HOST'];
     if(strpos($url, 'index')){
     	$url = str_replace('index', 'webapp', $url);
     }else{
-    	$url = 'http://'.$_SERVER['HTTP_HOST'].'/webapp.php'.$_SERVER['REQUEST_URI'];
+//    	$url = 'http://'.$_SERVER['HTTP_HOST'].'/webapp.php'.$_SERVER['REQUEST_URI'];
+        $url = 'http://'.$_SERVER['HTTP_HOST'].'/webapp.php';
     }
 
     header('Location: '.$url);
