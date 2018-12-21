@@ -9,8 +9,8 @@ if(is_mobile()){
 //    	$url = 'http://'.$_SERVER['HTTP_HOST'].'/webapp.php'.$_SERVER['REQUEST_URI'];
         $url = 'http://'.$_SERVER['HTTP_HOST'].'/webapp.php';
     }
-    echo $url; die;
-    header('Location: '.$url);
+//    echo $url;
+    header('Location: '.$url); die;
 }
 
 //判断是否移动端
