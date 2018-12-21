@@ -1,5 +1,9 @@
 {include file="page/header" /}
 <style>
+    iframe body {
+        display: block;
+        margin: 0px;
+    }
     #iframeLeft{
         width: 15%;
         height: 300px;
@@ -9,6 +13,7 @@
         width: 85%;
         height: 300px;
     }
+
 </style>
 <br>
 <header class="demos-header">
@@ -31,8 +36,8 @@
     <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
 </div>
 <div>
-    <iframe id="iframeLeft" name="iframeLeft" frameborder="0" src="{:url('/app/category_left')}" ></iframe>
-    <iframe id="iframeContent" name="iframeContent" frameborder="0" src="{:url('/app/category_right')}"  ></iframe>
+    <iframe id="iframeLeft" name="iframeLeft" frameborder="0" src="{:url('/app/category_left')}" border="0" ></iframe>
+    <iframe id="iframeContent" name="iframeContent" frameborder="0" src="{:url('/app/category_right')}"  border="0" ></iframe>
 </div>
 
 <br><br>
