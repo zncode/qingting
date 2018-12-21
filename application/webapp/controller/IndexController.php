@@ -124,28 +124,38 @@ class IndexController extends BaseController
         $request = Request::instance();
 
         $data['index_url'] = $request->root(true);
-
+        $data['id'] = $id;
         return view('index/category_list', $data);
     }
 
     public function taxonomy_menu_left(){
+        $id     = input('id');
+        $childs = Db::name('taxonomy')->where(array('parent_id'=>$id, 'delete'=>0))->select();
 
-        $menu = [];
-        for($i=1;$i<100;$i++){
-            $menu[$i] = 'menu'.$i;
-        }
-
-        $data['menu'] = $menu;
+        $data['menu'] = $childs;
         return view('index/taxonomy_menu_left', $data);
     }
 
     public function taxonomy_menu_right(){
         $id = input('id');
-        $content = '';
-        for($i=1;$i<100;$i++){
-            $content .= $id.'<br>';
+
+        $lists  = Db::name('article')
+            ->alias('a')
+            ->field('a.id,a.taxonomy_id,a.title,a.brief,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
+            ->join('upload b', 'a.thumb = b.id', 'left')
+            ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
+            ->where(array('a.taxonomy_id'=>$id,'a.delete'=>0))
+            ->order('create_time desc')
+            ->select();
+
+        if(is_array($lists) && count($lists)){
+            foreach($lists as $key => $value){
+                $lists[$key]['view_url'] = get_view_url($value['save_path']);
+                $lists[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
+            }
         }
-        $data['content'] = $content;
+
+        $data['list'] = $lists;
         return view('index/taxonomy_menu_right', $data);
     }
 
