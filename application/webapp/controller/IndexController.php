@@ -132,7 +132,7 @@ class IndexController extends BaseController
 
         $menu = [];
         for($i=1;$i<100;$i++){
-            $menu[$i] = 'menu-'.$i;
+            $menu[$i] = 'menu'.$i;
         }
 
         $data['menu'] = $menu;
