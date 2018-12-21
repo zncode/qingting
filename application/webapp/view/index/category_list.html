@@ -1,9 +1,4 @@
 {include file="page/header" /}
-<br><br>
-<header class="demos-header">
-    <h1 class="demos-title">Panel</h1>
-</header>
-<br><br>
 <style>
     #iframeLeft{
         width: 15%;
@@ -15,7 +10,26 @@
         height: 300px;
     }
 </style>
+<br>
+<header class="demos-header">
+    <h1 class="demos-title">Panel</h1>
+</header>
+<br>
 
+<div class="weui-search-bar" id="searchBar">
+    <form class="weui-search-bar__form">
+        <div class="weui-search-bar__box">
+            <i class="weui-icon-search"></i>
+            <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
+            <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+        </div>
+        <label class="weui-search-bar__label" id="searchText">
+            <i class="weui-icon-search"></i>
+            <span>搜索</span>
+        </label>
+    </form>
+    <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+</div>
 <div>
     <iframe id="iframeLeft" name="iframeLeft" frameborder="0" src="{:url('/app/category_left')}" ></iframe>
     <iframe id="iframeContent" name="iframeContent" frameborder="0" src="{:url('/app/category_right')}"  ></iframe>

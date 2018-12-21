@@ -119,27 +119,36 @@ class IndexController extends BaseController
         $data['sub_lists']          = $sub_lists;
         $data['meta_keyword']       = $taxonomy['keyword'];
         $data['meta_description']   = $taxonomy['description'];
+
+        $menu = [];
+        for($i=1;$i<100;$i++){
+            $menu[$i] = 'menu-'.$i;
+        }
+
+        $data['menu'] = $menu;
+
         return view('index/category_list', $data);
     }
 
     public function taxonomy_menu_left(){
-        $menu = '';
+
+        $menu = [];
         for($i=1;$i<100;$i++){
-            $menu .= '<div>';
-            $menu .= '<a href="'.url('/app/category_right', ['id'=>$i]).'" target="iframeContent">menu'.$i.'</a>';
-            $menu .= '</div>';
+            $menu[$i] = 'menu-'.$i;
         }
 
-        echo $menu;die;
+        $data['menu'] = $menu;
+        return view('index/taxonomy_menu_left', $data);
     }
+
     public function taxonomy_menu_right(){
         $id = input('id');
         $content = '';
         for($i=1;$i<100;$i++){
             $content .= $id.'<br>';
         }
-        echo $content;die;
-
+        $data['content'] = $content;
+        return view('index/taxonomy_menu_right', $data);
     }
 
     /**
