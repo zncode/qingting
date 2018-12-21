@@ -23,5 +23,7 @@
         if ((strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') !== FALSE) && (strpos($_SERVER['HTTP_ACCEPT'], 'text/html') === FALSE || (strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html')))){
             echo "HTTP_ACCEPT<br>";
         }  
-    }  
+    }
+
+    echo 'test';die;
 
