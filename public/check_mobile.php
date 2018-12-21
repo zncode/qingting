@@ -1,7 +1,6 @@
 <?php
 
 if(is_mobile()){
-    echo 'test';die;
 //    $url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
     $url = 'http://'.$_SERVER['HTTP_HOST'];
     if(strpos($url, 'index')){
@@ -10,7 +9,7 @@ if(is_mobile()){
 //    	$url = 'http://'.$_SERVER['HTTP_HOST'].'/webapp.php'.$_SERVER['REQUEST_URI'];
         $url = 'http://'.$_SERVER['HTTP_HOST'].'/webapp.php';
     }
-
+    echo $url; die;
     header('Location: '.$url);
 }
 
