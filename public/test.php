@@ -1,6 +1,6 @@
 <?php
+
 $is_mobile = is_mobile();
-var_dump($is_mobile);
 if($is_mobile){
     $url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
     if(strpos($url, 'index')){
