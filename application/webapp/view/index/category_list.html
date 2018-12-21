@@ -6,13 +6,13 @@
         float: left;
     }
     #iframeContent{
-        width: 80%;
+        width: 85%;
         height: 300px;
     }
 </style>
 <br>
 <header class="demos-header">
-    <h1 class="demos-title">Panel</h1>
+    <h1 class="demos-title"><a href="{$index_url}">Panel</a></h1>
 </header>
 <br>
 
@@ -34,4 +34,10 @@
     <iframe id="iframeLeft" name="iframeLeft" frameborder="0" src="{:url('/app/category_left')}" ></iframe>
     <iframe id="iframeContent" name="iframeContent" frameborder="0" src="{:url('/app/category_right')}"  ></iframe>
 </div>
+
+<br><br>
+<div class="weui-footer">
+    <p class="weui-footer__text">Copyright © 2018 qingting</p>
+</div>
+
 {include file="page/footer" /}

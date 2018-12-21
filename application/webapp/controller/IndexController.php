@@ -5,6 +5,7 @@ use app\admin\controller\TaxonomyController;
 use app\admin\controller\SystemController;
 use app\index\controller\BaseController;
 use think\Db;
+use think\Request;
 
 class IndexController extends BaseController
 {
@@ -120,12 +121,9 @@ class IndexController extends BaseController
         $data['meta_keyword']       = $taxonomy['keyword'];
         $data['meta_description']   = $taxonomy['description'];
 
-        $menu = [];
-        for($i=1;$i<100;$i++){
-            $menu[$i] = 'menu-'.$i;
-        }
+        $request = Request::instance();
 
-        $data['menu'] = $menu;
+        $data['index_url'] = $request->root(true);
 
         return view('index/category_list', $data);
     }
