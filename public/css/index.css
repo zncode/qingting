@@ -31,6 +31,7 @@
     float: left;
     width: 200px;
     margin-top:0px;
+    padding:10px;
 }
 .top_menu_wrapper{float:left;margin-top:25px; margin-left:50px; width: 900px;}
 .top_menu_wrapper ul{}
