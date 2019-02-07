@@ -18,10 +18,10 @@ class IndexController extends BaseController
         $site_recommend = $system->variable_get('site_recommend');
 
         //左侧菜单
-        $left_menu   = Db::name('taxonomy')->where(array('delete'=>0,'level'=>0))->order('weight asc, id desc')->select();
+        $left_menu   = Db::name('taxonomy')->where(array('delete'=>0,'level'=>0,'status'=>1))->order('weight asc, id desc')->select();
         if(is_array($left_menu) && count($left_menu)){
             foreach($left_menu as $key => $value){
-                $category = Db::name('taxonomy')->where(array('parent_id'=>$value['id'], 'delete'=>0))->order('weight asc, id desc')->select();
+                $category = Db::name('taxonomy')->where(array('parent_id'=>$value['id'], 'delete'=>0,'status'=>1))->order('weight asc, id desc')->select();
                 if(is_array($category) && count($category)){
                     $left_menu[$key]['child'] = $category;
                 }
