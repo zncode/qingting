@@ -78,7 +78,7 @@ class IndexController extends BaseController
 
         //左侧菜单
         $left_menu[0]   = $taxonomy;
-        $childs         = Db::name('taxonomy')->where(array('parent_id'=>$taxonomy['id'], 'delete'=>0))->select();
+        $childs         = Db::name('taxonomy')->where(array('parent_id'=>$taxonomy['id'], 'delete'=>0,'status'=>1))->select();
         $left_menu[0]['child'] = $childs;
 
         //获取子分类内容
