@@ -71,6 +71,7 @@ ul.pagination a:hover{font-weight: bold; text-decoration-line: underline}
 
 /* 左侧 */
 .body-left .bd dd a.active {
-    background-color: #23b991;
+    /*background-color: #23b991;*/
+    background-color: #1E9FFF;
     color: #fff;
 }

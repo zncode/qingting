@@ -77,9 +77,11 @@ class IndexController extends BaseController
         $breadcrumb[] = array('path'=>'','title'=>$taxonomy['name']);
 
         //左侧菜单
-        $left_menu[0]   = $taxonomy;
-        $childs         = Db::name('taxonomy')->where(array('parent_id'=>$taxonomy['id'], 'delete'=>0,'status'=>1))->select();
-        $left_menu[0]['child'] = $childs;
+        $left_menu[0]               = $taxonomy;
+        $childs                     = Db::name('taxonomy')->where(array('parent_id'=>$taxonomy['id'], 'delete'=>0,'status'=>1))->order('weight asc')->select();
+        $left_menu[0]['child']      = $childs;
+        $brothers                   = Db::name('taxonomy')->where(array('parent_id'=>$taxonomy['parent_id'], 'delete'=>0,'status'=>1))->order('weight asc')->select();
+        $left_menu[0]['brother']    = $brothers;
 
         //获取子分类内容
         if(is_array($childs) && count($childs)){

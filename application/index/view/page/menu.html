@@ -5,11 +5,29 @@
           <dt>
               {$breadcrumb}
           </dt>
-          <dd>
-            {volist name="v.child" id="vo"}
-               <a class="" href="{:url('category/id/'.$vo.id)}">{$vo.name}</a>
-            {/volist}
-          </dd>
+
+          <dl>
+              <dd>
+                  {volist name="v.brother" id="vo"}
+                    {if condition="$vo.id eq $v.id"}
+                        <a class="active" href="{:url('category/id/'.$vo.id)}" >{$vo.name}</a>
+                    {else/}
+                        <a href="{:url('category/id/'.$vo.id)}"  >{$vo.name}</a>
+                    {/if}
+                  {/volist}
+              </dd>
+          </dl>
+
+          <dl>
+              <dt>
+              </dt>
+              <dd>
+                {volist name="v.child" id="vo"}
+                   <a class="" href="{:url('category/id/'.$vo.id)}">{$vo.name}</a>
+                {/volist}
+              </dd>
+          </dl>
+
       </dl>
     {/if}
   {/volist}
