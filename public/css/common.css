@@ -7,6 +7,13 @@ body a:hover {
     color: #F40;
     text-decoration: none;
 }
+div.site_button {
+    padding-top:5px;
+}
+div.site_button a:hover {
+    background-color: #1E9FFF;
+    color:#ffffff;
+}
 .footer {
     margin: 50px auto 0 auto;
     width: 1200px;

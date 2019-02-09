@@ -22,7 +22,7 @@
                             <li>- 不收录网站名称和实际内容不符的网站。</li>
                             <li>- 不收录多级子域名的网站，或者是单页面网站。</li>
                             <li>- 不收录无法访问或者访问速度过慢的网站。</li>
-                            <li>- 网站提交以后，我们会在1-3个工作日之内审核网站信息，通过后会邮件通知。</li>
+                            <!--<li>- 网站提交以后，我们会在1-3个工作日之内审核网站信息，通过后会邮件通知。</li>-->
                         </ul>
                     </div>
                 </div>
@@ -52,38 +52,38 @@
                         <label class="layui-form-label">网站地址</label>
                         <div class="layui-input-block">
                             <div class="layui-input-inline" style="width: 300px;">
-                                <input type="input" name="url" placeholder="" class="layui-input" style="" >
+                                <input type="input" name="url" placeholder="http://www.qingting360.com" class="layui-input" style="" >
                             </div>
                         </div>
                     </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">ICP备案号</label>
-                        <div class="layui-input-block">
-                            <div class="layui-input-inline" style="width: 300px;">
-                                <input type="input" name="icp" placeholder="例如: 京ICP备12345678号" class="layui-input" style="" >
-                            </div>
-                        </div>
-                    </div>
+                    <!--<div class="layui-form-item">-->
+                        <!--<label class="layui-form-label">ICP备案号</label>-->
+                        <!--<div class="layui-input-block">-->
+                            <!--<div class="layui-input-inline" style="width: 300px;">-->
+                                <!--<input type="input" name="icp" placeholder="例如: 京ICP备12345678号" class="layui-input" style="" >-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
                     <div class="layui-form-item">
                         <label class="layui-form-label">网站邮箱</label>
                         <div class="layui-input-block">
                             <div class="layui-input-inline" style="width: 300px;">
-                                <input type="input" name="email" placeholder="" class="layui-input" style="" >
+                                <input type="input" name="email" placeholder="abc@qingting360.com" class="layui-input" style="" >
                             </div>
                         </div>
                     </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label" >关键字</label>
-                        <div class="layui-input-block">
-                            <input type="input" name="keyword" name="" class="layui-input"  placeholder="逗号分开: keyword1, keyword2, keyword3">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label" >网站描述</label>
-                        <div class="layui-input-block">
-                            <textarea class="layui-textarea" name="description" rows="2" placeholder="Enter ..." ></textarea>
-                        </div>
-                    </div>
+                    <!--<div class="layui-form-item">-->
+                        <!--<label class="layui-form-label" >关键字</label>-->
+                        <!--<div class="layui-input-block">-->
+                            <!--<input type="input" name="keyword" name="" class="layui-input"  placeholder="逗号分开: keyword1, keyword2, keyword3">-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="layui-form-item">-->
+                        <!--<label class="layui-form-label" >网站描述</label>-->
+                        <!--<div class="layui-input-block">-->
+                            <!--<textarea class="layui-textarea" name="description" rows="2" placeholder="Enter ..." ></textarea>-->
+                        <!--</div>-->
+                    <!--</div>-->
                     <div class="layui-form-item">
                         <label class="layui-form-label">验证码</label>
                         <div class="layui-input-block">
@@ -140,7 +140,7 @@
                             icon: 16,
                             shade: 0.2
                         }, function(){
-//                            parent.location.reload();
+                           parent.location.reload();
                         });
                     }else{
                         $.ajax({

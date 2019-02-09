@@ -432,10 +432,10 @@ class IndexController extends BaseController
         $tree                   = $taxonomyClass->get_taxonomy_tree_wrapper($taxonomyClass->get_taxonomy_tree($taxonomy));
 
         //左侧菜单
-        $left_menu   = Db::name('taxonomy')->where(array('delete'=>0,'level'=>0))->order('weight asc, id desc')->select();
+        $left_menu   = Db::name('taxonomy')->where(array('delete'=>0,'level'=>0,'status'=>1))->order('weight asc, id desc')->select();
         if(is_array($left_menu) && count($left_menu)){
             foreach($left_menu as $key => $value){
-                $category = Db::name('taxonomy')->where(array('parent_id'=>$value['id'], 'delete'=>0))->order('weight asc, id desc')->select();
+                $category = Db::name('taxonomy')->where(array('parent_id'=>$value['id'], 'delete'=>0,'status'=>1))->order('weight asc, id desc')->select();
                 if(is_array($category) && count($category)){
                     $left_menu[$key]['child'] = $category;
                 }
@@ -469,10 +469,10 @@ class IndexController extends BaseController
             'captcha|验证码'       => 'require|captcha',
             'name|网站名称'        => 'require|max:30',
             'url'                  => 'require|url',
-            'icp|备案号'           => 'require|max:100',
+//            'icp|备案号'           => 'require|max:100',
             'email'                => 'email',
-            'keyword|关键字'       => 'max:150',
-            'description|描述'     => 'max:255',
+//            'keyword|关键字'       => 'max:150',
+//            'description|描述'     => 'max:255',
         ]);
 
         if($result !== true){
@@ -485,15 +485,15 @@ class IndexController extends BaseController
             'taxonomy_id'       => $formData['taxonomy_id'],
             'status'            => 0,
             'email'             => $formData['email'],
-            'icp'               => $formData['icp'],
-            'keyword'           => $formData['keyword'],
-            'description'       => $formData['description'],
+            'icp'               => 'icp',
+            'keyword'           => 'keyword',
+            'description'       => 'description',
             'create_time'       => date("Y-m-d H:i:s", time()),
         ];
         $result     = Db::name('application')->insert($data);
 
         if($result){
-            echo json_encode(array('code'=>0, 'msg'=>'网站提交成功,审核通过后会邮件通知!', 'data'=>array()));die;
+            echo json_encode(array('code'=>0, 'msg'=>'网站提交成功，审核通过后您的网站将会收录!', 'data'=>array()));die;
         }else{
             echo json_encode(array('code'=>0, 'msg'=>'网络忙,请稍后再试!', 'data'=>array()));die;
         }
