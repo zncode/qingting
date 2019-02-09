@@ -219,7 +219,7 @@ class TaxonomyController extends BaseController
      * @param $tree
      */
     function get_taxonomy(){
-        $taxonomy = Db::name($this->table)->where(array('delete'=>0))->order('weight asc, id desc')->select();
+        $taxonomy = Db::name($this->table)->where(array('delete'=>0,'status'=>1))->order('weight asc, id desc')->select();
         return $taxonomy;
     }
 
