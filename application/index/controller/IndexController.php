@@ -55,11 +55,34 @@ class IndexController extends BaseController
             ->order('create_time asc')
             ->select();
 
+        $lists_copy  = Db::name('article')
+            ->alias('a')
+            ->field('a.id,a.taxonomy_id,a.title,a.brief,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
+            ->join('upload b', 'a.thumb = b.id', 'left')
+            ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
+            ->join('article_copy d', 'a.id = d.article_id', 'left')
+            ->where(array('d.taxonomy_id'=>$id,'a.delete'=>0))
+            ->select();
+
         if(is_array($lists) && count($lists)){
             foreach($lists as $key => $value){
                 $lists[$key]['view_url'] = get_view_url($value['save_path']);
                 $lists[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
             }
+        }
+
+        if(is_array($lists_copy) && count($lists_copy)){
+            foreach($lists_copy as $key => $value){
+                $lists_copy[$key]['view_url'] = get_view_url($value['save_path']);
+                $lists_copy[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
+            }
+        }
+
+        if(isset($lists_copy)){
+            if($lists === false){
+                $lists = [];
+            }
+            $lists = array_merge($lists, $lists_copy);
         }
 
         //导航条
