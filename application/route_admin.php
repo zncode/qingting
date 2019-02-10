@@ -67,7 +67,9 @@ Route::get('admin/article/delete', 		    'admin/ArticleController/delete');
 Route::get('admin/article/list_data', 		'admin/ArticleController/index_data');
 Route::post('admin/article/get_favicon',    'admin/ArticleController/get_favicon');
 Route::get('admin/article/check_url', 		'admin/ArticleController/check_url_exist');
-
+Route::get('admin/article/copy', 			'admin/ArticleController/copy_form');
+Route::post('admin/article/copy_submit', 	'admin/ArticleController/copy_form_submit');
+Route::post('admin/article/copy_delete', 			'admin/ArticleController/copy_delete');
 //网站申请
 Route::get('admin/site_apply/list', 			'admin/SiteApplyController/index');
 Route::get('admin/site_apply/info', 			'admin/SiteApplyController/info');

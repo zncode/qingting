@@ -106,6 +106,34 @@ class IndexController extends BaseController
                     $sub_lists[$child['id']]['name'] = $child['name'];
                     $sub_lists[$child['id']]['list'] = $sub_list;
                 }
+
+                //复制站点
+                $copy_list  = Db::name('article')
+                    ->alias('a')
+                    ->field('a.id,a.taxonomy_id,a.title,a.brief,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
+                    ->join('upload b', 'a.thumb = b.id', 'left')
+                    ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
+                    ->join('article_copy d', 'a.id = d.article_id', 'left')
+                    ->where(array('d.taxonomy_id'=>$child['id'],'a.delete'=>0))
+                    ->limit(20)
+                    ->select();
+
+                if(is_array($copy_list) && count($copy_list)){
+                    foreach($copy_list as $key => $value){
+                        $copy_list[$key]['view_url'] = get_view_url($value['save_path']);
+                        $copy_list[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
+                    }
+
+                    $copy_lists[$child['id']]['name'] = $child['name'];
+                    $copy_lists[$child['id']]['list'] = $copy_list;
+                }
+
+                if(isset($copy_lists)){
+                    if($sub_lists === false){
+                        $sub_lists = [];
+                    }
+                    $sub_lists = array_merge($sub_lists, $copy_lists);
+                }
             }
         }else{
             $sub_lists = false;

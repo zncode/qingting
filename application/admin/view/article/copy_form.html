@@ -1,0 +1,156 @@
+{include file="page/header" /}
+
+<div class="layui-layout layui-layout-admin">
+    {include file="page/body_top" /}
+    {include file="page/menu" /}
+
+    <div class="layui-body">
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+
+                        <div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
+                            <a lay-href="">主页</a><span lay-separator="">/</span>
+                            <a href="{:url('article/list')}" ><cite>{$module_name}列表</cite></a><span lay-separator="">/</span>
+                            <a><cite>{$module_name}复制 </cite></a><span lay-separator=""></span>
+                        </div>
+
+                        <div class="go_back"><a href="{$goback}" class="layui-btn layui-btn-sm">返回</a></div>
+
+                        <div class="layui-card-body">
+                            <form id="add_form" action="{$action}" method="post" class="layui-form">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">网站名称</label>
+                                    <div class="layui-input-block">
+                                        <input type="input" name="title" placeholder="" class="layui-input" value="{$info.title}" style="width: 30%" disabled="disabled">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">主分类</label>
+                                    <div class="layui-input-block">
+                                        <div style="padding-top: 8px;">{$taxonomy.name}</div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">复制分类</label>
+                                    <div class="layui-input-block">
+                                        <div style="padding-top: 8px;">
+                                            {if condition="count($copy) neq 0 "}
+                                                {volist name="copy" id="co"}
+                                                    <div style="margin-bottom: 2px;">{$co.name}&nbsp;&nbsp; <a href="javascript:;" class="layui-btn layui-btn-primary layui-btn-xs copy_delete" data-id="{$co.id}">删除</a></div>
+                                                {/volist}
+                                            {else /}
+                                                空
+                                            {/if}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">分类</label>
+                                    <div class="layui-input-block">
+                                        <div class="layui-input-inline">
+                                            <select name="taxonomy_id" class="layui-select"  lay-filter="taxonomy" placeholder=" - 选择 - " lay-search >
+                                                {volist name="tree" id="vo"}
+                                                    {if condition="$info.taxonomy_id eq $vo.id"}
+                                                        <option value="{$vo.id}" disabled="disabled">{$vo.name}</option>
+                                                    {else /}
+                                                        {if condition="count($copy) neq 0 "}
+                                                            <option value="{$vo.id}" {volist name="copy" id="co"}{if condition="$vo.id eq $co.taxonomy_id"} disabled="disabled" {/if}{/volist}>{$vo.name}</option>
+                                                        {else /}
+                                                            <option value="{$vo.id}">{$vo.name}</option>
+                                                        {/if}
+                                                    {/if}
+                                                {/volist}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <input type="hidden" name="article_id" value="{$info.id}">
+                                        <button class="layui-btn" lay-submit lay-filter="update" id="submit">提交</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    {include file="page/body_bottom" /}
+
+</div>
+
+{include file="page/footer" /}
+<script charset="utf-8" type="text/javascript" src='__ROOT__/kindeditor/kindeditor-all.js'></script>
+<script charset="utf-8" type="text/javascript" src="__ROOT__/kindeditor/lang/zh-CN.js"></script>
+
+<script>
+    layui.use(['form','upload'], function(){
+        var form = layui.form;
+        var upload = layui.upload;
+        $ = layui.jquery;
+
+        //执行实例
+        form.on('submit(update)', function(data){
+            //提交
+            $.ajax({
+                url: "{$action}",
+                type: "post",
+                data: data.field,
+                success:function(result){
+                    var result = JSON.parse(result);
+                    var code = result.code;
+                    var msg  = result.msg;
+                    var data = result.data;
+                    if(code==0){
+                        layer.msg(msg, {
+                            time: 2000,
+                            icon: 16,
+                            shade: 0.2
+                        }, function(){
+                            parent.location.reload();
+                        });
+                    }else{
+                        layer.msg(msg);
+                    }
+                }
+            })
+
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+        $('.copy_delete').click(function(){
+            var id = $(this).attr('data-id');
+            $.ajax({
+                url: '{:url("/admin/article/copy_delete")}',
+                type: "post",
+                dataType: "json",
+                data: {id:id},
+                success:function(result){
+                    // var result = JSON.parse(result);
+                    var code = result.code;
+                    var msg  = result.msg;
+                    var data = result.data;
+                    if(code==0){
+                        layer.msg(msg, {
+                            time: 2000,
+                            icon: 16,
+                            shade: 0.2
+                        }, function(){
+                            parent.location.reload();
+                        });
+                    }else{
+                        layer.msg(msg);
+                    }
+                }
+            })
+        });
+
+    });
+</script>

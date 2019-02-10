@@ -270,6 +270,80 @@ class ArticleController extends BaseController
     }
 
     /**
+     * 复制表单
+     */
+    public function copy_form()
+    {
+        $id = input('get.id');
+        $info = Db::name($this->table)->alias('a')
+            ->field('a.*,b.save_path')
+            ->join('upload b','a.thumb = b.id', 'left')
+            ->where(array('a.id'=>$id))
+            ->find();
+        if($info['save_path']){
+            if($_SERVER['HTTP_HOST'] == 'localhost'){
+                $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].'/'.Config::get('project_dirname').'/public/'.$info['save_path'];
+            }else{
+                $info['thumb_image'] = 'http://'.$_SERVER['HTTP_HOST'].$info['save_path'];
+            }
+        }
+        $copy = Db::name('article_copy')->alias('a')
+            ->field('a.*,b.name')
+            ->join('taxonomy b','a.taxonomy_id = b.id', 'left')
+            ->where(array('a.article_id'=>$id))->select();
+
+        $taxonomyClass          = new TaxonomyController();
+        $taxonomys               = $taxonomyClass->get_taxonomy();
+        $taxonomy               = $taxonomyClass->get_taxonomy_self($info['taxonomy_id']);
+        $tree                   = $taxonomyClass->get_taxonomy_tree_wrapper($taxonomyClass->get_taxonomy_tree($taxonomys));
+        $data['tree']           = $tree;
+        $data['info']           = $info;
+        $data['copy']           = $copy;
+        $data['taxonomy']       = $taxonomy;
+        $data['goback']         = url('admin/'.$this->url_path.'/list');
+        $data['action']         = url('admin/'.$this->url_path.'/copy_submit');
+        $data['module_name']    = $this->module_name;
+
+        return view($this->url_path.'/copy_form', $data);
+    }
+
+    /**
+     * 复制文章表单提交
+     */
+    public function copy_form_submit()
+    {
+        $formData       = input('request.');
+
+        //更新内容
+        $data = [
+            'article_id'        => $formData['article_id'],
+            'taxonomy_id'       => $formData['taxonomy_id'],
+        ];
+        $result = Db::name('article_copy')->insert($data);
+
+        if($result){
+            $this->json(array('code'=>0, 'msg'=>'复制成功', 'data'=>array()));
+        }else{
+            $this->json(array('code'=>1, 'msg'=>'复制失败', 'data'=>array()));
+        }
+    }
+
+    /**
+     * 删除复制
+     */
+    public function copy_delete()
+    {
+        $id = input('id');
+
+        $result = Db::name('article_copy')->where('id',$id)->delete();
+        if($result){
+            $this->json(array('code'=>0, 'msg'=>'删除成功', 'data'=>array('id'=>$id)));
+        }else{
+            $this->json(array('code'=>1, 'msg'=>'删除失败', 'data'=>array()));
+        }
+    }
+
+    /**
      * 获取favicon
      */
     function get_favicon(){
