@@ -14,11 +14,23 @@
                             <a><cite>{$module_name}列表</cite></a><span lay-separator="">/</span>
                         </div>
                         <div class="go_back layui-inline"><a href="{:url('admin/'.$path.'/add')}" class="layui-btn ">添加</a></div>
-                        <div class="demoTable layui-inline" style="margin-left: 10px;">
-                            <div class="layui-inline">
-                                <input class="layui-input" name="keyword" id="demoReload" autocomplete="off">
-                            </div>
-                            <button class="layui-btn" data-type="reload">搜索</button>
+                        <div class="layui-inline">
+                            <form id="add_form" action="" method="post" class="layui-form" enctype="multipart/form-data" >
+                                <div class="demoTable layui-inline" style="margin-left: 10px;">
+                                    <div class="layui-inline">
+                                        <input class="layui-input" name="keyword" id="demoReload" autocomplete="off">
+                                    </div>
+                                    <div class="layui-inline">
+                                        <select name="taxonomy_id" id="taxonomy" class="layui-select" lay-search>
+                                            <option value=""> - 选择 - </option>
+                                            {volist name="tree" id="vo"}
+                                                <option value="{$vo.id}">{$vo.name}</option>
+                                            {/volist}
+                                        </select>
+                                    </div>
+                                    <button class="layui-btn" data-type="reload">搜索</button>
+                                </div>
+                            </form>
                         </div>
                         <div class="layui-card-body">
                             <table class="layui-table" lay-data="{height:900, url:'{$Think.BASE_PATH}admin/{$path}/list_data', page:true, id:'demo', limit:20}" lay-filter="demo" >
@@ -128,9 +140,12 @@
                     curr: 1 //重新从第 1 页开始
                 }
                 ,where: {
-                    keyword: demoReload.val()
+                    keyword: demoReload.val(),
+                    taxonomy_id: $('#taxonomy').val()
                 }
             });
+
+            return false;
         });
 
 

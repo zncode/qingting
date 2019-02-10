@@ -67,7 +67,7 @@ class TaxonomyController extends BaseController
     public function add_form()
     {
         $parent_id           = input('get.parent_id') ? input('get.parent_id') : '';
-        $taxonomy            = Db::name($this->table)->where(array('delete'=>0))->select();
+        $taxonomy            = Db::name($this->table)->where(array('delete'=>0))->order("weight asc")->select();
         $tree                = $this->get_taxonomy_tree_wrapper($this->get_taxonomy_tree($taxonomy));
         $data['tree']        = $tree;
         $data['goback']      = url('admin/'.$this->url_path.'/list');

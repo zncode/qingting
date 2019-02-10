@@ -2,6 +2,7 @@
 namespace app\admin\controller;
 
 use app\admin\controller\BaseController;
+use app\admin\controller\TaxonomyController;
 use think\Db;
 use think\Config;
 
@@ -17,6 +18,11 @@ class ArticleController extends BaseController
      */
     public function index()
     {
+        $taxonomyClass = new TaxonomyController();
+        $taxonomy            = Db::name('taxonomy')->where(array('delete'=>0))->order("weight asc")->select();
+        $tree                = $taxonomyClass->get_taxonomy_tree_wrapper($taxonomyClass->get_taxonomy_tree($taxonomy));
+        $data['tree']        = $tree;
+
         $data['goback']         = url('admin/'.$this->url_path.'/add');
         $data['module_name']    = $this->module_name;
         $data['path']           = $this->url_path;
@@ -28,14 +34,19 @@ class ArticleController extends BaseController
      */
     public function index_data()
     {
-        $keyword = input('keyword') ? input('keyword') : '';
-        if(!empty($keyword)){
-            $count  = Db::name($this->table)->where(array('delete'=>0, 'title'=>['like', '%'.$keyword.'%']))->count();
-            $pages  = Db::name($this->table)->where(array('delete'=>0, 'title'=>['like', '%'.$keyword.'%']))->order('create_time desc')->paginate($this->pager);
-        }else{
-            $count  = Db::name($this->table)->where(array('delete'=>0))->count();
-            $pages  = Db::name($this->table)->where(array('delete'=>0))->order('create_time desc')->paginate($this->pager);
+        $keyword        = input('keyword') ? input('keyword') : '';
+        $taxonomy_id    = input('taxonomy_id') ? input('taxonomy_id') : '';
+        $where          = array('delete'=>0);
+
+        if(!empty($taxonomy_id)){
+            $where['taxonomy_id'] = $taxonomy_id;
         }
+        if(!empty($keyword)){
+            $where['title'] = ['like', '%'.$keyword.'%'];
+        }
+
+        $count  = Db::name($this->table)->where($where)->count();
+        $pages  = Db::name($this->table)->where($where)->order('create_time desc')->paginate($this->pager);
 
         $lists  = $pages->all();
         foreach($lists as $key => $value){
