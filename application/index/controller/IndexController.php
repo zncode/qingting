@@ -97,16 +97,6 @@ class IndexController extends BaseController
                     ->limit(20)
                     ->select();
 
-                if(is_array($sub_list) && count($sub_list)){
-                    foreach($sub_list as $key => $value){
-                        $sub_list[$key]['view_url'] = get_view_url($value['save_path']);
-                        $sub_list[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
-                    }
-
-                    $sub_lists[$child['id']]['name'] = $child['name'];
-                    $sub_lists[$child['id']]['list'] = $sub_list;
-                }
-
                 //复制站点
                 $copy_list  = Db::name('article')
                     ->alias('a')
@@ -118,22 +108,32 @@ class IndexController extends BaseController
                     ->limit(20)
                     ->select();
 
+                if(is_array($sub_list) && count($sub_list)){
+                    foreach($sub_list as $key => $value){
+                        $sub_list[$key]['view_url'] = get_view_url($value['save_path']);
+                        $sub_list[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
+                    }
+
+
+                }
+
                 if(is_array($copy_list) && count($copy_list)){
                     foreach($copy_list as $key => $value){
                         $copy_list[$key]['view_url'] = get_view_url($value['save_path']);
                         $copy_list[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
                     }
-
-                    $copy_lists[$child['id']]['name'] = $child['name'];
-                    $copy_lists[$child['id']]['list'] = $copy_list;
                 }
 
-                if(isset($copy_lists)){
-                    if($sub_lists === false){
-                        $sub_lists = [];
+                if(isset($copy_list)){
+                    if($sub_list === false){
+                        $sub_list = [];
                     }
-                    $sub_lists = array_merge($sub_lists, $copy_lists);
+                    $sub_list = array_merge($sub_list, $copy_list);
                 }
+
+                $sub_lists[$child['id']]['name'] = $child['name'];
+                $sub_lists[$child['id']]['list'] = $sub_list;
+
             }
         }else{
             $sub_lists = false;
