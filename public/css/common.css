@@ -92,3 +92,9 @@ ul.pagination a:hover{font-weight: bold; text-decoration-line: underline}
     height:48px;
     line-height: 48px;
 }
+
+/* 站点统计 */
+.site_statistic{
+    float: left;
+    margin: 5px 0 0 50px;
+}

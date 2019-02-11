@@ -3,6 +3,7 @@ namespace app\index\controller;
 
 use think\Controller;
 use app\admin\controller\SystemController;
+use think\Db;
 
 class BaseController extends Controller
 {
@@ -15,11 +16,18 @@ class BaseController extends Controller
         $this->site_logo = $system->variable_get('site_logo');
         $this->search_action = url('/search');
 
+        $count       = Db::name('article')->where(['delete'=>0,'status'=>1])->count();
+        $start_time  = date('Y-m-d',time()).' 00:00:00';
+        $end_time    = date('Y-m-d H:i:s',time());
+        $today_count = Db::name('article')->where(['delete'=>0,'status'=>1,'create_time'=>['between', [$start_time,$end_time]]])->count();
+
         \think\View::share(['search_action'     => url('/search')]);
         \think\View::share(['site_logo'         => $this->site_logo]);
         \think\View::share(['meta_keyword'      => $system->variable_get('site_keyword')]);
         \think\View::share(['meta_description'  => $system->variable_get('site_description')]);
         \think\View::share(['site_title'        => $system->variable_get('site_title')]);
+        \think\View::share(['site_count'        => $count]);
+        \think\View::share(['site_today_count'  => $today_count]);
     }
 
     public function get_document_root_dir(){
