@@ -82,3 +82,13 @@ ul.pagination a:hover{font-weight: bold; text-decoration-line: underline}
     background-color: #1E9FFF;
     color: #fff;
 }
+
+/* 站点信息鼠标效果 */
+.part_1_content_category li.site_info_mouseover {
+    background-color: #CDE5F9;
+    color: #1E9FFF;
+    border-radius:5px;
+    border: 1px solid #92CAFA;
+    height:48px;
+    line-height: 48px;
+}

@@ -16,9 +16,9 @@
                 <div class="part_1_content_category">
                     <ul>
                         {volist name='list' id='v'}
-                        <li>
+                        <li class="site_info">
                             <div style="height: 20px;line-height: 20px;"><img src="{$v.view_url}" width="16px" height="16px" > &nbsp;<a href="{$v.url}" target="_blank">{$v.title}</a></div>
-                            <div style="font-size: 12px;color:#ccc; height: 30px;line-height: 30px;padding:0 2px 0 2px;">{$v.brief}</div>
+                            <div class="site_info_brief" style="font-size: 12px;color:#ccc; height: 30px;line-height: 30px;padding:0 2px 0 2px;">{$v.brief}</div>
                         </li>
                         {/volist}
                     </ul>
@@ -34,9 +34,9 @@
                     <div class="part_1_content_category">
                         <ul>
                             {volist name="v['list']" id='vo'}
-                            <li>
+                            <li class="site_info">
                                 <div style="height: 20px;line-height: 20px;"><img src="{$vo.view_url}" width="16px" height="16px" > &nbsp;<a href="{$vo.url}" target="_blank">{$vo.title}</a></div>
-                                <div style="font-size: 12px;color:#ccc; height: 30px;line-height: 30px;padding:0 2px 0 2px;">{$vo.brief}</div>
+                                <div class="site_info_brief" style="font-size: 12px;color:#ccc; height: 30px;line-height: 30px;padding:0 2px 0 2px;">{$vo.brief}</div>
                             </li>
                             {/volist}
                         </ul>
@@ -65,6 +65,13 @@
         $('.top_menu').mouseover(function(){
             $('.top_menu').removeClass('active');
             $(this).addClass('active');
+        })
+
+        $('.site_info').mouseover(function(){
+            $('.site_info').removeClass('site_info_mouseover');
+            $(".site_info_brief").css({"color":"#cccccc"});
+            $(this).children(".site_info_brief").css({"color":"#1E9FFF"});
+            $(this).addClass('site_info_mouseover');
         })
     });
 </script>
