@@ -18,10 +18,10 @@ class IndexController extends BaseController
         $site_recommend = $system->variable_get('site_recommend');
 
         //左侧菜单
-        $left_menu   = Db::name('taxonomy')->where(array('delete'=>0,'level'=>0))->order('weight asc, id desc')->select();
+        $left_menu   = Db::name('taxonomy')->where(array('delete'=>0,'level'=>0,'status'=>1))->order('weight asc, id desc')->select();
         if(is_array($left_menu) && count($left_menu)){
             foreach($left_menu as $key => $value){
-                $category = Db::name('taxonomy')->where(array('parent_id'=>$value['id'], 'delete'=>0))->order('weight asc, id desc')->select();
+                $category = Db::name('taxonomy')->where(array('parent_id'=>$value['id'], 'delete'=>0,'status'=>1))->order('weight asc, id desc')->select();
                 if(is_array($category) && count($category)){
                     $left_menu[$key]['child'] = $category;
                 }
@@ -52,7 +52,16 @@ class IndexController extends BaseController
             ->join('upload b', 'a.thumb = b.id', 'left')
             ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
             ->where(array('a.taxonomy_id'=>$id,'a.delete'=>0))
-            ->order('create_time desc')
+            ->order('create_time asc')
+            ->select();
+
+        $lists_copy  = Db::name('article')
+            ->alias('a')
+            ->field('a.id,a.taxonomy_id,a.title,a.brief,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
+            ->join('upload b', 'a.thumb = b.id', 'left')
+            ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
+            ->join('article_copy d', 'a.id = d.article_id', 'left')
+            ->where(array('d.taxonomy_id'=>$id,'a.delete'=>0))
             ->select();
 
         if(is_array($lists) && count($lists)){
@@ -60,6 +69,20 @@ class IndexController extends BaseController
                 $lists[$key]['view_url'] = get_view_url($value['save_path']);
                 $lists[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
             }
+        }
+
+        if(is_array($lists_copy) && count($lists_copy)){
+            foreach($lists_copy as $key => $value){
+                $lists_copy[$key]['view_url'] = get_view_url($value['save_path']);
+                $lists_copy[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
+            }
+        }
+
+        if(isset($lists_copy)){
+            if($lists === false){
+                $lists = [];
+            }
+            $lists = array_merge($lists, $lists_copy);
         }
 
         //导航条
@@ -77,9 +100,11 @@ class IndexController extends BaseController
         $breadcrumb[] = array('path'=>'','title'=>$taxonomy['name']);
 
         //左侧菜单
-        $left_menu[0]   = $taxonomy;
-        $childs         = Db::name('taxonomy')->where(array('parent_id'=>$taxonomy['id'], 'delete'=>0))->select();
-        $left_menu[0]['child'] = $childs;
+        $left_menu[0]               = $taxonomy;
+        $childs                     = Db::name('taxonomy')->where(array('parent_id'=>$taxonomy['id'], 'delete'=>0,'status'=>1))->order('weight asc')->select();
+        $left_menu[0]['child']      = $childs;
+        $brothers                   = Db::name('taxonomy')->where(array('parent_id'=>$taxonomy['parent_id'], 'delete'=>0,'status'=>1))->order('weight asc')->select();
+        $left_menu[0]['brother']    = $brothers;
 
         //获取子分类内容
         if(is_array($childs) && count($childs)){
@@ -91,7 +116,18 @@ class IndexController extends BaseController
                     ->join('upload b', 'a.thumb = b.id', 'left')
                     ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
                     ->where(array('a.taxonomy_id'=>$child['id'],'a.delete'=>0))
-                    ->order('create_time desc')
+                    ->order('create_time asc')
+                    ->limit(20)
+                    ->select();
+
+                //复制站点
+                $copy_list  = Db::name('article')
+                    ->alias('a')
+                    ->field('a.id,a.taxonomy_id,a.title,a.brief,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
+                    ->join('upload b', 'a.thumb = b.id', 'left')
+                    ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
+                    ->join('article_copy d', 'a.id = d.article_id', 'left')
+                    ->where(array('d.taxonomy_id'=>$child['id'],'a.delete'=>0))
                     ->limit(20)
                     ->select();
 
@@ -101,9 +137,26 @@ class IndexController extends BaseController
                         $sub_list[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
                     }
 
-                    $sub_lists[$child['id']]['name'] = $child['name'];
-                    $sub_lists[$child['id']]['list'] = $sub_list;
+
                 }
+
+                if(is_array($copy_list) && count($copy_list)){
+                    foreach($copy_list as $key => $value){
+                        $copy_list[$key]['view_url'] = get_view_url($value['save_path']);
+                        $copy_list[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
+                    }
+                }
+
+                if(isset($copy_list)){
+                    if($sub_list === false){
+                        $sub_list = [];
+                    }
+                    $sub_list = array_merge($sub_list, $copy_list);
+                }
+
+                $sub_lists[$child['id']]['name'] = $child['name'];
+                $sub_lists[$child['id']]['list'] = $sub_list;
+
             }
         }else{
             $sub_lists = false;
@@ -430,10 +483,10 @@ class IndexController extends BaseController
         $tree                   = $taxonomyClass->get_taxonomy_tree_wrapper($taxonomyClass->get_taxonomy_tree($taxonomy));
 
         //左侧菜单
-        $left_menu   = Db::name('taxonomy')->where(array('delete'=>0,'level'=>0))->order('weight asc, id desc')->select();
+        $left_menu   = Db::name('taxonomy')->where(array('delete'=>0,'level'=>0,'status'=>1))->order('weight asc, id desc')->select();
         if(is_array($left_menu) && count($left_menu)){
             foreach($left_menu as $key => $value){
-                $category = Db::name('taxonomy')->where(array('parent_id'=>$value['id'], 'delete'=>0))->order('weight asc, id desc')->select();
+                $category = Db::name('taxonomy')->where(array('parent_id'=>$value['id'], 'delete'=>0,'status'=>1))->order('weight asc, id desc')->select();
                 if(is_array($category) && count($category)){
                     $left_menu[$key]['child'] = $category;
                 }
@@ -467,10 +520,10 @@ class IndexController extends BaseController
             'captcha|验证码'       => 'require|captcha',
             'name|网站名称'        => 'require|max:30',
             'url'                  => 'require|url',
-            'icp|备案号'           => 'require|max:100',
+//            'icp|备案号'           => 'require|max:100',
             'email'                => 'email',
-            'keyword|关键字'       => 'max:150',
-            'description|描述'     => 'max:255',
+//            'keyword|关键字'       => 'max:150',
+//            'description|描述'     => 'max:255',
         ]);
 
         if($result !== true){
@@ -483,15 +536,15 @@ class IndexController extends BaseController
             'taxonomy_id'       => $formData['taxonomy_id'],
             'status'            => 0,
             'email'             => $formData['email'],
-            'icp'               => $formData['icp'],
-            'keyword'           => $formData['keyword'],
-            'description'       => $formData['description'],
+            'icp'               => 'icp',
+            'keyword'           => 'keyword',
+            'description'       => 'description',
             'create_time'       => date("Y-m-d H:i:s", time()),
         ];
         $result     = Db::name('application')->insert($data);
 
         if($result){
-            echo json_encode(array('code'=>0, 'msg'=>'网站提交成功,审核通过后会邮件通知!', 'data'=>array()));die;
+            echo json_encode(array('code'=>0, 'msg'=>'网站提交成功，审核通过后您的网站将会收录!', 'data'=>array()));die;
         }else{
             echo json_encode(array('code'=>0, 'msg'=>'网络忙,请稍后再试!', 'data'=>array()));die;
         }

@@ -7,6 +7,13 @@ body a:hover {
     color: #F40;
     text-decoration: none;
 }
+div.site_button {
+    padding-top:5px;
+}
+div.site_button a:hover {
+    background-color: #1E9FFF;
+    color:#ffffff;
+}
 .footer {
     margin: 50px auto 0 auto;
     width: 1200px;
@@ -71,6 +78,23 @@ ul.pagination a:hover{font-weight: bold; text-decoration-line: underline}
 
 /* 左侧 */
 .body-left .bd dd a.active {
-    background-color: #23b991;
+    /*background-color: #23b991;*/
+    background-color: #1E9FFF;
     color: #fff;
+}
+
+/* 站点信息鼠标效果 */
+.part_1_content_category li.site_info_mouseover {
+    background-color: #CDE5F9;
+    color: #1E9FFF;
+    border-radius:5px;
+    border: 1px solid #92CAFA;
+    height:48px;
+    line-height: 48px;
+}
+
+/* 站点统计 */
+.site_statistic{
+    float: left;
+    margin: 5px 0 0 50px;
 }

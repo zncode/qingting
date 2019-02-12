@@ -19,8 +19,12 @@
                 </div>
             </div>
             <div class="site_button">
-                <!--<button class="layui-btn layui-btn-lg layui-btn-primary">站点发布</button>-->
+                <a class="layui-btn layui-btn-md layui-btn-primary" href="{:url('/site_application')}">申请收录</a>
                 <!--<button class="layui-btn layui-btn-lg layui-btn-primary">用户登录</button>-->
+            </div>
+            <div class="site_statistic">
+                <div>网站总数: {$site_count}</div>
+                <div>今日收录: {$site_today_count}</div>
             </div>
         </div>
     </div>
