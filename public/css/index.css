@@ -129,6 +129,9 @@
 .part_1_title {
     height: 20px;
     border-left: 3px #23b991 solid;
+    border-bottom: 1px solid #f6f6f6;
+    height: 24px;
+    line-height: 24px;
 }
 .part_1_title h2{
     padding-left: 10px;
