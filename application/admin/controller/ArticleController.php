@@ -42,7 +42,11 @@ class ArticleController extends BaseController
             $where['taxonomy_id'] = $taxonomy_id;
         }
         if(!empty($keyword)){
-            $where['title'] = ['like', '%'.$keyword.'%'];
+            if(preg_match('/[\x{4e00}-\x{9fa5}]/u', $keyword)>0) {
+                $where['title'] = ['like', '%'.$keyword.'%'];
+            } else {
+                $where['url'] = ['like', '%'.$keyword.'%'];
+            }
         }
 
         $count  = Db::name($this->table)->where($where)->count();
