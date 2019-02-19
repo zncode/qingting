@@ -130,6 +130,12 @@ class UserController extends BaseController
 //            }else{
 //                $lists[$key]['taxonomy_name'] = '';
 //            }
+            $id = $value['id'];
+            if($value['status'] == 1){
+                $lists[$key]['status'] = '<input type="checkbox" value="1" dataid="'.$id.'" lay-skin="switch" lay-filter="status" lay-text="开启|关闭" checked>';
+            }else{
+                $lists[$key]['status'] = '<input type="checkbox"  value="0" dataid="'.$id.'" lay-skin="switch" lay-filter="status" lay-text="开启|关闭">';
+            }
 
             $lists[$key]['role_name'] = '管理员';
         }
@@ -268,4 +274,19 @@ class UserController extends BaseController
         }
     }
 
+    /**
+     * 更新状态
+     */
+    public function ajax_update_status(){
+        $id = input('id');
+        $status = input('status');
+        if($status){
+            Db::name($this->table)->where(array('id'=>$id))->update(['status'=>0]);
+            $this->json(array('code'=>0, 'msg'=>'关闭完成!', 'data'=>[]));
+        }else{
+            Db::name($this->table)->where(array('id'=>$id))->update(['status'=>1]);
+            $this->json(array('code'=>0, 'msg'=>'开启完成!', 'data'=>[]));
+        }
+
+    }
 }
