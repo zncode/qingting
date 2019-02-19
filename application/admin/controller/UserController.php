@@ -232,13 +232,13 @@ class UserController extends BaseController
         $formData = input('request.');
         $id = $formData['id'];
 
-        $info = Db::name($this->table)->where(array('username'=>$formData['username']))->find();
-        if($info){
-            return $this->json(['code'=>1, 'msg'=>'用户已经存在!', 'data'=>[]]);
-        }
+//        $info = Db::name($this->table)->where(array('username'=>$formData['username']))->find();
+//        if($info){
+//            return $this->json(['code'=>1, 'msg'=>'用户已经存在!', 'data'=>[]]);
+//        }
 
         $data = [
-            'username'          => $formData['username'],
+//            'username'          => $formData['username'],
             'nickname'          => $formData['nickname'],
             'password'          => md5($formData['password']),
             'update_time'       => date("Y-m-d H:i:s", time()),
