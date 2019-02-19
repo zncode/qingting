@@ -97,6 +97,18 @@ Route::get('admin/article_type/list', 			'CategoryController/index');
 Route::get('admin/article_type/info', 			'CategoryController/info');
 Route::get('admin/article_type/delete', 		'CategoryController/delete');
 
+//用户
+Route::get('admin/user/add', 			        'admin/UserController/add_form');
+Route::post('admin/user/add_submit', 	        'admin/UserController/add_form_submit');
+Route::get('admin/user/edit', 			        'admin/UserController/edit_form');
+Route::post('admin/user/edit_submit', 	        'admin/UserController/edit_form_submit');
+Route::get('admin/user/list', 			        'admin/UserController/index');
+Route::get('admin/user/info', 			        'admin/UserController/info');
+Route::get('admin/user/delete', 		        'admin/UserController/delete');
+Route::get('admin/user/json_data', 		        'admin/UserController/json_data');
+Route::get('admin/user/list_data', 		        'admin/UserController/index_data');
+Route::post('admin/user/ajax_update_status',    'admin/UserController/ajax_update_status');
+
 //系统设置
 Route::get('admin/system/index_setup', 			    'admin/SystemController/index_setup');
 Route::post('admin/system/index_setup_submit', 	    'admin/SystemController/index_setup_submit');
