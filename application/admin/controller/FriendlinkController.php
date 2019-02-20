@@ -111,7 +111,8 @@ class FriendlinkController extends BaseController
             'status'            => 1,
             'delete'            => 0,
             'title'             => $formData['title'],
-            'url'              => md5($formData['url']),
+            'url'               => $formData['url'],
+            'weight'            => $formData['weight'],
             'create_time'   => date("Y-m-d H:i:s", time()),
         ];
         $result  = Db::name($this->table)->insert($data);
@@ -154,6 +155,7 @@ class FriendlinkController extends BaseController
 //            'username'          => $formData['username'],
             'title'          => $formData['title'],
             'url'            => $formData['url'],
+            'weight'         => $formData['weight'],
             'update_time'    => date("Y-m-d H:i:s", time()),
         ];
         $result = Db::name($this->table)->where(array('id'=>$id))->update($data);
