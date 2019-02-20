@@ -125,6 +125,10 @@ class IndexController extends BaseController
 
         $data['index_url'] = $request->root(true);
         $data['id'] = $id;
+
+        $page_title = $taxonomy['name'].'_蜻蜓好站';
+        \think\View::share(['title'=> $page_title]);
+
         return view('index/category_list', $data);
     }
 
@@ -156,6 +160,13 @@ class IndexController extends BaseController
         }
 
         $data['list'] = $lists;
+
+        $taxonomyClass = new TaxonomyController();
+        $taxonomy = $taxonomyClass->get_taxonomy_self($id);
+        $page_title = $taxonomy['name'].'_蜻蜓好站';
+
+        \think\View::share(['title'=> $page_title]);
+
         return view('index/taxonomy_menu_right', $data);
     }
 
@@ -322,6 +333,10 @@ class IndexController extends BaseController
         $data['meta_description']   = $info['meta_description'];
         $data['site_title']         = $system->variable_get('site_title');
         $data['current_date']       = get_current_date();
+
+        $page_title = $info['title'].'_蜻蜓好站';
+        \think\View::share(['title'=> $page_title]);
+
         return view('index/page_info', $data);
     }
 
