@@ -4,6 +4,7 @@ namespace app\index\controller;
 use think\Controller;
 use app\admin\controller\SystemController;
 use think\Db;
+use think\Request;
 
 class BaseController extends Controller
 {
@@ -25,10 +26,11 @@ class BaseController extends Controller
         \think\View::share(['site_logo'         => $this->site_logo]);
         \think\View::share(['meta_keyword'      => $system->variable_get('site_keyword')]);
         \think\View::share(['meta_description'  => $system->variable_get('site_description')]);
-        \think\View::share(['site_title'        => $system->variable_get('site_title')]);
+        \think\View::share(['title'             => $system->variable_get('site_title')]);
         \think\View::share(['site_count'        => $count]);
         \think\View::share(['site_today_count'  => $today_count]);
         \think\View::share(['friend_link'       => $friendlink]);
+
     }
 
     public function get_document_root_dir(){

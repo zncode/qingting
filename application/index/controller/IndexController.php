@@ -170,6 +170,10 @@ class IndexController extends BaseController
         $data['sub_lists']          = $sub_lists;
         $data['meta_keyword']       = $taxonomy['keyword'];
         $data['meta_description']   = $taxonomy['description'];
+
+        $page_title = $taxonomy['name'].'_蜻蜓好站';
+        \think\View::share(['title'=> $page_title]);
+
         return view('index/category_list', $data);
     }
 
@@ -284,6 +288,9 @@ class IndexController extends BaseController
         $data['left_menu']          = $left_menu;
         $data['taxonomy_id']        = $taxonomy_id;
 
+        $page_title = '好站推荐_蜻蜓好站';
+        \think\View::share(['title'=> $page_title]);
+
         return view('index/recommend_list', $data);
     }
 
@@ -336,6 +343,10 @@ class IndexController extends BaseController
         $data['meta_description']   = $info['meta_description'];
         $data['site_title']         = $system->variable_get('site_title');
         $data['current_date']       = get_current_date();
+
+        $page_title = $info['title'].'_蜻蜓好站';
+        \think\View::share(['title'=> $page_title]);
+
         return view('index/page_info', $data);
     }
 
