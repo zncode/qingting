@@ -109,6 +109,18 @@ Route::get('admin/user/json_data', 		        'admin/UserController/json_data');
 Route::get('admin/user/list_data', 		        'admin/UserController/index_data');
 Route::post('admin/user/ajax_update_status',    'admin/UserController/ajax_update_status');
 
+//用户
+Route::get('admin/friend_link/add', 			        'admin/FriendlinkController/add_form');
+Route::post('admin/friend_link/add_submit', 	        'admin/FriendlinkController/add_form_submit');
+Route::get('admin/friend_link/edit', 			        'admin/FriendlinkController/edit_form');
+Route::post('admin/friend_link/edit_submit', 	        'admin/FriendlinkController/edit_form_submit');
+Route::get('admin/friend_link/list', 			        'admin/FriendlinkController/index');
+Route::get('admin/friend_link/info', 			        'admin/FriendlinkController/info');
+Route::get('admin/friend_link/delete', 		            'admin/FriendlinkController/delete');
+Route::get('admin/friend_link/json_data', 		        'admin/FriendlinkController/json_data');
+Route::get('admin/friend_link/list_data', 		        'admin/FriendlinkController/index_data');
+Route::post('admin/friend_link/ajax_update_status',     'admin/FriendlinkController/ajax_update_status');
+
 //系统设置
 Route::get('admin/system/index_setup', 			    'admin/SystemController/index_setup');
 Route::post('admin/system/index_setup_submit', 	    'admin/SystemController/index_setup_submit');

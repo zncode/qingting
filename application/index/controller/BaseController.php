@@ -20,7 +20,7 @@ class BaseController extends Controller
         $start_time  = date('Y-m-d',time()).' 00:00:00';
         $end_time    = date('Y-m-d H:i:s',time());
         $today_count = Db::name('article')->where(['delete'=>0,'status'=>1,'create_time'=>['between', [$start_time,$end_time]]])->count();
-
+        $friendlink  = Db::name('friend_link')->where(['delete'=>0,'status'=>1])->select();
         \think\View::share(['search_action'     => url('/search')]);
         \think\View::share(['site_logo'         => $this->site_logo]);
         \think\View::share(['meta_keyword'      => $system->variable_get('site_keyword')]);
@@ -28,6 +28,7 @@ class BaseController extends Controller
         \think\View::share(['site_title'        => $system->variable_get('site_title')]);
         \think\View::share(['site_count'        => $count]);
         \think\View::share(['site_today_count'  => $today_count]);
+        \think\View::share(['friend_link'       => $friendlink]);
     }
 
     public function get_document_root_dir(){

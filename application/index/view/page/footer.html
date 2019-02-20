@@ -1,5 +1,15 @@
 <div style="clear: both;"></div>
-<div class="footer"><br>  Copyright &copy; 2018 蜻蜓好站 www.qingting360.com  京ICP备09036132号  站长邮箱: qingting360@163.com </div>
+
+<div class="footer">
+    {if condition="count($friend_link) > 0"}
+        <div class="friend_link">&nbsp;友情链接:&nbsp;&nbsp;
+            {volist name="$friend_link" id="vo"}
+                <a href="{$vo.url}" target="_blank">{$vo.title}</a>&nbsp;&nbsp;
+            {/volist}
+        </div>
+    {/if}
+    <br>  Copyright &copy; 2018 蜻蜓好站 www.qingting360.com  京ICP备09036132号  站长邮箱: qingting360@163.com
+</div>
 <script>
     //JavaScript代码区域
     layui.use('element', function(){
