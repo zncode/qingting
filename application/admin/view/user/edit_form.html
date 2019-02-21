@@ -32,15 +32,32 @@
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
+                                    <label class="layui-form-label">角色</label>
+                                    <div class="layui-input-block">
+                                        <div class="layui-input-inline">
+                                            <select name="role_id" class="layui-select"  lay-filter="role" placeholder=" - 选择 - " lay-search >
+                                                {volist name="role" id="vo"}
+                                                    {if condition="$info.role_id eq $vo.role_id"}
+                                                        <option value="{$vo.role_id}" selected="selected">{$vo.name}</option>
+                                                    {else /}
+                                                        <option value="{$vo.role_id}">{$vo.name}</option>
+                                                    {/if}
+                                                {/volist}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="layui-form-item">
                                     <label class="layui-form-label">密码</label>
                                     <div class="layui-input-block">
-                                        <input type="password" name="password" id="LAY-user-login-password" lay-verify="required" placeholder="密码" class="layui-input" style="width: 30%">
+                                        <input type="password" name="password" id="LAY-user-login-password" lay-verify="" placeholder="密码" class="layui-input" style="width: 30%">
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">确认密码</label>
                                     <div class="layui-input-block">
-                                        <input type="password" name="repass" id="LAY-user-login-repass" lay-verify="required" placeholder="确认密码" class="layui-input" style="width: 30%">
+                                        <input type="password" name="repass" id="LAY-user-login-repass" lay-verify="" placeholder="确认密码" class="layui-input" style="width: 30%">
                                     </div>
                                 </div>
                                 <div class="layui-form-item">

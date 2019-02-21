@@ -26,15 +26,21 @@
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">描述</label>
+                                    <label class="layui-form-label">角色ID</label>
                                     <div class="layui-input-block">
-                                        <textarea class="layui-textarea" name="description" rows="2" placeholder="Enter ..." >{$info.description}</textarea>
+                                        <input type="input" name="role_id" placeholder="" lay-verify="required" class="layui-input" value="{$info.role_id}"  style="width: 30%">
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">排序</label>
                                     <div class="layui-input-block">
                                         <input type="input" name="weight" placeholder="" lay-verify="required" class="layui-input" value="{$info.weight}"  style="width: 30%">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">描述</label>
+                                    <div class="layui-input-block">
+                                        <textarea class="layui-textarea" name="description" rows="2" placeholder="Enter ..." >{$info.description}</textarea>
                                     </div>
                                 </div>
                                 <div class="layui-form-item">

@@ -40,7 +40,7 @@ class RoleController extends BaseController
         }
 
         $count  = Db::name($this->table)->where($where)->count();
-        $pages  = Db::name($this->table)->where($where)->order('create_time desc')->paginate($this->pager);
+        $pages  = Db::name($this->table)->where($where)->order('role_id asc')->paginate($this->pager);
 
         $lists  = $pages->all();
         foreach($lists as $key => $value){
@@ -111,8 +111,9 @@ class RoleController extends BaseController
             'status'            => 1,
             'delete'            => 0,
             'name'              => $formData['name'],
-            'description'       => $formData['description'],
+            'role_id'           => $formData['role_id'],
             'weight'            => $formData['weight'],
+            'description'       => $formData['description'],
             'create_time'   => date("Y-m-d H:i:s", time()),
         ];
         $result  = Db::name($this->table)->insert($data);
@@ -146,15 +147,16 @@ class RoleController extends BaseController
         $formData = input('request.');
         $id = $formData['id'];
 
-//        $info = Db::name($this->table)->where(array('username'=>$formData['username']))->find();
-//        if($info){
-//            return $this->json(['code'=>1, 'msg'=>'用户已经存在!', 'data'=>[]]);
-//        }
+        $info = Db::name($this->table)->where(array('id'=>$formData['id']))->find();
+        if($info['role_id'] == $formData['role_id']){
+            return $this->json(['code'=>1, 'msg'=>'角色ID已经存在!', 'data'=>[]]);
+        }
 
         $data = [
             'name'           => $formData['name'],
-            'description'    => $formData['description'],
+            'role_id'        => $formData['role_id'],
             'weight'         => $formData['weight'],
+            'description'    => $formData['description'],
             'update_time'    => date("Y-m-d H:i:s", time()),
         ];
         $result = Db::name($this->table)->where(array('id'=>$id))->update($data);
@@ -194,6 +196,17 @@ class RoleController extends BaseController
         }else{
             Db::name($this->table)->where(array('id'=>$id))->update(['status'=>1]);
             $this->json(array('code'=>0, 'msg'=>'开启完成!', 'data'=>[]));
+        }
+    }
+
+    /**
+     * 获取角色
+     */
+    public function get_role($id=null){
+        if($id){
+            return Db::name($this->table)->where(['role_id'=>$id])->find();
+        }else{
+            return Db::name($this->table)->where(['delete'=>0, 'status'=>1])->select();
         }
     }
 }

@@ -5,6 +5,7 @@ use app\admin\controller\BaseController;
 use think\Db;
 use think\Session;
 use app\model\UserModel;
+use app\admin\controller\RoleController;
 
 class UserController extends BaseController
 {
@@ -27,7 +28,7 @@ class UserController extends BaseController
     public function login_form_submit(){
         $formData = input('request.');
 
-        $info = Db::name($this->table)->where(array('username'=>$formData['username'], 'password'=>md5($formData['password']),'delete'=>0,'status'=>1))->find();
+        $info = Db::name($this->table)->where(array('username'=>$formData['username'], 'password'=>md5($formData['password']),'delete'=>0,'status'=>1,'role_id'=>config('role_admin')))->find();
         Session('user_id', $info['id']);
 
         if($info){
@@ -54,7 +55,7 @@ class UserController extends BaseController
     }
 
     /**
-     * 用户注册提交
+     * 后台用户注册提交
      */
     public function register_form_submit(){
         return json(['code'=>1, 'msg'=>'注册关闭!', 'data'=>[]]);
@@ -67,7 +68,7 @@ class UserController extends BaseController
 
         $data = [
             'status'            => 1,
-            'role_id'           => 1,
+            'role_id'           => config('role_admin'),
             'username'          => $formData['username'],
             'password'          => md5($formData['password']),
             'nickname'          => $formData['nickname'],
@@ -136,8 +137,9 @@ class UserController extends BaseController
             }else{
                 $lists[$key]['status'] = '<input type="checkbox"  value="0" dataid="'.$id.'" lay-skin="switch" lay-filter="status" lay-text="开启|关闭">';
             }
-
-            $lists[$key]['role_name'] = '管理员';
+            $roleObject = new RoleController();
+            $role = $roleObject->get_role($value['role_id']);
+            $lists[$key]['role_name'] = $role['name'];
         }
         $data = [
             'code'  => 0,
@@ -170,6 +172,9 @@ class UserController extends BaseController
         $data['goback'] = url('admin/'.$this->url_path.'/list');
         $data['action'] = url('admin/'.$this->url_path.'/add_submit');
         $data['module_name'] = $this->module_name;
+        $roleObject = new RoleController();
+        $role = $roleObject->get_role();
+        $data['role'] = $role;
         return view($this->url_path.'/add_form', $data);
     }
 
@@ -197,7 +202,7 @@ class UserController extends BaseController
 
         $data = [
             'status'            => 1,
-            'role_id'           => 1,
+            'role_id'           => $formData['role_id'],
             'username'          => $formData['username'],
             'password'          => md5($formData['password']),
             'nickname'          => $formData['nickname'],
@@ -227,6 +232,9 @@ class UserController extends BaseController
         $data['goback'] = url('admin/'.$this->url_path.'/list');
         $data['action'] = url('admin/'.$this->url_path.'/edit_submit');
         $data['module_name'] = $this->module_name;
+        $roleObject = new RoleController();
+        $role = $roleObject->get_role();
+        $data['role'] = $role;
         return view($this->url_path.'/edit_form', $data);
     }
 
@@ -238,15 +246,26 @@ class UserController extends BaseController
         $formData = input('request.');
         $id = $formData['id'];
 
-//        $info = Db::name($this->table)->where(array('username'=>$formData['username']))->find();
+        $info = Db::name($this->table)->where(array('id'=>$id))->find();
+        if(!empty($formData['password'])){
+            $password = md5($formData['password']);
+        }else{
+            $password = $info['password'];
+        }
+//        if(!empty($formData['username'])){
+//            $username = $formData['username'];
+//        }else{
+//            $username = $formData['username'];
+//        }
 //        if($info){
 //            return $this->json(['code'=>1, 'msg'=>'用户已经存在!', 'data'=>[]]);
 //        }
 
         $data = [
-//            'username'          => $formData['username'],
+//            'username'          => $username,
+            'role_id'           => $formData['role_id'],
             'nickname'          => $formData['nickname'],
-            'password'          => md5($formData['password']),
+            'password'          => $password,
             'update_time'       => date("Y-m-d H:i:s", time()),
         ];
         $result = Db::name($this->table)->where(array('id'=>$id))->update($data);
