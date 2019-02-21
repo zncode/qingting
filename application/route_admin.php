@@ -121,6 +121,18 @@ Route::get('admin/friend_link/json_data', 		        'admin/FriendlinkController/
 Route::get('admin/friend_link/list_data', 		        'admin/FriendlinkController/index_data');
 Route::post('admin/friend_link/ajax_update_status',     'admin/FriendlinkController/ajax_update_status');
 
+//角色
+Route::get('admin/role/add', 			        'admin/RoleController/add_form');
+Route::post('admin/role/add_submit', 	        'admin/RoleController/add_form_submit');
+Route::get('admin/role/edit', 			        'admin/RoleController/edit_form');
+Route::post('admin/role/edit_submit', 	        'admin/RoleController/edit_form_submit');
+Route::get('admin/role/list', 			        'admin/RoleController/index');
+Route::get('admin/role/info', 			        'admin/RoleController/info');
+Route::get('admin/role/delete', 		        'admin/RoleController/delete');
+Route::get('admin/role/json_data', 		        'admin/RoleController/json_data');
+Route::get('admin/role/list_data', 		        'admin/RoleController/index_data');
+Route::post('admin/role/ajax_update_status',    'admin/RoleController/ajax_update_status');
+
 //系统设置
 Route::get('admin/system/index_setup', 			    'admin/SystemController/index_setup');
 Route::post('admin/system/index_setup_submit', 	    'admin/SystemController/index_setup_submit');
