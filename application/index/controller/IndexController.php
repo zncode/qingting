@@ -573,7 +573,7 @@ class IndexController extends BaseController
 
         $date      = date('Y-m-d',time());
 
-        for($i=1;$i<=100;$i++){
+        for($i=1;$i<70;$i++){
             $date = date("Y-m-d",strtotime("-{$i} day"));
             $date_start = $date.' 00:00:00';
             $date_end = $date.' 23:59:59';
@@ -596,8 +596,9 @@ class IndexController extends BaseController
             }
         }
 
-        $totle = count($pages);
-        $totle_page = ceil($totle/10);
+        $total = count($pages);
+        print_r($total);
+        $total_page = ceil($total/10);
 
         $i = 0;
         foreach ($pages as $key => $value){
@@ -627,7 +628,7 @@ class IndexController extends BaseController
         $data['list']               = $pages_new;
         $data['page']               = $page;
         $data['left_menu']          = $left_menu;
-        $data['totle_page']        = $totle_page;
+        $data['total_page']        = $total_page;
         $page_title = '最新加入_蜻蜓好站';
         \think\View::share(['title'=> $page_title]);
 
