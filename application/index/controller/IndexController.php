@@ -562,6 +562,79 @@ class IndexController extends BaseController
     }
 
     /**
+     * 最近加入网站
+     */
+    public function site_new()
+    {
+        $page       = input('page') ? input('page') : 1;
+        $page_size  = 10;
+        $page_start = $page_size * ($page - 1);
+        $page_end   = $page_start + $page_size;
+
+        $date      = date('Y-m-d',time());
+
+        for($i=1;$i<=100;$i++){
+            $date = date("Y-m-d",strtotime("-{$i} day"));
+            $date_start = $date.' 00:00:00';
+            $date_end = $date.' 23:59:59';
+            $sites  = Db::name('article')
+                ->alias('a')
+                ->field('a.id,a.title,a.url,a.create_time,a.brief,a.taxonomy_id,b.save_path')
+                ->join('upload b', 'a.thumb = b.id', 'left')
+                ->where(array('a.delete'=>0,'a.status'=>1,'a.create_time'=>array('between',[$date_start,$date_end])))
+                ->order('create_time desc')
+                ->select();
+
+            if(is_array($sites) && count($sites)){
+                foreach($sites as $key => $value){
+                    $sites[$key]['view_url'] = get_view_url($value['save_path']);
+                }
+            }
+
+            if($sites){
+                $pages[$date] = $sites;
+            }
+        }
+
+        $totle = count($pages);
+        $totle_page = ceil($totle/10);
+
+        $i = 0;
+        foreach ($pages as $key => $value){
+            if($i >= $page_start && $i < $page_end){
+                $pages_new[$key] = $value;
+            }
+            $i++;
+        }
+        //导航条
+        $breadcrumb[] = array('path'=>url('/'),'title'=>'首页');
+        $breadcrumb[] = array('path'=>url('/recommend'),'title'=>'最近加入');
+
+
+        //左侧菜单
+        $left_menu   = Db::name('taxonomy')->where(array('delete'=>0,'level'=>0))->order('weight asc, id desc')->select();
+        if(is_array($left_menu) && count($left_menu)){
+            foreach($left_menu as $key => $value){
+                $category = Db::name('taxonomy')->where(array('parent_id'=>$value['id'], 'delete'=>0))->order('weight asc, id desc')->select();
+                if(is_array($category) && count($category)){
+                    $left_menu[$key]['child'] = $category;
+                }
+            }
+        }
+
+        $data['breadcrumb']         = $this->get_breadcrumb($breadcrumb);
+        $data['current_date']       = get_current_date();
+        $data['list']               = $pages_new;
+        $data['page']               = $page;
+        $data['left_menu']          = $left_menu;
+        $data['totle_page']        = $totle_page;
+        $page_title = '最新加入_蜻蜓好站';
+        \think\View::share(['title'=> $page_title]);
+
+        return view('index/site_new', $data);
+    }
+
+    /**
      * 获取热门站点
      */
     public function get_site_popular($site_popular=NULL){
