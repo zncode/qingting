@@ -1,0 +1,92 @@
+{include file="page/header" /}
+{include file="page/body_top" /}
+<div style="clear: both;"></div>
+<div class="body">
+    <div class="body-left">
+      {include file="page/menu_recommend" /}
+    </div>
+    <div class="part_wrapper" style="width: 900px;margin-left: 20px;" >
+        <div class="body-center">
+          <div class="breadcrumb">
+              <div class="breadcrumb_left">&nbsp;</div>
+              {$breadcrumb}
+          </div>
+            {volist name="list" id="vo" key="k"}
+                <div class="part_1_title">
+                    <h2>{$key}</h2>
+                </div>
+                <div class="part_1_content_category">
+                    <ul>
+                        {volist name="vo" id='v'}
+                        <li class="site_info">
+                            <div style="height: 20px;line-height: 20px;"><img src="{$v.view_url}" width="16px" height="16px" > &nbsp;<a href="{$v.url}" target="_blank">{$v.title}</a></div>
+                            <div class="site_info_brief" style="font-size: 12px;color:#ccc; height: 30px;line-height: 30px;padding:0 2px 0 2px;">{$v.brief}</div>
+                        </li>
+                        {/volist}
+                    </ul>
+                </div>
+                <div style="clear: both;"></div>
+            {/volist}
+          <div id="page">
+              <ul class="pagination">
+                  {for start="1" end="$total_page"}
+                    {if condition="$page eq $i"}
+                        <li class="active"><span>{$i}</span></li>
+                    {else /}
+                        <li><a href="site_new?page={$i}">{$i}</a></li>
+                    {/if}
+                  {/for}
+              </ul>
+          </div>
+        </div>
+
+        <div class="body-right">
+          <div class="body_right_block"><a href="https://s.weibo.com/weibo?q=%23%E6%8C%91%E6%88%98PADMAN%23" target="_blank"><img src="{$Think.BASE_PATH}image/ad/ad_1.jpg" width="200px" height="auto"></a></div>
+          <div class="body_right_block"><a href="http://edu.sina.com.cn/zt_d/edugongyi/" target="_blank"><img src="{$Think.BASE_PATH}image/ad/ad_2.jpg" width="200px" height="auto"></a></div>
+          <div class="body_right_block"><a href="https://s.weibo.com/weibo?q=%23%E6%8C%91%E6%88%98PADMAN%23" target="_blank"><img src="{$Think.BASE_PATH}image/ad/ad_3.jpg" width="200px" height="auto"></a></div>
+        </div>
+    </div>
+  <div style="clear: both"></div>
+</div>
+
+
+<script>
+    layui.use(['element', 'laypage'], function(){
+        var $ = layui.$;
+        var laypage = layui.laypage;
+
+        $('.line_wrapper').mouseover(function(){
+            $(this).css('background-color','#F2F2F2');
+        })
+        $('.line_wrapper').mouseout(function(){
+            $(this).css('background-color','#ffffff');
+        })
+
+        laypage.render({
+            elem: 'page1'
+            ,count: '100'
+            ,limit: 2
+            ,theme: '#1E9FFF'
+            ,layout: ['count', 'prev', 'page', 'next', 'skip']
+            ,curr: location.hash.replace('#!fenye=', '')
+            ,hash: 'fenye'
+            ,jump: function(obj, first){
+                //obj包含了当前分页的所有参数，比如：
+                console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                console.log(obj.limit); //得到每页显示的条数
+
+                //首次不执行
+                if(!first){
+                    //do something
+                    var domain = window.location.host;
+                    console.log(window.location.href);
+//                    var current_url = window.location.href;
+                    var current_url = window.location.href.replace('&*', '');
+                    var jump_url= current_url+'&page='+obj.curr+'#!fenye='+obj.curr;
+                    window.location.href = jump_url;
+                }
+            }
+        });
+    });
+</script>
+{include file="page/footer" /}

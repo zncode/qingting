@@ -13,4 +13,5 @@ Route::get('recommend',                 'index/IndexController/recommend_list');
 Route::get('page',                      'index/IndexController/page_info');
 Route::get('site_application', 	        'index/IndexController/site_application_form');
 Route::post('site_application_submit', 	'index/IndexController/site_application_form_submit');
+Route::get('site_new',                   'index/IndexController/site_new');
 
