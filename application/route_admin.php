@@ -133,6 +133,18 @@ Route::get('admin/role/json_data', 		        'admin/RoleController/json_data');
 Route::get('admin/role/list_data', 		        'admin/RoleController/index_data');
 Route::post('admin/role/ajax_update_status',    'admin/RoleController/ajax_update_status');
 
+//菜单
+Route::get('admin/menu/add', 			        'admin/MenuController/add_form');
+Route::post('admin/menu/add_submit', 	        'admin/MenuController/add_form_submit');
+Route::get('admin/menu/edit', 			        'admin/MenuController/edit_form');
+Route::post('admin/menu/edit_submit', 	        'admin/MenuController/edit_form_submit');
+Route::get('admin/menu/list', 			        'admin/MenuController/index');
+Route::get('admin/menu/info', 			        'admin/MenuController/info');
+Route::get('admin/menu/delete', 		        'admin/MenuController/delete');
+Route::get('admin/menu/json_data', 		        'admin/MenuController/json_data');
+Route::get('admin/menu/list_data', 		        'admin/MenuController/index_data');
+Route::post('admin/menu/ajax_update_status',    'admin/MenuController/ajax_update_status');
+
 //系统设置
 Route::get('admin/system/index_setup', 			    'admin/SystemController/index_setup');
 Route::post('admin/system/index_setup_submit', 	    'admin/SystemController/index_setup_submit');

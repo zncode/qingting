@@ -2,56 +2,16 @@
   <div class="layui-side-scroll">
     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
     <ul class="layui-nav layui-nav-tree"  lay-filter="test">
-      <li class="layui-nav-item layui-nav-itemed">
-        <a href="javascript:;">内容管理</a>
-        <dl class="layui-nav-child">
-          <dd><a href="{:url('@admin/article/list')}">文章列表</a></dd>
-          <dd><a href="{:url('@admin/article/add')}">文章添加</a></dd>
-          <dd><a href="{:url('@admin/recommend/list')}">推荐列表</a></dd>
-          <dd><a href="{:url('@admin/recommend/add')}">推荐添加</a></dd>
-          <dd><a href="{:url('@admin/site_apply/list')}">收录申请</a></dd>
-        </dl>
-      </li>
-      <li class="layui-nav-item layui-nav-itemed">
-        <a href="javascript:;">分类管理</a>
-        <dl class="layui-nav-child">
-          <!--<dd><a href="{:url('@admin/channel/list')}">频道列表</a></dd>-->
-          <!--<dd><a href="{:url('@admin/channel/add')}">频道添加</a></dd>-->
-          <!--<dd><a href="{:url('@admin/vocabulary/list')}">类型列表</a></dd>-->
-          <!--<dd><a href="{:url('@admin/vocabulary/add')}">类型添加</a></dd>-->
-          <dd><a href="{:url('@admin/taxonomy/list')}">分类列表</a></dd>
-          <dd><a href="{:url('@admin/taxonomy/add')}">分类添加</a></dd>
-          <!--<dd><a href="{:url('@admin/category/list',array('level'=>1))}">一级栏目列表</a></dd>-->
-          <!--<dd><a href="{:url('@admin/category/add',array('level'=>1))}">一级栏目添加</a></dd>-->
-          <!--<dd><a href="{:url('@admin/category/list',array('level'=>2))}">二级栏目列表</a></dd>-->
-          <!--<dd><a href="{:url('@admin/category/add',array('level'=>2))}">二级栏目添加</a></dd>-->
-        </dl>
-      </li>
-      <li class="layui-nav-item layui-nav-itemed">
-        <a href="javascript:;">用户管理</a>
-        <dl class="layui-nav-child">
-          <dd><a href="{:url('@admin/user/list')}">用户列表</a></dd>
-          <dd><a href="{:url('@admin/user/add')}">用户添加</a></dd>
-          <dd><a href="{:url('@admin/role/list')}">角色列表</a></dd>
-          <dd><a href="{:url('@admin/role/add')}">角色添加</a></dd>
-        </dl>
-      </li>
-      <li class="layui-nav-item layui-nav-itemed">
-        <a href="javascript:;">友链管理</a>
-        <dl class="layui-nav-child">
-          <dd><a href="{:url('@admin/friend_link/list')}">友链列表</a></dd>
-          <dd><a href="{:url('@admin/friend_link/add')}">友链添加</a></dd>
-        </dl>
-      </li>
-      <li class="layui-nav-item layui-nav-itemed">
-        <a href="javascript:;">系统设置</a>
-        <dl class="layui-nav-child">
-          <dd><a href="{:url('@admin/system/index_setup')}">首页设置</a></dd>
-          <dd><a href="{:url('@admin/system/site_setup')}">网站信息</a></dd>
-          <dd><a href="{:url('@admin/system/sitemap_setup')}">Sitemap</a></dd>
-        </dl>
-      </li>
-      <!--<li class="layui-nav-item"><a href="">系统设置</a></li>-->
+      {volist name="menu" id="vo"}
+        <li class="layui-nav-item layui-nav-itemed">
+          <a href="javascript:;">{$vo.name}</a>
+          <dl class="layui-nav-child">
+            {volist name="vo.child" id="v"}
+              <dd><a href="{:url($v.url)}">{$v.name}</a></dd>
+            {/volist}
+          </dl>
+        </li>
+      {/volist}
     </ul>
   </div>
 </div>

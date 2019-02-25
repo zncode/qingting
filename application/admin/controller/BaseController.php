@@ -3,6 +3,7 @@ namespace app\admin\controller;
 
 use think\Controller;
 use think\Session;
+use think\Db;
 
 class BaseController extends Controller
 {
@@ -24,6 +25,13 @@ class BaseController extends Controller
                 }
             }
         }
+        $menu = Db::name('menu')->where(array('delete'=>0, 'status'=>1, 'level'=>0))->order("weight asc")->select();
+        foreach($menu as $key => $value){
+            $child = Db::name('menu')->where(array('delete'=>0, 'status'=>1, 'level'=>1,'parent_id'=>$value['id']))->order("weight asc")->select();
+            $menu[$key]['child'] = $child;
+        }
+
+        \think\View::share(['menu' => $menu]);
     }
 
     public function get_document_root_dir(){

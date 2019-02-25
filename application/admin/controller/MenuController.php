@@ -4,12 +4,12 @@ namespace app\admin\controller;
 use app\admin\controller\BaseController;
 use think\Db;
 
-class TaxonomyController extends BaseController
+class MenuController extends BaseController
 {
     public $pager = 20;
-    public $table = 'taxonomy';
-    public $url_path = 'taxonomy';
-    public $module_path = 'taxonomy';
+    public $table = 'menu';
+    public $url_path = 'menu';
+    public $module_path = 'menu';
     public $module_name = '分类';
     public $parent; //上级
 
@@ -68,8 +68,8 @@ class TaxonomyController extends BaseController
     public function add_form()
     {
         $parent_id           = input('get.parent_id') ? input('get.parent_id') : '';
-        $taxonomy            = Db::name($this->table)->where(array('delete'=>0))->order("weight asc")->select();
-        $tree                = $this->get_taxonomy_tree_wrapper($this->get_taxonomy_tree($taxonomy));
+        $menu                = Db::name($this->table)->where(array('delete'=>0))->order("weight asc")->select();
+        $tree                = $this->get_menu_tree_wrapper($this->get_menu_tree($menu));
         $data['tree']        = $tree;
         $data['goback']      = url('admin/'.$this->url_path.'/list');
         $data['action']      = url('admin/'.$this->url_path.'/add_submit');
@@ -86,17 +86,16 @@ class TaxonomyController extends BaseController
         $formData = input('request.');
         $data = [
             'name'          => $formData['name'],
+            'type'          => 1, //1=后台菜单
             'parent_id'     => $formData['parent_id'],
             'weight'        => $formData['weight'],
             'status'        => 1,
-            'keyword'       => $formData['keyword'],
+            'url'           => $formData['url'],
             'description'   => $formData['description'],
             'level'         => $this->get_level_by_parent($formData['parent_id']),
             'create_time'   => date("Y-m-d H:i:s", time()),
         ];
         $result = Db::name($this->table)->insert($data);
-//        $id     = Db::name($this->table)->getLastInsID();
-//        Db::name('taxonomy_relate')->insert(array('parent_id'=>$formData['parent_id'],'taxonomy_id'=>$id));
         if($result){
             $this->json(array('code'=>0, 'msg'=>'添加成功', 'data'=>array()));
         }else{
@@ -111,8 +110,8 @@ class TaxonomyController extends BaseController
     {
         $id                     = input('get.id');
         $info                   = Db::name($this->table)->where(array('id'=>$id))->find();
-        $taxonomy               = Db::name($this->table)->where(array('delete'=>0))->select();
-        $tree                   = $this->get_taxonomy_tree_wrapper($this->get_taxonomy_tree($taxonomy));
+        $menu                   = Db::name($this->table)->where(array('delete'=>0))->select();
+        $tree                   = $this->get_menu_tree_wrapper($this->get_menu_tree($menu));
         $data['tree']           = $tree;
         $data['info']           = $info;
         $data['goback']         = url('admin/'.$this->url_path.'/list');
@@ -133,7 +132,7 @@ class TaxonomyController extends BaseController
             'name'          => $formData['name'],
             'parent_id'     => $formData['parent_id'],
             'weight'        => $formData['weight'],
-            'keyword'       => $formData['keyword'],
+            'url'           => $formData['url'],
             'description'   => $formData['description'],
             'level'         => $this->get_level_by_parent($formData['parent_id']),
             'update_time'   => date("Y-m-d H:i:s", time()),
@@ -163,30 +162,6 @@ class TaxonomyController extends BaseController
         }
     }
 
-    /**
-     * 获取栏目
-     */
-    public function get_category(){
-        $level = input('level') ? input('level') : 1;
-        $parent_id = input('id') ? input('id') : 1;
-
-        if($level == 1){
-            $table = 'category';
-        }
-        if($level == 2){
-            $table = 'category_2';
-        }
-
-        $categorys  = Db::name($table)->where(array('delete'=>0, 'parent_id'=>$parent_id))->select();
-
-//        if(is_array($categorys) && count($categorys)){
-//            foreach($categorys as $category){
-//                $category_html[] = '<option value="'.$category['id'].'"> '.$category['name'].' </option>';
-//            }
-//            $category_html = implode('', $category_html);
-//        }
-        $this->json(array('code'=>0, 'msg'=>'获取成功', 'data'=>array('category'=>$categorys)));
-    }
 
     /**
      * 递归实现无限极分类
@@ -195,7 +170,7 @@ class TaxonomyController extends BaseController
      * @param $level 分类级别
      * @return $list 分好类的数组 直接遍历即可 $level可以用来遍历缩进
      */
-    function get_taxonomy_tree($array, $pid =0, $level = 0){
+    function get_menu_tree($array, $pid =0, $level = 0){
         //声明静态数组,避免递归调用时,多次声明导致数组覆盖
         static $list = [];
         foreach ($array as $key => $value){
@@ -208,7 +183,7 @@ class TaxonomyController extends BaseController
                 //把这个节点从数组中移除,减少后续递归消耗
                 unset($array[$key]);
                 //开始递归,查找父ID为该节点ID的节点,级别则为原级别+1
-                $this->get_taxonomy_tree($array, $value['id'], $level+1);
+                $this->get_menu_tree($array, $value['id'], $level+1);
 
             }
         }
@@ -219,7 +194,7 @@ class TaxonomyController extends BaseController
      * 添加样式
      * @param $tree
      */
-    function get_taxonomy(){
+    function get_menu(){
         $taxonomy = Db::name($this->table)->where(array('delete'=>0,'status'=>1))->order('weight asc, id desc')->select();
         return $taxonomy;
     }
@@ -228,7 +203,7 @@ class TaxonomyController extends BaseController
      * 添加样式
      * @param $tree
      */
-    function get_taxonomy_tree_wrapper($tree){
+    function get_menu_tree_wrapper($tree){
         if(is_array($tree) && count($tree)){
             $i = 1;
             foreach($tree as $key => $value ){
@@ -245,7 +220,7 @@ class TaxonomyController extends BaseController
      */
     public function get_level_by_parent($parent_id = NULL){
         if($parent_id){
-            $parent_level = Db::name('taxonomy')->where(array('id'=>$parent_id))->find();
+            $parent_level = Db::name($this->table)->where(array('id'=>$parent_id))->find();
             $level = $parent_level['level'] + 1;
         }else{
             $level = 0;
@@ -257,8 +232,8 @@ class TaxonomyController extends BaseController
      * 获取分类
      * @param $id
      */
-    public function get_taxonomy_self($id){
-        $taxonomy = Db::name('taxonomy')->where(array('id'=>$id))->find();
+    public function get_menu_self($id){
+        $taxonomy = Db::name($this->table)->where(array('id'=>$id))->find();
         return $taxonomy;
     }
 
@@ -268,8 +243,8 @@ class TaxonomyController extends BaseController
      */
     public function get_parent($id){
         static $parents = [];
-        $self   = Db::name('taxonomy')->where(array('id'=>$id))->find();
-        $parent = Db::name('taxonomy')->where(array('id'=>$self['parent_id']))->find();
+        $self   = Db::name($this->table)->where(array('id'=>$id))->find();
+        $parent = Db::name($this->table)->where(array('id'=>$self['parent_id']))->find();
 
         if($parent){
             $parents[] = $parent;
@@ -277,6 +252,18 @@ class TaxonomyController extends BaseController
         }
         asort($parents);
         return $parents;
+    }
+
+    /**
+     * 获取左侧菜单
+     */
+    public function get_site_menu(){
+        $menu = Db::name($this->table)->where(array('delete'=>0, 'status'=>1, 'level'=>0))->order("weight asc")->select();
+        foreach($menu as $key => $value){
+            $child = Db::name($this->table)->where(array('delete'=>0, 'status'=>1, 'level'=>1,'parent_id'=>$value['id']))->order("weight asc")->select();
+            $menu[$key]['child'] = $child;
+        }
+        return $menu;
     }
 
     /**
