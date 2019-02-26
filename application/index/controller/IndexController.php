@@ -1,8 +1,6 @@
 <?php
 namespace app\index\controller;
 
-use app\admin\controller\TaxonomyController;
-use app\admin\controller\SystemController;
 use app\index\controller\BaseController;
 use think\Db;
 
@@ -13,9 +11,8 @@ class IndexController extends BaseController
     public function index()
     {
         //热门站点
-        $system = new SystemController();
-        $site_popular   = $system->variable_get('site_popular');
-        $site_recommend = $system->variable_get('site_recommend');
+        $site_popular   = variable_get('site_popular');
+        $site_recommend = variable_get('site_recommend');
 
         //左侧菜单
         $left_menu   = Db::name('taxonomy')->where(array('delete'=>0,'level'=>0,'status'=>1))->order('weight asc, id desc')->select();
@@ -45,7 +42,7 @@ class IndexController extends BaseController
     {
         $id         = input('id');
         $sub_lists  = false;
-        $system     = new SystemController();
+
         $lists  = Db::name('article')
             ->alias('a')
             ->field('a.id,a.taxonomy_id,a.title,a.brief,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
@@ -87,15 +84,14 @@ class IndexController extends BaseController
 
         //导航条
         $breadcrumb[] = array('path'=>url('/'),'title'=>'首页');
-        $taxonomyClass = new TaxonomyController();
-        $parents = $taxonomyClass->get_parent($id);
+        $parents = taxonomy_get_parent($id);
 
         if(count($parents)){
             foreach($parents as $parent){
                 $breadcrumb[] = array('path'=>url('category/id/'.$parent['id']),'title'=>$parent['name']);
             }
         }
-        $taxonomy = $taxonomyClass->get_taxonomy_self($id);
+        $taxonomy = get_taxonomy_self($id);
 
         $breadcrumb[] = array('path'=>'','title'=>$taxonomy['name']);
 
@@ -235,7 +231,7 @@ class IndexController extends BaseController
      */
     public function recommend_list()
     {
-        $system         = new SystemController();
+
         $taxonomy_id    = input('id');
         $pages  = Db::name('recommend')
             ->alias('a')
@@ -300,7 +296,6 @@ class IndexController extends BaseController
      */
     public function page_info()
     {
-        $system = new SystemController();
         $id     = input('id');
         $info  = Db::name('recommend')
             ->alias('a')
@@ -341,7 +336,7 @@ class IndexController extends BaseController
         $data['taxonomy_id']        = $id;
         $data['meta_keyword']       = $info['meta_keyword'];
         $data['meta_description']   = $info['meta_description'];
-        $data['site_title']         = $system->variable_get('site_title');
+        $data['site_title']         = variable_get('site_title');
         $data['current_date']       = get_current_date();
 
         $page_title = $info['title'].'_蜻蜓好站';
@@ -489,9 +484,8 @@ class IndexController extends BaseController
      */
     public function site_application_form()
     {
-        $taxonomyClass          = new TaxonomyController();
-        $taxonomy               = $taxonomyClass->get_taxonomy();
-        $tree                   = $taxonomyClass->get_taxonomy_tree_wrapper($taxonomyClass->get_taxonomy_tree($taxonomy));
+        $taxonomy               = get_taxonomy();
+        $tree                   = get_taxonomy_tree_wrapper(get_taxonomy_tree($taxonomy));
 
         //左侧菜单
         $left_menu   = Db::name('taxonomy')->where(array('delete'=>0,'level'=>0,'status'=>1))->order('weight asc, id desc')->select();

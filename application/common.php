@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 
 use Think\Config;
+use think\Db;
 
 // 应用公共文件
 /**
@@ -236,4 +237,92 @@ function get_remote_picture($url, $save_path){
     fclose($fp2);
 //    unset($img,$url);
 //    return array('file_name'=>$filename,'save_path'=>$save_dir.$filename,'error'=>0);
+}
+
+/**
+ * 获取系统配置
+ * @param $key
+ * @return mixed
+ */
+function variable_get($key){
+    $varialbe = Db::name('variable')->where(array('keyword'=>$key))->find();
+    $varialbe = unserialize($varialbe['content']);
+    return $varialbe;
+}
+
+/**
+ * 递归实现无限极分类
+ * @param $array 分类数据
+ * @param $pid 父ID
+ * @param $level 分类级别
+ * @return $list 分好类的数组 直接遍历即可 $level可以用来遍历缩进
+ */
+function get_taxonomy_tree($array, $pid =0, $level = 0){
+    //声明静态数组,避免递归调用时,多次声明导致数组覆盖
+    static $list = [];
+    foreach ($array as $key => $value){
+        //第一次遍历,找到父节点为根节点的节点 也就是pid=0的节点
+        if ($value['parent_id'] == $pid){
+            //父节点为根节点的节点,级别为0，也就是第一级
+            $value['level'] = $level;
+            //把数组放到list中
+            $list[] = $value;
+            //把这个节点从数组中移除,减少后续递归消耗
+            unset($array[$key]);
+            //开始递归,查找父ID为该节点ID的节点,级别则为原级别+1
+            get_taxonomy_tree($array, $value['id'], $level+1);
+
+        }
+    }
+    return $list;
+}
+
+/**
+ * 添加样式
+ * @param $tree
+ */
+function get_taxonomy(){
+    $taxonomy = Db::name('taxonomy')->where(array('delete'=>0,'status'=>1))->order('weight asc, id desc')->select();
+    return $taxonomy;
+}
+
+/**
+ * 添加样式
+ * @param $tree
+ */
+function get_taxonomy_tree_wrapper($tree){
+    if(is_array($tree) && count($tree)){
+        $i = 1;
+        foreach($tree as $key => $value ){
+            $tree[$key]['name'] = $i.') '.str_repeat('--', $value['level']). $value['name'];
+            $i++;
+        }
+    }
+    return $tree;
+}
+
+/**
+ * 获取分类
+ * @param $id
+ */
+function get_taxonomy_self($id){
+    $taxonomy = Db::name('taxonomy')->where(array('id'=>$id))->find();
+    return $taxonomy;
+}
+
+/**
+ * 获取父级分类
+ * @param $id
+ */
+function taxonomy_get_parent($id){
+    static $parents = [];
+    $self   = Db::name('taxonomy')->where(array('id'=>$id))->find();
+    $parent = Db::name('taxonomy')->where(array('id'=>$self['parent_id']))->find();
+
+    if($parent){
+        $parents[] = $parent;
+        taxonomy_get_parent($parent['id']);
+    }
+    asort($parents);
+    return $parents;
 }

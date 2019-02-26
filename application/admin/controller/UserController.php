@@ -28,7 +28,7 @@ class UserController extends BaseController
     public function login_form_submit(){
         $formData = input('request.');
 
-        $info = Db::name($this->table)->where(array('username'=>$formData['username'], 'password'=>md5($formData['password']),'delete'=>0,'status'=>1,'role_id'=>config('role_admin')))->find();
+        $info = Db::name($this->table)->where(array('username'=>$formData['username'], 'password'=>md5($formData['password']),'delete'=>0,'status'=>1))->find();
         Session('user_id', $info['id']);
 
         if($info){

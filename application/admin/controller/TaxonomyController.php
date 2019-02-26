@@ -15,7 +15,7 @@ class TaxonomyController extends BaseController
 
     public function __construct()
     {
-//        parent::_initialize();
+        parent::_initialize();
         if(input('get.url_path')){
             $this->url_path = input('get.url_path');
         }

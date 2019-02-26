@@ -2,7 +2,6 @@
 namespace app\index\controller;
 
 use think\Controller;
-use app\admin\controller\SystemController;
 use think\Db;
 use think\Request;
 
@@ -13,8 +12,8 @@ class BaseController extends Controller
 
     public function __construct()
     {
-        $system = new SystemController();
-        $this->site_logo = $system->variable_get('site_logo');
+
+        $this->site_logo = variable_get('site_logo');
         $this->search_action = url('/search');
 
         $count       = Db::name('article')->where(['delete'=>0,'status'=>1])->count();
@@ -24,9 +23,9 @@ class BaseController extends Controller
         $friendlink  = Db::name('friend_link')->where(['delete'=>0,'status'=>1])->order('weight asc')->select();
         \think\View::share(['search_action'     => url('/search')]);
         \think\View::share(['site_logo'         => $this->site_logo]);
-        \think\View::share(['meta_keyword'      => $system->variable_get('site_keyword')]);
-        \think\View::share(['meta_description'  => $system->variable_get('site_description')]);
-        \think\View::share(['title'             => $system->variable_get('site_title')]);
+        \think\View::share(['meta_keyword'      => variable_get('site_keyword')]);
+        \think\View::share(['meta_description'  => variable_get('site_description')]);
+        \think\View::share(['title'             => variable_get('site_title')]);
         \think\View::share(['site_count'        => $count]);
         \think\View::share(['site_today_count'  => $today_count]);
         \think\View::share(['friend_link'       => $friendlink]);

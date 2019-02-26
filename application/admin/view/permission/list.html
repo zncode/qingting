@@ -11,20 +11,26 @@
                     <div class="layui-card">
                         <div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
                             <a lay-href="">主页</a><span lay-separator="">/</span>
-                            <a><cite>菜单管理</cite></a><span lay-separator="">/</span>
-                            <a><cite>菜单列表</cite></a><span lay-separator=""></span>
+                            <a><cite>权限管理</cite></a><span lay-separator="">/</span>
+                            <a><cite>权限列表</cite></a><span lay-separator=""></span>
                         </div>
                         <div class="go_back">
-                            <a href="{:url('admin/menu/add')}" class="layui-btn layui-btn-sm">添加</a>
-                            <button class="layui-btn layui-btn-primary up-all">全部收起</button>
-                            <button class="layui-btn layui-btn-primary down-all">全部展开</button>
-                            <button class="layui-btn layui-btn-primary get-checked">获取选中</button>
-
+                            <!--<a href="{:url('admin/menu/add')}" class="layui-btn layui-btn-sm">添加</a>-->
+                            <!--<button class="layui-btn layui-btn-primary up-all">全部收起</button>-->
+                            <!--<button class="layui-btn layui-btn-primary down-all">全部展开</button>-->
+                            <!--<button class="layui-btn layui-btn-primary get-checked">获取选中</button>-->
+                            {volist name="role" id="v" }
+                                {if condition="$role_id eq $v.role_id"}
+                                    <a href="{:url('admin/permission/list', ['role_id'=>$v.role_id])}" class="layui-btn layui-btn-sm layui-btn-primary">{$v.name}</a>
+                                {else/}
+                                    <a href="{:url('admin/permission/list', ['role_id'=>$v.role_id])}" class="layui-btn layui-btn-sm ">{$v.name}</a>
+                                {/if}
+                            {/volist}
                         </div>
                         <div class="layui-card-body">
                             <table class="layui-table layui-form" id="test-tree-table"></table>
-
                         </div>
+                        <input type="hidden" value="{$role_id}" name="role_id">
                     </div>
                 </div>
             </div>
@@ -44,13 +50,17 @@
     })
     layui.use(['treetable','form'],function(){
         $ = layui.jquery;
+        var role_id = $("input[name=role_id]").val();
+
         $.ajax({
-            url: "{$Think.BASE_PATH}admin/menu/list_data",
+            url: "{$Think.BASE_PATH}admin/permission/list_data",
             type: "get",
+            data: 'role_id='+role_id,
             success:function(result){
                 var result = JSON.parse(result);
                 var code = result.code;
                 var msg  = result.message;
+
                 if(code==0){
                     var data = result.data;
 //                    console.log(data);
@@ -60,7 +70,11 @@
                         elem: '#test-tree-table',
                         data: data,
                         field: 'title',
-                        is_checkbox: true,
+                        is_checkbox: false,
+//                        checked:{
+//                            key: 'id',
+//                            data: [112, 113, 114, 115, 116, 117],
+//                        },
                         cols: [
                             {
                                 field: 'title',
@@ -76,52 +90,56 @@
                                 title: '状态',
                                 width: '20%',
                                 template: function(item){
-                                    if(item.status == 1){
-                                        return '<input type="checkbox" value="1" dataid="'+item.id+'" lay-skin="switch" lay-filter="status" lay-text="开启|关闭" checked>';
+                                    if(role_id == 1){
+                                        return '<input type="checkbox" value="1" dataid="'+item.id+'" roleid="'+role_id+'" lay-skin="switch" lay-filter="status" lay-text="开启|关闭" disabled="disabled" checked>';
                                     }else{
-                                        return '<input type="checkbox"  value="0" dataid="'+item.id+'" lay-skin="switch" lay-filter="status" lay-text="开启|关闭">';
+                                        if(item.status == 1){
+                                            return '<input type="checkbox" value="1" dataid="'+item.id+'" roleid="'+role_id+'" lay-skin="switch" lay-filter="status" lay-text="开启|关闭" checked>';
+                                        }else{
+                                            return '<input type="checkbox"  value="0" dataid="'+item.id+'"  roleid="'+role_id+'" lay-skin="switch" lay-filter="status" lay-text="开启|关闭">';
+                                        }
                                     }
                                 }
                             },
-                            {
-                                title: '排序',
-                                width: '5%',
-                                field: 'weight',
+//                            {
+//                                title: '排序',
+//                                width: '5%',
+//                                field: 'weight',
 //                                template: function(item){
 //                                    return '<input type="textfield" lay-filter="edit" value="'+item.weight+'" class="layui-input">';
 //                                }
-                            },
+//                            },
 //                            {
 //                                field: 'pid',
 //                                title: '父ID',
 //                                width: '20%',
 //                            },
-                            {
-                                field: 'actions',
-                                title: '操作',
-                                width: '40%',
-                                template: function(item){
-                                    var tem = [];
-                                    var id=item.id;
-                                    var parent_id=item.pid;
-//                                    tem.push('<a lay-filter="edit">编辑</a>');
-                                    var edit_url = "{:url('admin/menu/edit?id=')}";
-                                    var info_url = "{:url('admin/menu/info?id=')}";
-                                    var add_url = "{:url('admin/menu/add?parent_id=')}";
-                                    tem.push('<a href="'+info_url+id+'">详情</a>');
-                                    tem.push('<a href="'+edit_url+id+'">编辑</a>');
-                                    if(item.pid == 0){
-//                                        tem.push('<a class="add-child" lay-filter="add">添加子级</a>');
-                                        tem.push('<a href="'+add_url+id+'">添加子级</a>');
-                                    }
-                                    if(item.pid > 0){
-//                                        tem.push('<a class="set-attr">设置属性</a>');
-                                        tem.push('<a href="'+add_url+id+'">添加子级</a>');
-                                    }
-                                    return tem.join(' <font>|</font> ')
-                                },
-                            },
-                        ],
+//                            {
+//                                field: 'actions',
+//                                title: '操作',
+//                                width: '40%',
+//                                template: function(item){
+//                                    var tem = [];
+//                                    var id=item.id;
+//                                    var parent_id=item.pid;
+////                                    tem.push('<a lay-filter="edit">编辑</a>');
+//                                    var edit_url = "{:url('admin/menu/edit?id=')}";
+//                                    var info_url = "{:url('admin/menu/info?id=')}";
+//                                    var add_url = "{:url('admin/menu/add?parent_id=')}";
+//                                    tem.push('<a href="'+info_url+id+'">详情</a>');
+//                                    tem.push('<a href="'+edit_url+id+'">编辑</a>');
+//                                    if(item.pid == 0){
+////                                        tem.push('<a class="add-child" lay-filter="add">添加子级</a>');
+//                                        tem.push('<a href="'+add_url+id+'">添加子级</a>');
+//                                    }
+//                                    if(item.pid > 0){
+////                                        tem.push('<a class="set-attr">设置属性</a>');
+//                                        tem.push('<a href="'+add_url+id+'">添加子级</a>');
+//                                    }
+//                                    return tem.join(' <font>|</font> ')
+//                                },
+//                            },
+                        ]
                     });
 
                     treetable.on('treetable(add)',function(data){
@@ -152,13 +170,15 @@
                     })
 
                     form.on('switch(status)',function(data){
-                        var id = data.elem.attributes.dataid.nodeValue;
+                        var menu_id = data.elem.attributes.dataid.nodeValue;
+                        var role_id = data.elem.attributes.roleid.nodeValue;
                         var data = {
-                            'id':id,
+                            'menu_id':menu_id,
+                            'role_id':role_id,
                             'status': data.value,
                         };
                         $.ajax({
-                            url: "{:url('admin/menu/ajax_update_status')}",
+                            url: "{:url('admin/permission/ajax_update_status')}",
                             type: "post",
                             data: data,
                             success:function(result){

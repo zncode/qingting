@@ -145,6 +145,12 @@ Route::get('admin/menu/json_data', 		        'admin/MenuController/json_data');
 Route::get('admin/menu/list_data', 		        'admin/MenuController/index_data');
 Route::post('admin/menu/ajax_update_status',    'admin/MenuController/ajax_update_status');
 
+//权限
+Route::get('admin/permission/list', 			        'admin/PermissionController/index');
+Route::get('admin/permission/list_data', 		        'admin/PermissionController/index_data');
+Route::post('admin/permission/list_submit', 	        'admin/PermissionController/list_setup_submit');
+Route::post('admin/permission/ajax_update_status',      'admin/PermissionController/ajax_update_status');
+
 //系统设置
 Route::get('admin/system/index_setup', 			    'admin/SystemController/index_setup');
 Route::post('admin/system/index_setup_submit', 	    'admin/SystemController/index_setup_submit');

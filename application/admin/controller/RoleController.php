@@ -136,6 +136,7 @@ class RoleController extends BaseController
         $data['goback'] = url('admin/'.$this->url_path.'/list');
         $data['action'] = url('admin/'.$this->url_path.'/edit_submit');
         $data['module_name'] = $this->module_name;
+        $data['old_role_id'] = $info['role_id'];
         return view($this->url_path.'/edit_form', $data);
     }
 
@@ -148,7 +149,7 @@ class RoleController extends BaseController
         $id = $formData['id'];
 
         $info = Db::name($this->table)->where(array('id'=>$formData['id']))->find();
-        if($info['role_id'] == $formData['role_id']){
+        if(($info['role_id'] == $formData['role_id']) && ($formData['old_role_id'] != $formData['role_id'])){
             return $this->json(['code'=>1, 'msg'=>'角色ID已经存在!', 'data'=>[]]);
         }
 

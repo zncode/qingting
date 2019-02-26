@@ -25,8 +25,12 @@ class BaseController extends Controller
                 }
             }
         }
+        $user = Db::name('user')->where(['id'=>$this->user_id])->find();
+
         $menu = Db::name('menu')->where(array('delete'=>0, 'status'=>1, 'level'=>0))->order("weight asc")->select();
         foreach($menu as $key => $value){
+            $permission = Db::name('permission')->where(['role_id'=>$user['role_id'],'menu_id'=>$value['id']])->find();
+            $menu[$key]['display'] = $permission['status'];
             $child = Db::name('menu')->where(array('delete'=>0, 'status'=>1, 'level'=>1,'parent_id'=>$value['id']))->order("weight asc")->select();
             $menu[$key]['child'] = $child;
         }

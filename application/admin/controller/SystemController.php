@@ -11,7 +11,7 @@ class SystemController extends BaseController
 
     public function __construct()
     {
-
+        parent::_initialize();
     }
 
     /**
