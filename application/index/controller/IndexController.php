@@ -591,7 +591,6 @@ class IndexController extends BaseController
         }
 
         $total = count($pages);
-        print_r($total);
         $total_page = ceil($total/10);
 
         $i = 0;
