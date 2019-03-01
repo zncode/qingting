@@ -263,7 +263,7 @@ class IndexController extends BaseController
 
         //导航条
         $breadcrumb[] = array('path'=>url('/'),'title'=>'首页');
-        $breadcrumb[] = array('path'=>url('/recommend'),'title'=>'精彩推荐');
+        $breadcrumb[] = array('path'=>url('/recommend'),'title'=>'好站推荐');
 
 
         //左侧菜单
