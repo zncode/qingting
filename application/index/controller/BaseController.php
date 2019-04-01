@@ -17,9 +17,9 @@ class BaseController extends Controller
         $this->search_action = url('/search');
 
         $count       = Db::name('article')->where(['delete'=>0,'status'=>1])->count();
-        $start_time  = date('Y-m-d',time()).' 00:00:00';
+        $start_time  = date('Y-m-d', (time() - ((date('w') == 0 ? 7 : date('w')) - 1) * 24 * 3600)).' 00:00:00';
         $end_time    = date('Y-m-d H:i:s',time());
-        $today_count = Db::name('article')->where(['delete'=>0,'status'=>1,'create_time'=>['between', [$start_time,$end_time]]])->count();
+        $week_count = Db::name('article')->where(['delete'=>0,'status'=>1,'create_time'=>['between', [$start_time,$end_time]]])->count();
         $friendlink  = Db::name('friend_link')->where(['delete'=>0,'status'=>1])->order('weight asc')->select();
         \think\View::share(['search_action'     => url('/search')]);
         \think\View::share(['site_logo'         => $this->site_logo]);
@@ -27,7 +27,7 @@ class BaseController extends Controller
         \think\View::share(['meta_description'  => variable_get('site_description')]);
         \think\View::share(['title'             => variable_get('site_title')]);
         \think\View::share(['site_count'        => $count]);
-        \think\View::share(['site_today_count'  => $today_count]);
+        \think\View::share(['site_week_count'   => $week_count]);
         \think\View::share(['friend_link'       => $friendlink]);
 
     }
