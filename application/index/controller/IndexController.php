@@ -283,6 +283,7 @@ class IndexController extends BaseController
         $data['page']               = $page;
         $data['left_menu']          = $left_menu;
         $data['taxonomy_id']        = $taxonomy_id;
+        $data['meta_keyword']       = '好站推荐,网站推荐,趣味网站';
 
         $page_title = '好站推荐_蜻蜓好站';
         \think\View::share(['title'=> $page_title]);
