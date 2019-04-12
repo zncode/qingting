@@ -121,6 +121,12 @@ class IndexController extends BaseController
 
         $data['index_url'] = $request->root(true);
         $data['id'] = $id;
+        if($childs){
+            $data['right_id'] = $childs[0]['id'];
+        }else{
+            $data['right_id'] = 0;
+        }
+
 
         $page_title = $taxonomy['name'].'_蜻蜓好站';
         \think\View::share(['title'=> $page_title]);
