@@ -160,6 +160,15 @@ class IndexController extends BaseController
             ->order('create_time desc')
             ->select();
 
+        $lists_copy  = Db::name('article')
+            ->alias('a')
+            ->field('a.id,a.taxonomy_id,a.title,a.brief,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
+            ->join('upload b', 'a.thumb = b.id', 'left')
+            ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
+            ->join('article_copy d', 'a.id = d.article_id', 'left')
+            ->where(array('d.taxonomy_id'=>$id,'a.delete'=>0))
+            ->select();
+
         if(is_array($lists) && count($lists)){
             foreach($lists as $key => $value){
                 $lists[$key]['view_url'] = get_view_url($value['save_path']);
@@ -167,9 +176,81 @@ class IndexController extends BaseController
             }
         }
 
+        if(is_array($lists_copy) && count($lists_copy)){
+            foreach($lists_copy as $key => $value){
+                $lists_copy[$key]['view_url'] = get_view_url($value['save_path']);
+                $lists_copy[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
+            }
+        }
+
+        if(isset($lists_copy)){
+            if($lists === false){
+                $lists = [];
+            }
+            $lists = array_merge($lists, $lists_copy);
+        }
+
         $data['list'] = $lists;
 
+        //获取子分类内容
+        $childs   = Db::name('taxonomy')->where(array('parent_id'=>$id, 'delete'=>0,'status'=>1))->order('weight asc')->select();
+        if(is_array($childs) && count($childs)){
+            foreach($childs as $child){
+
+                $sub_list  = Db::name('article')
+                    ->alias('a')
+                    ->field('a.id,a.taxonomy_id,a.title,a.brief,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
+                    ->join('upload b', 'a.thumb = b.id', 'left')
+                    ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
+                    ->where(array('a.taxonomy_id'=>$child['id'],'a.delete'=>0))
+                    ->order('create_time asc')
+                    ->limit(20)
+                    ->select();
+
+                //复制站点
+                $copy_list  = Db::name('article')
+                    ->alias('a')
+                    ->field('a.id,a.taxonomy_id,a.title,a.brief,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
+                    ->join('upload b', 'a.thumb = b.id', 'left')
+                    ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
+                    ->join('article_copy d', 'a.id = d.article_id', 'left')
+                    ->where(array('d.taxonomy_id'=>$child['id'],'a.delete'=>0))
+                    ->limit(20)
+                    ->select();
+
+                if(is_array($sub_list) && count($sub_list)){
+                    foreach($sub_list as $key => $value){
+                        $sub_list[$key]['view_url'] = get_view_url($value['save_path']);
+                        $sub_list[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
+                    }
+                }
+
+                if(is_array($copy_list) && count($copy_list)){
+                    foreach($copy_list as $key => $value){
+                        $copy_list[$key]['view_url'] = get_view_url($value['save_path']);
+                        $copy_list[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
+                    }
+                }
+
+                if(isset($copy_list)){
+                    if($sub_list === false){
+                        $sub_list = [];
+                    }
+                    $sub_list = array_merge($sub_list, $copy_list);
+                }
+
+                $sub_lists[$child['id']]['name'] = $child['name'];
+                $sub_lists[$child['id']]['list'] = $sub_list;
+            }
+        }else{
+            $sub_lists = false;
+        }
+
+        $data['sub_lists'] = $sub_lists;
+
         $taxonomy = get_taxonomy_self($id);
+
+        $data['taxonomy'] = $taxonomy;
         $page_title = $taxonomy['name'].'_蜻蜓好站';
 
         \think\View::share(['title'=> $page_title]);
