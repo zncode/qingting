@@ -139,6 +139,12 @@ class IndexController extends BaseController
         $childs = Db::name('taxonomy')->where(array('parent_id'=>$id, 'delete'=>0))->select();
 
         $data['menu'] = $childs;
+        $data['id'] = $id;
+        if($childs){
+            $data['right_id'] = $childs[0]['id'];
+        }else{
+            $data['right_id'] = 0;
+        }
         return view('index/taxonomy_menu_left', $data);
     }
 
