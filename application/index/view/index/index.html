@@ -52,7 +52,7 @@
           {volist name='site_recommend' id='v'}
               <div class="line_wrapper" style="height: 180px">
                   <div class="line_picture" style="width: 165px">
-                      <a href="{:url('/page',array('id'=>$v.id))}" ><img src="{$v.view_url}" width="150px" height="100px" ></a>
+                      <a href="{:url('/page',array('id'=>$v.id))}" ><img src="{$v.view_url}" width="150px" height="100px" style="border-radius:10px;"></a>
                   </div>
                   <div class="line_content" style="width: 370px;">
                       <div class="line_content_title"><a href="{:url('/page',array('id'=>$v.id))}" >{$v.title}</a></div>
