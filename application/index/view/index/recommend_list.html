@@ -15,7 +15,7 @@
                 {volist name="list" id="v"}
                     <div class="line_wrapper">
                         <div class="line_picture">
-                            <a href="{:url('/page',array('id'=>$v.id))}" ><img src="{$v.view_url}" width="180px" height="120px"></a>
+                            <a href="{:url('/page',array('id'=>$v.id))}" ><img src="{$v.view_url}" width="180px" height="120px" style="border-radius:5px;" ></a>
                         </div>
                         <div class="line_content">
                             <div class="line_content_title"><a href="{:url('/page',array('id'=>$v.id))}">{$v.title}</a></div>
