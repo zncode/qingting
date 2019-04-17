@@ -5,3 +5,13 @@ html,body {
     max-width: 750px;
     margin: 0 auto;
 }
+
+body a {
+    color: #66CCFF;
+    text-decoration: none;
+}
+
+body a:visited {
+    color: #666699;
+    text-decoration: none;
+}
