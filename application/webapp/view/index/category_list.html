@@ -37,7 +37,7 @@
     <div class="left_content" style="width:20%;height: auto;float: left;">
         <ul style="margin:0px;">
             {volist name="menu" id="v" key="k"}
-                {if condition="$right_id eq $v.id"}
+                {if condition="$id eq $v.id"}
                     <li class="menu" style=" list-style-type:none; margin:0px; height:40px; line-height: 40px; background-color: #ffffff; text-align: center;">
                         <a href="{:url('/app/category', ['id'=>$v.id])}" style="">{$v.name}</a>
                     </li>

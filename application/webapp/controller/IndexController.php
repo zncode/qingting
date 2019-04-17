@@ -101,12 +101,16 @@ class IndexController extends BaseController
         $breadcrumb[] = array('path'=>'','title'=>$taxonomy['name']);
 
         //左侧菜单
-        $left_menu[0]   = $taxonomy;
-        $childs         = Db::name('taxonomy')->where(array('parent_id'=>$id, 'delete'=>0, 'status'=>1))->select();
-        $left_menu[0]['child'] = $childs;
+        if($taxonomy['level'] == 0){
+            $left_menu = Db::name('taxonomy')->where(array('parent_id'=>$taxonomy['id'], 'delete'=>0, 'status'=>1))->select();
+        }elseif($taxonomy['level'] == 1){
+            $left_menu = Db::name('taxonomy')->where(array('parent_id'=>$taxonomy['parent_id'], 'delete'=>0, 'status'=>1))->select();
+        }
 
 
         //获取子分类内容
+        $childs  = Db::name('taxonomy')->where(array('parent_id'=>$id, 'delete'=>0, 'status'=>1))->select();
+
         if(is_array($childs) && count($childs)){
             foreach($childs as $child){
 
@@ -136,9 +140,9 @@ class IndexController extends BaseController
 
         $data['breadcrumb']         = $this->get_breadcrumb($breadcrumb);
         $data['list']               = $lists;
-        $data['menu']               = $childs;
+        $data['menu']               = $left_menu;
         $data['current_date']       = get_current_date();
-        $data['category']           = $taxonomy;
+        $data['taxonomy']           = $taxonomy;
         $data['sub_lists']          = $sub_lists;
         $data['meta_keyword']       = $taxonomy['keyword'];
         $data['meta_description']   = $taxonomy['description'];
@@ -147,12 +151,6 @@ class IndexController extends BaseController
 
         $data['index_url'] = $request->root(true);
         $data['id'] = $id;
-        if($childs){
-            $data['right_id'] = $childs[0]['id'];
-        }else{
-            $data['right_id'] = 0;
-        }
-
 
         $page_title = $taxonomy['name'].'_蜻蜓好站';
         \think\View::share(['title'=> $page_title]);
