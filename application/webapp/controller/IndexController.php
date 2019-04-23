@@ -124,15 +124,41 @@ class IndexController extends BaseController
                     ->limit(20)
                     ->select();
 
+                //复制站点
+                $copy_list  = Db::name('article')
+                    ->alias('a')
+                    ->field('a.id,a.taxonomy_id,a.title,a.brief,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
+                    ->join('upload b', 'a.thumb = b.id', 'left')
+                    ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
+                    ->join('article_copy d', 'a.id = d.article_id', 'left')
+                    ->where(array('d.taxonomy_id'=>$child['id'],'a.delete'=>0))
+                    ->limit(20)
+                    ->select();
+
                 if(is_array($sub_list) && count($sub_list)){
                     foreach($sub_list as $key => $value){
                         $sub_list[$key]['view_url'] = get_view_url($value['save_path']);
                         $sub_list[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
                     }
 
-                    $sub_lists[$child['id']]['name'] = $child['name'];
-                    $sub_lists[$child['id']]['list'] = $sub_list;
                 }
+
+                if(is_array($copy_list) && count($copy_list)){
+                    foreach($copy_list as $key => $value){
+                        $copy_list[$key]['view_url'] = get_view_url($value['save_path']);
+                        $copy_list[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
+                    }
+                }
+
+                if(isset($copy_list)){
+                    if($sub_list === false){
+                        $sub_list = [];
+                    }
+                    $sub_list = array_merge($sub_list, $copy_list);
+                }
+
+                $sub_lists[$child['id']]['name'] = $child['name'];
+                $sub_lists[$child['id']]['list'] = $sub_list;
             }
         }else{
             $sub_lists = false;
