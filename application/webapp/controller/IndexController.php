@@ -52,7 +52,7 @@ class IndexController extends BaseController
             ->join('upload b', 'a.thumb = b.id', 'left')
             ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
             ->where(array('a.taxonomy_id'=>$id,'a.delete'=>0))
-            ->order('create_time desc')
+            ->order('create_time asc')
             ->select();
 
         $lists_copy  = Db::name('article')
@@ -120,7 +120,7 @@ class IndexController extends BaseController
                     ->join('upload b', 'a.thumb = b.id', 'left')
                     ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
                     ->where(array('a.taxonomy_id'=>$child['id'],'a.delete'=>0))
-                    ->order('create_time desc')
+                    ->order('create_time asc')
                     ->limit(20)
                     ->select();
 
