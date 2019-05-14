@@ -51,7 +51,7 @@ class IndexController extends BaseController
             ->field('a.id,a.taxonomy_id,a.title,a.brief,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
             ->join('upload b', 'a.thumb = b.id', 'left')
             ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
-            ->where(array('a.taxonomy_id'=>$id,'a.delete'=>0))
+            ->where(array('a.taxonomy_id'=>$id,'a.delete'=>0, 'a.status'=>1))
             ->order('create_time asc')
             ->select();
 
@@ -61,7 +61,7 @@ class IndexController extends BaseController
             ->join('upload b', 'a.thumb = b.id', 'left')
             ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
             ->join('article_copy d', 'a.id = d.article_id', 'left')
-            ->where(array('d.taxonomy_id'=>$id,'a.delete'=>0))
+            ->where(array('d.taxonomy_id'=>$id,'a.delete'=>0, 'a.status'=>1))
             ->select();
 
         if(is_array($lists) && count($lists)){
@@ -119,7 +119,7 @@ class IndexController extends BaseController
                     ->field('a.id,a.taxonomy_id,a.title,a.brief,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
                     ->join('upload b', 'a.thumb = b.id', 'left')
                     ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
-                    ->where(array('a.taxonomy_id'=>$child['id'],'a.delete'=>0))
+                    ->where(array('a.taxonomy_id'=>$child['id'],'a.delete'=>0, 'a.status'=>1))
                     ->order('create_time asc')
                     ->limit(20)
                     ->select();
@@ -131,7 +131,7 @@ class IndexController extends BaseController
                     ->join('upload b', 'a.thumb = b.id', 'left')
                     ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
                     ->join('article_copy d', 'a.id = d.article_id', 'left')
-                    ->where(array('d.taxonomy_id'=>$child['id'],'a.delete'=>0))
+                    ->where(array('d.taxonomy_id'=>$child['id'],'a.delete'=>0, 'a.status'=>1))
                     ->limit(20)
                     ->select();
 
