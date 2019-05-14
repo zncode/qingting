@@ -64,6 +64,11 @@ class ArticleController extends BaseController
             }else{
                 $lists[$key]['taxonomy_name'] = '';
             }
+            if($value['status'] == 1){
+                $lists[$key]['status'] = '开启';
+            }elseif($value['status'] == 0){
+                $lists[$key]['status'] = '关闭';
+            }
         }
         $data = [
             'code'  => 0,
@@ -145,7 +150,7 @@ class ArticleController extends BaseController
             'meta_description'  => $formData['summary'],
             'summary'           => $formData['summary'],
             'content'           => $formData['content'],
-            'status'            => 1,
+            'status'            => $formData['status'],
             'thumb'             => $formData['upload_id'],
             'create_time'       => date("Y-m-d H:i:s", time()),
         ];
@@ -229,6 +234,7 @@ class ArticleController extends BaseController
             'summary'           => $formData['summary'],
             'content'           => $formData['content'],
             'thumb'             => $formData['upload_id'],
+            'status'            => $formData['status'],
             'update_time'       => date("Y-m-d H:i:s", time()),
         ];
         $result = Db::name($this->table)->where(array('id'=>$id))->update($data);
@@ -399,4 +405,19 @@ class ArticleController extends BaseController
         }
     }
 
+    /**
+     * 更新状态
+     */
+    public function ajax_update_status(){
+        $id = input('id');
+        $status = input('status');
+        if($status){
+            Db::name($this->table)->where(array('id'=>$id))->update(['status'=>0]);
+            $this->json(array('code'=>0, 'msg'=>'关闭完成!', 'data'=>[]));
+        }else{
+            Db::name($this->table)->where(array('id'=>$id))->update(['status'=>1]);
+            $this->json(array('code'=>0, 'msg'=>'开启完成!', 'data'=>[]));
+        }
+
+    }
 }
