@@ -1,55 +1,75 @@
 {include file="page/header" /}
-{include file="page/body_top" /}
-<div style="clear: both;"></div>
-<div class="body">
-    <div class="body-left">
-      {include file="page/menu_index" /}
-    </div>
-    <div class="body-content">
+<style>
+    iframe body {
+        display: block;
+        margin: 0px;
+    }
+    #iframeLeft{
+        width: 20%;
+        height: 300px;
+        float: left;
+    }
+    #iframeContent{
+        width: 80%;
+        height: 300px;
+    }
 
-      <!-- 搜索结果开始 -->
-      <div class="part_1_wrapper">
-        <div class="part_1_title">
-          <h2>搜索结果</h2>
+</style>
+<header class="demos-header" style="margin: 15px 0 15px 0;">
+    <h1 class="demos-title"><a href="{$index_url}">蜻蜓好站</a></h1>
+</header>
+
+<div class="weui-search-bar" id="searchBar">
+    <form class="weui-search-bar__form" action="{:url('/app/search')}" >
+        <div class="weui-search-bar__box">
+            <i class="weui-icon-search"></i>
+            <input type="search" name="keyword" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
+            <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
         </div>
-        <div class="part_1_content">
-            {if condition="$search_result neq '' " }
+        <label class="weui-search-bar__label" id="searchText">
+            <i class="weui-icon-search"></i>
+            <span>搜索</span>
+        </label>
+    </form>
+    <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+</div>
+<div style="height: auto; margin-bottom: 20px; float: left; width: 100%;">
+    <div style="width:20%;height: auto;float: left;">
+        <ul style="margin:0px;">
+            {volist name="menu" id="v" key="k"}
+                <li class="menu" style=" list-style-type:none; margin:0px; height:40px; line-height: 40px; background-color: #f8f8f8; text-align: center;">
+                    <a href="{:url('/app/category', ['id'=>$v.id])}" style="">{$v.name}</a>
+                </li>
+            {/volist}
+        </ul>
+    </div>
+    <div style="width:80%;height: auto;float: left;">
+        <div class="part_wrapper"style="padding: 10px 0 0 5px;">
+            <div class="part_title" style="margin-left: 10px;">
+                <h4>搜索结果</h4>
+            </div>
+            <div class="part_content_category">
+                {if condition="$list neq ''"}
                 <ul>
-                    {volist name='search_result' id='v'}
-                    <li>
-                        <div style="height: 20px;line-height: 20px;"><img src="{$v.view_url}" width="16px" height="16px"> &nbsp;<a href="{$v.url}" target="_blank">{$v.title}</a></div>
-                        <div style="font-size: 12px;color:#ccc; height: 25px;line-height: 25px;">{$v.brief}</div>
+                    {volist name='list' id='v'}
+                    <li style=" list-style-type:none; margin: 10px 0 10px 0; height:40px; line-height: 40px; text-align: center; width: 140px; float:left;">
+                        <div style="height: 20px;line-height: 20px;"><img src="{$v.view_url}" width="16px" height="16px" > &nbsp;<a href="{$v.url}" target="_blank">{$v.title}</a></div>
+                        <div style="font-size: 12px;color:#ccc; height: 30px;line-height: 30px;padding:0 2px 0 2px;">{$v.brief}</div>
                     </li>
                     {/volist}
                 </ul>
-            {else /}
-                <br>
-                <p>没有找到内容~</p>
-            {/if}
+                {else /}
+                    <div style="margin-left: 20px; margin-top: 10px;">未找到相关内容</div>
 
+                {/if}
+            </div>
+            <div style="clear: both;"></div>
         </div>
-      </div>
-      <!-- 热门站点结束 -->
-
-      <!-- 广告2开始 -->
-      <div class="part_wrapper" style="width: 98%; margin: 10px 0 10px 0;">
-          <img src="{$Think.BASE_PATH}image/tmp/ad.jpg" width="280px">&nbsp;&nbsp;&nbsp;
-          <img src="{$Think.BASE_PATH}image/tmp/ad.jpg" width="280px">&nbsp;&nbsp;&nbsp;
-          <img src="{$Think.BASE_PATH}image/tmp/ad.jpg" width="280px">
-      </div>
-      <!-- 广告2结束 -->
-
     </div>
 </div>
+<div style="clear: both;"></div>
+<div class="weui-footer">
+    <p class="weui-footer__text">Copyright © 2018 蜻蜓好站 www.qingting360.com <br>站长邮箱: qingting360@163.com<br>京ICP备09036132号 </p>
+</div>
 
-
-<script>
-    layui.use('element', function(){
-        var $ = layui.$;
-        $('.top_menu').mouseover(function(){
-            $('.top_menu').removeClass('active');
-            $(this).addClass('active');
-        })
-    });
-</script>
 {include file="page/footer" /}

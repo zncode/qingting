@@ -19,9 +19,15 @@
 <div>
     <ul style="margin:0px;">
     {volist name="menu" id="v" key="k"}
-        <li class="menu" style=" list-style-type:none; margin:0px; height:40px; line-height: 40px; background-color: #f8f8f8; text-align: center;">
-            <a href="{:url('/app/category_right', ['id'=>$v.id])}" target="iframeContent" style="">{$v.name}</a>
-        </li>
+        {if condition="$right_id eq $v.id"}
+            <li class="menu" style=" list-style-type:none; margin:0px; height:40px; line-height: 40px; background-color: #ffffff; text-align: center;">
+                <a href="{:url('/app/category_right', ['id'=>$v.id])}" target="iframeContent" style="">{$v.name}</a>
+            </li>
+        {else/}
+            <li class="menu" style=" list-style-type:none; margin:0px; height:40px; line-height: 40px; background-color: #f8f8f8; text-align: center;">
+                <a href="{:url('/app/category_right', ['id'=>$v.id])}" target="iframeContent" style="">{$v.name}</a>
+            </li>
+        {/if}
     {/volist}
     </ul>
 </div>

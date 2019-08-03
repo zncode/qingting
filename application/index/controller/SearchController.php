@@ -22,7 +22,7 @@ class SearchController extends BaseController
             ->field('a.id,a.url,a.title,a.brief,a.create_time,b.save_path')
             ->join('upload b', 'a.thumb = b.id', 'left')
             ->order('create_time desc')
-            ->where(array('a.delete'=>0,'a.title'=>['like', '%'.$keyword.'%']))
+            ->where(array('a.delete'=>0,'a.title|a.brief'=>['like', '%'.$keyword.'%']))
             ->select();
 
         if(is_array($search_result) && count($search_result)){

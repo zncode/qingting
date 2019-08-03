@@ -2,12 +2,11 @@
 <header class="demos-header" style="margin: 15px 0 15px 0;">
     <h1 class="demos-title">蜻蜓好站</h1>
 </header>
-
 <div class="weui-search-bar" id="searchBar">
-    <form class="weui-search-bar__form">
+    <form class="weui-search-bar__form" action="{:url('/app/search')}">
         <div class="weui-search-bar__box">
             <i class="weui-icon-search"></i>
-            <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
+            <input type="search" name="keyword" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
             <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
         </div>
         <label class="weui-search-bar__label" id="searchText">
@@ -20,7 +19,7 @@
 <div class="weui-grids">
     <a href="{:url('/app/category', ['id'=>14])}" class="weui-grid js_grid">
         <div class="weui-grid__icon">
-            <img src="images/icon_nav_button.png" alt="">
+            <i class="fa fa-home fa-fw fa-lg" aria-hidden="true"></i>
         </div>
         <p class="weui-grid__label">
            综合信息
@@ -28,7 +27,7 @@
     </a>
     <a href="{:url('/app/category', ['id'=>13])}" class="weui-grid js_grid">
         <div class="weui-grid__icon">
-            <img src="images/icon_nav_cell.png" alt="">
+            <i class="fa fa-asterisk fa-lg" aria-hidden="true"></i>
         </div>
         <p class="weui-grid__label">
             文化艺术
@@ -36,7 +35,7 @@
     </a>
     <a href="{:url('/app/category', ['id'=>12])}" class="weui-grid js_grid">
         <div class="weui-grid__icon">
-            <img src="images/icon_nav_cell.png" alt="">
+            <i class="fa fa-bandcamp fa-lg" aria-hidden="true"></i>
         </div>
         <p class="weui-grid__label">
             科学科普
@@ -44,7 +43,7 @@
     </a>
     <a href="{:url('/app/category', ['id'=>11])}" class="weui-grid js_grid">
         <div class="weui-grid__icon">
-            <img src="images/icon_nav_cell.png" alt="">
+            <i class="fa fa-gamepad fa-lg" aria-hidden="true"></i>
         </div>
         <p class="weui-grid__label">
            休闲娱乐
@@ -52,7 +51,7 @@
     </a>
     <a href="{:url('/app/category', ['id'=>58])}" class="weui-grid js_grid">
         <div class="weui-grid__icon">
-            <img src="images/icon_nav_cell.png" alt="">
+            <i class="fa fa-user fa-lg" aria-hidden="true"></i>
         </div>
         <p class="weui-grid__label">
             生活服务
@@ -60,7 +59,7 @@
     </a>
     <a href="{:url('/app/category', ['id'=>59])}" class="weui-grid js_grid">
         <div class="weui-grid__icon">
-            <img src="images/icon_nav_cell.png" alt="">
+            <i class="fa fa-futbol-o fa-lg" aria-hidden="true"></i>
         </div>
         <p class="weui-grid__label">
             运动健康
@@ -68,7 +67,7 @@
     </a>
     <a href="{:url('/app/category', ['id'=>60])}" class="weui-grid js_grid">
         <div class="weui-grid__icon">
-            <img src="images/icon_nav_cell.png" alt="">
+            <i class="fa fa-university fa-lg" aria-hidden="true"></i>
         </div>
         <p class="weui-grid__label">
             教育培训
@@ -76,7 +75,7 @@
     </a>
     <a href="{:url('/app/category', ['id'=>61])}" class="weui-grid js_grid">
         <div class="weui-grid__icon">
-            <img src="images/icon_nav_cell.png" alt="">
+            <i class="fa fa-recycle fa-lg" aria-hidden="true"></i>
         </div>
         <p class="weui-grid__label">
             IT技术
@@ -84,7 +83,7 @@
     </a>
     <a href="{:url('/app/category', ['id'=>62])}" class="weui-grid js_grid">
         <div class="weui-grid__icon">
-            <img src="images/icon_nav_cell.png" alt="">
+            <i class="fa fa-tags fa-lg" aria-hidden="true"></i>
         </div>
         <p class="weui-grid__label">
             金融财经

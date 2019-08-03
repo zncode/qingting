@@ -5,3 +5,23 @@ html,body {
     max-width: 750px;
     margin: 0 auto;
 }
+
+body a {
+    color: 	#4169E1;
+    text-decoration: none;
+}
+
+body a:visited {
+    color: 	#FFA500;
+    text-decoration: none;
+}
+
+body .demos-title a {
+    color: 	#3cc51f;
+    text-decoration: none;
+}
+
+body .left_content a {
+    color: 	#4169E1;
+    text-decoration: none;
+}

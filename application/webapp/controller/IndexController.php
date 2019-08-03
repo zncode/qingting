@@ -51,8 +51,17 @@ class IndexController extends BaseController
             ->field('a.id,a.taxonomy_id,a.title,a.brief,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
             ->join('upload b', 'a.thumb = b.id', 'left')
             ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
-            ->where(array('a.taxonomy_id'=>$id,'a.delete'=>0))
-            ->order('create_time desc')
+            ->where(array('a.taxonomy_id'=>$id,'a.delete'=>0, 'a.status'=>1))
+            ->order('create_time asc')
+            ->select();
+
+        $lists_copy  = Db::name('article')
+            ->alias('a')
+            ->field('a.id,a.taxonomy_id,a.title,a.brief,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
+            ->join('upload b', 'a.thumb = b.id', 'left')
+            ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
+            ->join('article_copy d', 'a.id = d.article_id', 'left')
+            ->where(array('d.taxonomy_id'=>$id,'a.delete'=>0, 'a.status'=>1))
             ->select();
 
         if(is_array($lists) && count($lists)){
@@ -61,6 +70,22 @@ class IndexController extends BaseController
                 $lists[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
             }
         }
+
+        if(is_array($lists_copy) && count($lists_copy)){
+            foreach($lists_copy as $key => $value){
+                $lists_copy[$key]['view_url'] = get_view_url($value['save_path']);
+                $lists_copy[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
+            }
+        }
+
+        if(isset($lists_copy)){
+            if($lists === false){
+                $lists = [];
+            }
+            $lists = array_merge($lists, $lists_copy);
+        }
+
+        $data['list'] = $lists;
 
         //导航条
         $breadcrumb[] = array('path'=>url('/'),'title'=>'首页');
@@ -76,11 +101,16 @@ class IndexController extends BaseController
         $breadcrumb[] = array('path'=>'','title'=>$taxonomy['name']);
 
         //左侧菜单
-        $left_menu[0]   = $taxonomy;
-        $childs         = Db::name('taxonomy')->where(array('parent_id'=>$taxonomy['id'], 'delete'=>0))->select();
-        $left_menu[0]['child'] = $childs;
+        if($taxonomy['level'] == 0){
+            $left_menu = Db::name('taxonomy')->where(array('parent_id'=>$taxonomy['id'], 'delete'=>0, 'status'=>1))->select();
+        }elseif($taxonomy['level'] == 1){
+            $left_menu = Db::name('taxonomy')->where(array('parent_id'=>$taxonomy['parent_id'], 'delete'=>0, 'status'=>1))->select();
+        }
+
 
         //获取子分类内容
+        $childs  = Db::name('taxonomy')->where(array('parent_id'=>$id, 'delete'=>0, 'status'=>1))->select();
+
         if(is_array($childs) && count($childs)){
             foreach($childs as $child){
 
@@ -89,8 +119,19 @@ class IndexController extends BaseController
                     ->field('a.id,a.taxonomy_id,a.title,a.brief,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
                     ->join('upload b', 'a.thumb = b.id', 'left')
                     ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
-                    ->where(array('a.taxonomy_id'=>$child['id'],'a.delete'=>0))
-                    ->order('create_time desc')
+                    ->where(array('a.taxonomy_id'=>$child['id'],'a.delete'=>0, 'a.status'=>1))
+                    ->order('create_time asc')
+                    ->limit(20)
+                    ->select();
+
+                //复制站点
+                $copy_list  = Db::name('article')
+                    ->alias('a')
+                    ->field('a.id,a.taxonomy_id,a.title,a.brief,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
+                    ->join('upload b', 'a.thumb = b.id', 'left')
+                    ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
+                    ->join('article_copy d', 'a.id = d.article_id', 'left')
+                    ->where(array('d.taxonomy_id'=>$child['id'],'a.delete'=>0, 'a.status'=>1))
                     ->limit(20)
                     ->select();
 
@@ -100,9 +141,24 @@ class IndexController extends BaseController
                         $sub_list[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
                     }
 
-                    $sub_lists[$child['id']]['name'] = $child['name'];
-                    $sub_lists[$child['id']]['list'] = $sub_list;
                 }
+
+                if(is_array($copy_list) && count($copy_list)){
+                    foreach($copy_list as $key => $value){
+                        $copy_list[$key]['view_url'] = get_view_url($value['save_path']);
+                        $copy_list[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
+                    }
+                }
+
+                if(isset($copy_list)){
+                    if($sub_list === false){
+                        $sub_list = [];
+                    }
+                    $sub_list = array_merge($sub_list, $copy_list);
+                }
+
+                $sub_lists[$child['id']]['name'] = $child['name'];
+                $sub_lists[$child['id']]['list'] = $sub_list;
             }
         }else{
             $sub_lists = false;
@@ -110,9 +166,9 @@ class IndexController extends BaseController
 
         $data['breadcrumb']         = $this->get_breadcrumb($breadcrumb);
         $data['list']               = $lists;
-        $data['left_menu']          = $left_menu;
+        $data['menu']               = $left_menu;
         $data['current_date']       = get_current_date();
-        $data['category']           = $taxonomy;
+        $data['taxonomy']           = $taxonomy;
         $data['sub_lists']          = $sub_lists;
         $data['meta_keyword']       = $taxonomy['keyword'];
         $data['meta_description']   = $taxonomy['description'];
@@ -125,96 +181,6 @@ class IndexController extends BaseController
         $page_title = $taxonomy['name'].'_蜻蜓好站';
         \think\View::share(['title'=> $page_title]);
 
-        return view('index/category_list', $data);
-    }
-
-    public function taxonomy_menu_left(){
-        $id     = input('id');
-        $childs = Db::name('taxonomy')->where(array('parent_id'=>$id, 'delete'=>0))->select();
-
-        $data['menu'] = $childs;
-        return view('index/taxonomy_menu_left', $data);
-    }
-
-    public function taxonomy_menu_right(){
-        $id = input('id');
-
-        $lists  = Db::name('article')
-            ->alias('a')
-            ->field('a.id,a.taxonomy_id,a.title,a.brief,a.create_time,a.url,b.save_path,c.name as taxonomy_name')
-            ->join('upload b', 'a.thumb = b.id', 'left')
-            ->join('taxonomy c', 'a.taxonomy_id = c.id', 'left')
-            ->where(array('a.taxonomy_id'=>$id,'a.delete'=>0))
-            ->order('create_time desc')
-            ->select();
-
-        if(is_array($lists) && count($lists)){
-            foreach($lists as $key => $value){
-                $lists[$key]['view_url'] = get_view_url($value['save_path']);
-                $lists[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
-            }
-        }
-
-        $data['list'] = $lists;
-
-        $taxonomy = get_taxonomy_self($id);
-        $page_title = $taxonomy['name'].'_蜻蜓好站';
-
-        \think\View::share(['title'=> $page_title]);
-
-        return view('index/taxonomy_menu_right', $data);
-    }
-
-    /**
-     * 频道列表
-     */
-    public function channel_list()
-    {
-        $channel_id = input('id');
-
-        $pages  = Db::name('article')
-            ->alias('a')
-            ->field('a.id,a.title,a.summary,a.create_time,a.channel_id,b.save_path,c.name as category_name_1, d.name as category_name_2')
-            ->join('upload b', 'a.thumb = b.id', 'left')
-            ->join('category c', 'a.category_1 = c.id', 'left')
-            ->join('category_2 d', 'a.category_2 = d.id', 'left')
-            ->where(array('a.channel_id'=>$channel_id,'a.delete'=>0))
-            ->order('create_time desc')
-            ->paginate(10);
-
-        $page = $pages->render();
-        $lists  = $pages->all();
-        if(is_array($lists) && count($lists)){
-            foreach($lists as $key => $value){
-                $lists[$key]['view_url'] = get_view_url($value['save_path']);
-            }
-        }
-
-        $channel    = Db::name('channel')->where(array('id'=>$channel_id))->find();
-
-        //导航条
-        $breadcrumb[] = array('path'=>url('/'),'title'=>'首页');
-        if($channel){
-            $breadcrumb[] = array('path'=>'','title'=>$channel['name']);
-        }
-
-
-        //左侧菜单
-        $left_menu   = Db::name('category')->where(array('parent_id'=>$channel_id))->select();
-        if(is_array($left_menu) && count($left_menu)){
-            foreach($left_menu as $key => $value){
-                $category_2 = Db::name('category_2')->where(array('parent_id'=>$value['id']))->select();
-                if(is_array($category_2) && count($category_2)){
-                    $left_menu[$key]['child'] = $category_2;
-                }
-            }
-        }
-
-        $data['breadcrumb']   = $this->get_breadcrumb($breadcrumb);
-        $data['list']         = $lists;
-        $data['page']         = $page;
-        $data['left_menu']    = $left_menu;
-        $data['channel_id']   = $channel_id;
         return view('index/category_list', $data);
     }
 
@@ -332,140 +298,6 @@ class IndexController extends BaseController
         \think\View::share(['title'=> $page_title]);
 
         return view('index/page_info', $data);
-    }
-
-    /**
-     * 一级栏目列表
-     */
-    public function category1_list()
-    {
-        $id = input('id');
-
-        $pages  = Db::name('article')
-            ->alias('a')
-            ->field('a.id,a.title,a.create_time,a.channel_id,a.url,b.save_path,c.name as category_name_1, d.name as category_name_2')
-            ->join('upload b', 'a.thumb = b.id', 'left')
-            ->join('category c', 'a.category_1 = c.id', 'left')
-            ->join('category_2 d', 'a.category_2 = d.id', 'left')
-            ->where(array('a.category_1'=>$id,'a.delete'=>0))
-            ->order('create_time desc')
-            ->paginate(10);
-
-        $page = $pages->render();
-        $lists  = $pages->all();
-        if(is_array($lists) && count($lists)){
-            foreach($lists as $key => $value){
-                $lists[$key]['view_url'] = get_view_url($value['save_path']);
-            }
-        }
-
-        $category_1 = Db::name('category')->where(array('id'=>$id))->find();
-        $channel    = Db::name('channel')->where(array('id'=>$category_1['parent_id']))->find();
-
-        //导航条
-        $breadcrumb[] = array('path'=>url('/'),'title'=>'首页');
-        if($channel){
-            $breadcrumb[] = array('path'=>'','title'=>$channel['name']);
-        }
-        if($category_1){
-            $breadcrumb[] = array('path'=>url('category1/id/'.$category_1['id']),'title'=>$category_1['name']);
-        }
-
-        //左侧菜单
-//        $left_menu   = Db::name('category')->where(array('parent_id'=>$channel['id']))->select();
-//        if(is_array($left_menu) && count($left_menu)){
-//            foreach($left_menu as $key => $value){
-//                $category_2 = Db::name('category_2')->where(array('parent_id'=>$value['id']))->select();
-//                if(is_array($category_2) && count($category_2)){
-//                    $left_menu[$key]['child'] = $category_2;
-//                }
-//            }
-//        }
-
-        $left_menu   = Db::name('channel')->where(array('delete'=>0))->select();
-        if(is_array($left_menu) && count($left_menu)){
-            foreach($left_menu as $key => $value){
-                $category = Db::name('category')->where(array('parent_id'=>$value['id'], 'delete'=>0))->select();
-                if(is_array($category) && count($category)){
-                    $left_menu[$key]['child'] = $category;
-                }
-            }
-        }
-
-        $data['breadcrumb']     = $this->get_breadcrumb($breadcrumb);
-        $data['list']           = $lists;
-        $data['page']           = $page;
-        $data['left_menu']      = $left_menu;
-        $data['channel_id']     = $channel['id'];
-        $data['current_date']   = get_current_date();
-        $data['category']       = $category_1;
-        return view('index/category_list', $data);
-    }
-
-    /**
-     * 二级栏目列表
-     */
-    public function category2_list()
-    {
-        $id = input('id');
-
-        $pages  = Db::name('article')
-            ->alias('a')
-            ->field('a.id,a.category_1,a.category_2,a.title,a.summary,a.create_time,a.channel_id,b.save_path,c.name as category_name_1, d.name as category_name_2')
-            ->join('upload b', 'a.thumb = b.id', 'left')
-            ->join('category c', 'a.category_1 = c.id', 'left')
-            ->join('category_2 d', 'a.category_2 = d.id', 'left')
-            ->where(array('a.category_2'=>$id,'a.delete'=>0))
-            ->order('a.create_time desc')
-            ->paginate(10);
-
-        $page = $pages->render();
-        $lists  = $pages->all();
-        if(is_array($lists) && count($lists)){
-            foreach($lists as $key => $value){
-                $lists[$key]['view_url'] = get_view_url($value['save_path']);
-            }
-        }
-
-        $category_2 = Db::name('category_2')->where(array('id'=>$id))->find();
-        $category_1 = Db::name('category')->where(array('id'=>$category_2['parent_id']))->find();
-        $channel    = Db::name('channel')->where(array('id'=>$category_1['parent_id']))->find();
-
-        //导航条
-        $breadcrumb[] = array('path'=>url('/'),'title'=>'首页');
-        if($channel){
-            $breadcrumb[] = array('path'=>'','title'=>$channel['name']);
-        }
-        if($category_1){
-            $breadcrumb[] = array('path'=>url('category1/id/'.$category_1['id']),'title'=>$category_1['name']);
-        }
-        if($category_2){
-            $breadcrumb[] = array('path'=>url('category2/id/'.$category_2['id']),'title'=>$category_2['name']);
-        }
-
-        //左侧菜单
-        $left_menu   = Db::name('category')->where(array('parent_id'=>$channel['id']))->select();
-        if(is_array($left_menu) && count($left_menu)){
-            foreach($left_menu as $key => $value){
-                $category_2 = Db::name('category_2')->where(array('parent_id'=>$value['id']))->select();
-                if(is_array($category_2) && count($category_2)){
-                    $left_menu[$key]['child'] = $category_2;
-                }
-            }
-        }
-
-        $data['breadcrumb']   = $this->get_breadcrumb($breadcrumb);
-        $data['list']         = $lists;
-        $data['page']         = $page;
-        $data['left_menu']    = $left_menu;
-        $data['channel_id']   = $channel['id'];
-        return view('index/category_list', $data);
-    }
-
-    public function resource_list()
-    {
-//        echo 'test';die;
-        return view('index/resource_list');
     }
 
     /**
@@ -629,45 +461,6 @@ class IndexController extends BaseController
         }
 
         return $lists;
-    }
-
-    /**
-     * 获取精彩推荐
-     */
-    public function get_site_recommend1($site_recommend=NULL){
-        $site_recommend   = explode(',', $site_recommend);
-        if(count($site_recommend)){
-            foreach($site_recommend as $site_name){
-                $site  = Db::name('article')
-                    ->alias('a')
-                    ->field('a.id,a.url,a.title,a.brief,a.create_time,b.save_path')
-                    ->join('upload b', 'a.thumb = b.id', 'left')
-                    ->order('create_time desc')
-                    ->where(array('a.delete'=>0,'a.title'=>$site_name))
-                    ->find();
-
-                if($site){
-                    $recommend_site[]  = $site;
-                }
-            }
-        }else{
-            $recommend_site  = Db::name('article')
-                ->alias('a')
-                ->field('a.id,a.url,a.title,a.brief,a.create_time,b.save_path')
-                ->join('upload b', 'a.thumb = b.id', 'left')
-                ->order('create_time desc')
-                ->where(array('a.delete'=>0))
-                ->limit(50)
-                ->select();
-        }
-        if(is_array($recommend_site) && count($recommend_site)){
-            foreach($recommend_site as $key => $value) {
-                $recommend_site[$key]['brief']    = mb_substr($value['brief'],0,10,"UTF-8");
-                $recommend_site[$key]['view_url'] = get_view_url($value['save_path']);
-            }
-        }
-
-        return $recommend_site;
     }
 
 }

@@ -16,14 +16,14 @@
 
 </style>
 <header class="demos-header" style="margin: 15px 0 15px 0;">
-    <h1 class="demos-title"><a href="{$index_url}">蜻蜓好站</a></h1>
+    <h1 class="demos-title"><a href="{$index_url}" id="top">蜻蜓好站</a></h1>
 </header>
 
 <div class="weui-search-bar" id="searchBar">
-    <form class="weui-search-bar__form">
+    <form class="weui-search-bar__form" action="{:url('/app/search')}" >
         <div class="weui-search-bar__box">
             <i class="weui-icon-search"></i>
-            <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
+            <input type="search" name="keyword" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
             <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
         </div>
         <label class="weui-search-bar__label" id="searchText">
@@ -33,14 +33,78 @@
     </form>
     <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
 </div>
-<div>
-    <iframe id="iframeLeft" name="iframeLeft" frameborder="0" src="{:url('/app/category_left', ['id'=>$id])}" border="0" ></iframe>
-    <iframe id="iframeContent" name="iframeContent" frameborder="0" src="{:url('/app/category_right')}"  border="0" ></iframe>
+<div style="height: auto; float: left; width: 100%;">
+    <div class="left_content" style="width:20%;height: auto;float: left;">
+        <ul style="margin:0px;">
+            {volist name="menu" id="v" key="k"}
+                {if condition="$id eq $v.id"}
+                    <li class="menu" style=" list-style-type:none; margin:0px; height:40px; line-height: 40px; background-color: #ffffff; text-align: center;">
+                        <a href="{:url('/app/category', ['id'=>$v.id])}" style="">{$v.name}</a>
+                    </li>
+                {else/}
+                    <li class="menu" style=" list-style-type:none; margin:0px; height:40px; line-height: 40px; background-color: #f8f8f8; text-align: center;">
+                        <a href="{:url('/app/category', ['id'=>$v.id])}" style="">{$v.name}</a>
+                    </li>
+                {/if}
+            {/volist}
+        </ul>
+    </div>
+    <div class="right_content" style="width:80%;height: auto;float: left; margin-top: 20px;">
+        <div class="part_wrapper">
+            {if condition="count($list) neq 0 "}
+                <div class="part_title" style="margin-left: 10px;">
+                    <h4>{$taxonomy.name}</h4>
+                </div>
+                <div class="part_content_category">
+                    <ul>
+                        {volist name='list' id='v'}
+                        <li style=" list-style-type:none; margin: 10px 0 10px 0; height:40px; line-height: 40px; text-align: center; width: 140px; float:left;">
+                            <div style="height: 20px;line-height: 20px;"><img src="{$v.view_url}" width="16px" height="16px" > &nbsp;<a href="{$v.url}" target="_blank">{$v.title}</a></div>
+                            <div style="font-size: 12px;color:#ccc; height: 30px;line-height: 30px;padding:0 2px 0 2px;">{$v.brief}</div>
+                        </li>
+                        {/volist}
+                    </ul>
+                </div>
+                <div style="clear: both;"></div>
+            {/if}
+            {if condition="$sub_lists neq '' " }
+                {volist name='sub_lists' id='v'}
+                    <div class="part_title" style="margin-left: 10px;">
+                        <h4>{$v.name}</h4>
+                    </div>
+                    <div class="part_content_category">
+                        <ul>
+                            {volist name="v['list']" id='vo'}
+                                <li style=" list-style-type:none; margin: 10px 0 10px 0; height:40px; line-height: 40px; text-align: center; width: 140px; float:left;">
+                                    <div style="height: 20px;line-height: 20px;"><img src="{$vo.view_url}" width="16px" height="16px" > &nbsp;<a href="{$vo.url}" target="_blank">{$vo.title}</a></div>
+                                    <div style="font-size: 12px;color:#ccc; height: 30px;line-height: 30px;padding:0 2px 0 2px;">{$vo.brief}</div>
+                                </li>
+                            {/volist}
+                        </ul>
+                    </div>
+                    <div style="clear: both;"></div>
+                {/volist}
+            {/if}
+
+            <div style="width: 100%; text-align: center;margin-top: 5px;">
+                <a href="#top" style="padding:5px 20px 5px 20px; border: 1px solid #cccccc; font-size: 12px;">返回顶部</a>
+            </div>
+        </div>
+
+
+    </div>
 </div>
 
-<br><br><br>
+<div style="clear: both;"></div>
+<br>
 <div class="weui-footer">
     <p class="weui-footer__text">Copyright © 2018 蜻蜓好站 www.qingting360.com <br>站长邮箱: qingting360@163.com<br>京ICP备09036132号 </p>
 </div>
 
+<script>
+    $('.menu').click(function(){
+        $('.menu').css('background-color', '#f8f8f8');
+        $(this).css('background-color', '#ffffff');
+    })
+</script>
 {include file="page/footer" /}

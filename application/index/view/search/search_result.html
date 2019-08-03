@@ -12,13 +12,17 @@
         <div class="part_1_title">
           <h2>搜索结果</h2>
         </div>
-        <div class="part_1_content">
+        <div class="part_1_content_category">
             {if condition="$search_result neq '' " }
                 <ul>
                     {volist name='search_result' id='v'}
-                    <li>
-                        <div style="height: 20px;line-height: 20px;"><img src="{$v.view_url}" width="16px" height="16px"> &nbsp;<a href="{$v.url}" target="_blank">{$v.title}</a></div>
-                        <div style="font-size: 12px;color:#ccc; height: 25px;line-height: 25px;">{$v.brief}</div>
+                    <!--<li>-->
+                        <!--<div style="height: 20px;line-height: 20px;"><img src="{$v.view_url}" width="16px" height="16px"> &nbsp;<a href="{$v.url}" target="_blank">{$v.title}</a></div>-->
+                        <!--<div style="font-size: 12px;color:#ccc; height: 25px;line-height: 25px;">{$v.brief}</div>-->
+                    <!--</li>-->
+                    <li class="site_info">
+                        <div style="height: 20px;line-height: 20px;"><img src="{$v.view_url}" width="16px" height="16px" > &nbsp;<a href="{$v.url}" target="_blank">{$v.title}</a></div>
+                        <div class="site_info_brief" style="font-size: 12px;color:#ccc; height: 30px;line-height: 30px;padding:0 2px 0 2px;">{$v.brief}</div>
                     </li>
                     {/volist}
                 </ul>
@@ -32,10 +36,20 @@
       <!-- 热门站点结束 -->
 
       <!-- 广告2开始 -->
-      <div class="part_wrapper" style="width: 98%; margin: 10px 0 10px 0;">
-          <img src="{$Think.BASE_PATH}image/tmp/ad.jpg" width="280px">&nbsp;&nbsp;&nbsp;
-          <img src="{$Think.BASE_PATH}image/tmp/ad.jpg" width="280px">&nbsp;&nbsp;&nbsp;
-          <img src="{$Think.BASE_PATH}image/tmp/ad.jpg" width="280px">
+      <div class="part_wrapper" style="width: 95%; margin: 10px 0 10px 0;">
+          <script type="text/javascript">
+              (function() {
+                  var s = "_" + Math.random().toString(36).slice(2);
+                  document.write('<div style="" id="' + s + '"></div>');
+                  (window.slotbydup = window.slotbydup || []).push({
+                      id: "u3700586",
+                      container:  s
+                  });
+              })();
+          </script>
+          <!--<img src="{$Think.BASE_PATH}image/tmp/ad.jpg" width="280px">&nbsp;&nbsp;&nbsp;-->
+          <!--<img src="{$Think.BASE_PATH}image/tmp/ad.jpg" width="280px">&nbsp;&nbsp;&nbsp;-->
+          <!--<img src="{$Think.BASE_PATH}image/tmp/ad.jpg" width="280px">-->
       </div>
       <!-- 广告2结束 -->
 
@@ -49,6 +63,13 @@
         $('.top_menu').mouseover(function(){
             $('.top_menu').removeClass('active');
             $(this).addClass('active');
+        })
+
+        $('.site_info').mouseover(function(){
+            $('.site_info').removeClass('site_info_mouseover');
+            $(".site_info_brief").css({"color":"#cccccc"});
+            $(this).children(".site_info_brief").css({"color":"#1E9FFF"});
+            $(this).addClass('site_info_mouseover');
         })
     });
 </script>
