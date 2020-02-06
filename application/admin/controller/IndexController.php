@@ -5,7 +5,7 @@ use app\admin\controller\BaseController;
 
 class IndexController extends BaseController
 {
-    //首页
+    //首页1
     public function index()
     {
         return view('index/index');
