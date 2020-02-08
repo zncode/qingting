@@ -11,7 +11,7 @@
 
 // [ 应用入口文件 ]
 
-//判断移动端
+//判断移动端1
 require_once 'check_mobile.php';
 
 // 定义应用目录
