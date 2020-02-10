@@ -17,10 +17,6 @@ class UploadController extends BaseController
     {
         $category   = input('category') ? input('category') : '';
         $file       = request()->file('imgFile');
-        if(is_array($file)){
-            $file = $file['file'];
-        }
-
         $date_dir   = date('Ymd', time());
         if($category){
             $upload_save_path       = ROOT_PATH . 'public' . DS . 'upload' . DS . 'kindeditor' . DS .$category;
