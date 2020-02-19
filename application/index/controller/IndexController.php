@@ -568,7 +568,7 @@ class IndexController extends BaseController
 
         $date      = date('Y-m-d',time());
 
-        for($i=1;$i<70;$i++){
+        for($i=1;$i<365;$i++){
             $date = date("Y-m-d",strtotime("-{$i} day"));
             $date_start = $date.' 00:00:00';
             $date_end = $date.' 23:59:59';
